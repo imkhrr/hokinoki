@@ -1,0 +1,171 @@
+/* material ui colors */
+
+/* icons & text */
+
+.is-red {
+  color: #f44336;
+}
+
+.is-pink {
+  color: #e91e63;
+}
+
+.is-purple {
+  color: #9c27b0;
+}
+
+.is-deep-purple {
+  color: #673ab7;
+}
+
+.is-indigo {
+  color: #3f51b5;
+}
+
+.is-blue {
+  color: #2196f3;
+}
+.is-light-blue {
+  color: #03a9f4;
+}
+
+.is-cyan {
+  color: #00bcd4;
+}
+
+.is-teal {
+  color: #009688;
+}
+
+.is-green {
+  color: #4caf50;
+}
+
+.is-light-green {
+  color: #8bc34a;
+}
+
+.is-lime {
+  color: #cddc39;
+}
+
+.is-yellow {
+  color: #ffeb3b;
+}
+
+.is-amber {
+  color: #ffc107;
+}
+
+.is-orange {
+  color: #ff9800;
+}
+
+.is-deep-orange {
+  color: #ff5722;
+}
+
+.is-brown {
+  color: #795548;
+}
+
+.is-grey {
+  color: #9e9e9e;
+}
+
+.is-blue-grey {
+  color: #607d8b;
+}
+
+.is-white {
+  color: #ffffff;
+}
+
+.is-black {
+  color: #212121;
+}
+
+/* backgrounds */
+
+.is-bg-red {
+  background-color: #f44336 !important;
+}
+
+.is-bg-pink {
+  background-color: #e91e63 !important;
+}
+
+.is-bg-purple {
+  background-color: #9c27b0 !important;
+}
+
+.is-bg-deep-purple {
+  background-color: #673ab7 !important;
+}
+
+.is-bg-indigo {
+  background-color: #3f51b5 !important;
+}
+
+.is-bg-blue {
+  background-color: #2196f3 !important;
+}
+.is-bg-light-blue {
+  background-color: #03a9f4 !important;
+}
+
+.is-bg-cyan {
+  background-color: #00bcd4 !important;
+}
+
+.is-bg-teal {
+  background-color: #009688 !important;
+}
+
+.is-bg-green {
+  background-color: #4caf50 !important;
+}
+
+.is-bg-light-green {
+  background-color: #8bc34a !important;
+}
+
+.is-bg-lime {
+  background-color: #cddc39 !important;
+}
+
+.is-bg-yellow {
+  background-color: #ffeb3b !important;
+}
+
+.is-bg-amber {
+  background-color: #ffc107 !important;
+}
+
+.is-bg-orange {
+  background-color: #ff9800 !important;
+}
+
+.is-bg-deep-orange {
+  background-color: #ff5722 !important;
+}
+
+.is-bg-brown {
+  background-color: #795548 !important;
+}
+
+.is-bg-grey {
+  background-color: #9e9e9e !important;
+}
+
+.is-bg-blue-grey {
+  background-color: #607d8b !important;
+}
+
+.is-bg-white {
+  background-color: #ffffff !important;
+}
+
+.is-bg-black {
+  background-color: #212121 !important;
+}

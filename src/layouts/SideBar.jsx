@@ -5,10 +5,6 @@ import { Nav, Icon } from "rsuite";
 import "../styles/sidebar.css";
 
 class SideBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
   render() {
     return (
       <Nav vertical className="pb-2">
@@ -19,70 +15,90 @@ class SideBar extends Component {
             icon={<Icon className="is-blue" icon="user-circle-o" />}
             style={{ marginTop: "6px" }}
           >
-            Administrator
+            <span className="pl-1">Administrator</span>
           </Nav.Item>
           <br />
         </div>
+
         <span className="pl-1 t4">MAIN MENU</span>
-        <Nav.Item
-          eventKey="dashboard"
-          icon={<Icon className="is-red" icon="home" />}
-          active
-        >
-          Dashboard
-        </Nav.Item>
-        <Nav.Item
-          eventKey="transaksi"
-          icon={<Icon className="is-green" icon="shopping-cart" />}
-        >
-          Transaksi
-        </Nav.Item>
+        <NavLink exact to="/">
+          <Nav.Item
+            eventKey="dashboard"
+            icon={<Icon className="is-red" icon="home" />}
+          >
+            <a className="pl-1">Dashboard</a>
+          </Nav.Item>
+        </NavLink>
+
+        <NavLink exact to="/transaksi">
+          <Nav.Item
+            eventKey="transaksi"
+            icon={<Icon className="is-green" icon="shopping-cart" />}
+          >
+            <span className="pl-1">Transaksi</span>
+          </Nav.Item>
+        </NavLink>
         <br />
+
         <span className="pl-1 t4">MANAJEMEN</span>
-        <Nav.Item
-          eventKey="items"
-          icon={<Icon className="is-orange" icon="shopping-bag" />}
-        >
-          Items
-        </Nav.Item>
-        <Nav.Item
-          eventKey="users"
-          icon={<Icon className="is-blue" icon="avatar" />}
-        >
-          Users
-        </Nav.Item>
-        <Nav.Item
-          eventKey="customers"
-          icon={<Icon className="is-teal" icon="people-group" />}
-        >
-          Customers
-        </Nav.Item>
-        <Nav.Item
-          eventKey="suppliers"
-          icon={<Icon className="is-indigo" icon="truck" />}
-        >
-          Suppliers
-        </Nav.Item>
+        <NavLink exact to="/items">
+          <Nav.Item
+            eventKey="items"
+            icon={<Icon className="is-orange" icon="shopping-bag" />}
+          >
+            <span className="pl-1">Items</span>
+          </Nav.Item>
+        </NavLink>
+        <NavLink exact to="/users">
+          <Nav.Item
+            eventKey="users"
+            icon={<Icon className="is-blue" icon="avatar" />}
+          >
+            <span className="pl-1">Users</span>
+          </Nav.Item>
+        </NavLink>
+        <NavLink exact to="/customers">
+          <Nav.Item
+            eventKey="customers"
+            icon={<Icon className="is-teal" icon="people-group" />}
+          >
+            <span className="pl-1">Customers</span>
+          </Nav.Item>
+        </NavLink>
+        <NavLink exact to="/suppliers">
+          <Nav.Item
+            eventKey="suppliers"
+            icon={<Icon className="is-indigo" icon="truck" />}
+          >
+            <span className="pl-1">Suppliers</span>
+          </Nav.Item>
+        </NavLink>
         <br />
         <span className="pl-1 t4">LAPORAN</span>
-        <Nav.Item
-          eventKey="penjualan"
-          icon={<Icon className="is-deep-orange" icon="money" />}
-        >
-          Penjualan
-        </Nav.Item>
-        <Nav.Item
-          eventKey="stok"
-          icon={<Icon className="is-brown" icon="attribution" />}
-        >
-          Stok Opname
-        </Nav.Item>
-        <Nav.Item
-          eventKey="statistik"
-          icon={<Icon className="is-gray" icon="pie-chart" />}
-        >
-          Statistik
-        </Nav.Item>
+        <NavLink exact to="/penjualan">
+          <Nav.Item
+            eventKey="penjualan"
+            icon={<Icon className="is-deep-orange" icon="money" />}
+          >
+            <span className="pl-1">Penjualan</span>
+          </Nav.Item>
+        </NavLink>
+        <NavLink exact to="/stok">
+          <Nav.Item
+            eventKey="stok"
+            icon={<Icon className="is-brown" icon="attribution" />}
+          >
+            <span className="pl-1">Stok Opname</span>
+          </Nav.Item>
+        </NavLink>
+        <NavLink exact to="/statistik">
+          <Nav.Item
+            eventKey="statistik"
+            icon={<Icon className="is-gray" icon="pie-chart" />}
+          >
+            <span className="pl-1">Statistik</span>
+          </Nav.Item>
+        </NavLink>
         <div className="is-mobile">
           <br />
           <span className="pl-1 t4">EXTRA</span>
@@ -91,14 +107,14 @@ class SideBar extends Component {
             icon={<Icon className="is-gray" icon="setting" />}
             style={{ marginTop: "6px" }}
           >
-            Settings
+            <span className="pl-1">Settings</span>
           </Nav.Item>
           <Nav.Item
             eventKey="logout"
             icon={<Icon className="is-gray" icon="sign-out" />}
             style={{ marginTop: "6px" }}
           >
-            Logout
+            <span className="pl-1">Logout</span>
           </Nav.Item>
         </div>
       </Nav>

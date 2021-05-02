@@ -6,3 +6,8 @@
   background-color: #e3f2fd;
   border-radius: 6px;
 }
+
+a {
+  text-decoration: none !important;
+  color: #8e8e93;
+}

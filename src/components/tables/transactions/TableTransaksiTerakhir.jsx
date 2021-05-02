@@ -3,11 +3,11 @@ import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableItems = (props) => {
+const TableTransaksiTerakhir = (props) => {
   return (
     <div>
       <Table data={props.listdata} autoHeight>
-        <Column width={60} align="center" fixed>
+        <Column width={50} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {
@@ -15,40 +15,38 @@ const TableItems = (props) => {
             }}
           </Cell>
         </Column>
-        <Column flexGrow={1.5}>
-          <HeaderCell>Nama Barang</HeaderCell>
-          <Cell dataKey="name" />
+        <Column flexGrow={1.5} sortable>
+          <HeaderCell>Kode Transaksi</HeaderCell>
+          <Cell dataKey="list" />
         </Column>
-        <Column flexGrow={0.8} align="left">
-          <HeaderCell>Kategori</HeaderCell>
-          <Cell dataKey="category" />
+
+        <Column flexGrow={0.8} sortable>
+          <HeaderCell>Pembeli</HeaderCell>
+          <Cell dataKey="buyer" />
         </Column>
-        <Column flexGrow={0.5} align="right">
-          <HeaderCell>Harga</HeaderCell>
-          <Cell dataKey="price" />
-        </Column>
-        <Column flexGrow={0.5} align="center">
-          <HeaderCell>Stok</HeaderCell>
-          <Cell dataKey="stock" />
+        <Column flexGrow={0.8} align="center" sortable>
+          <HeaderCell>Tanggal Transaksi</HeaderCell>
+          <Cell dataKey="date" />
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Action</HeaderCell>
+
           <Cell>
             {(rowData) => {
               function handleAction() {
-                alert(`id:${rowData.name}`);
+                alert(`id: ${rowData.id}`);
               }
               return (
                 <div>
                   <ButtonToolbar>
                     <IconButton
-                      icon={<Icon icon="edit" />}
+                      icon={<Icon icon="info" />}
                       appearance="ghost"
                       color="blue"
                       size="xs"
                       onClick={handleAction}
                     >
-                      <span className="is-desktop">Edit</span>
+                      <span className="is-desktop">Rincian</span>
                     </IconButton>
                     <IconButton
                       icon={<Icon icon="trash" />}
@@ -70,4 +68,4 @@ const TableItems = (props) => {
   );
 };
 
-export default TableItems;
+export default TableTransaksiTerakhir;

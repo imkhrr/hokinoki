@@ -3,11 +3,11 @@ import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableTransaksiTerakhir = (props) => {
+const TableCheckout = (props) => {
   return (
     <div>
       <Table data={props.listdata} autoHeight>
-        <Column width={60} align="center" fixed>
+        <Column width={50} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {
@@ -15,20 +15,27 @@ const TableTransaksiTerakhir = (props) => {
             }}
           </Cell>
         </Column>
-        <Column flexGrow={1.5} sortable>
-          <HeaderCell>Kode Transaksi</HeaderCell>
-          <Cell dataKey="list" />
+        <Column flexGrow={2}>
+          <HeaderCell>Nama Barang</HeaderCell>
+          <Cell dataKey="name" />
         </Column>
-
-        <Column flexGrow={0.8} sortable>
-          <HeaderCell>Pembeli</HeaderCell>
-          <Cell dataKey="buyer" />
+        <Column flexGrow={0.8} align="center">
+          <HeaderCell>Jumlah</HeaderCell>
+          <Cell dataKey="count">
+            {(rowData) => {
+              return <span className="bold ">{rowData.count}</span>;
+            }}
+          </Cell>
         </Column>
-        <Column flexGrow={0.8} align="center" sortable>
-          <HeaderCell>Waktu Pembelian</HeaderCell>
-          <Cell dataKey="date" />
+        <Column flexGrow={0.8} align="right">
+          <HeaderCell>Harga</HeaderCell>
+          <Cell dataKey="price" />
         </Column>
-        <Column flexGrow={1}>
+        <Column flexGrow={0.8} align="right">
+          <HeaderCell>SubTotal</HeaderCell>
+          <Cell dataKey="subtotal" />
+        </Column>
+        <Column flexGrow={0.8}>
           <HeaderCell>Action</HeaderCell>
 
           <Cell>
@@ -40,22 +47,13 @@ const TableTransaksiTerakhir = (props) => {
                 <div>
                   <ButtonToolbar>
                     <IconButton
-                      icon={<Icon icon="info" />}
-                      appearance="primary"
-                      color="blue"
-                      size="xs"
-                      onClick={handleAction}
-                    >
-                      Rincian
-                    </IconButton>
-                    <IconButton
                       icon={<Icon icon="trash" />}
-                      appearance="primary"
+                      appearance="ghost"
                       color="red"
                       size="xs"
                       onClick={handleAction}
                     >
-                      Hapus
+                      <span className="is-desktop">Hapus</span>
                     </IconButton>
                   </ButtonToolbar>
                 </div>
@@ -68,4 +66,4 @@ const TableTransaksiTerakhir = (props) => {
   );
 };
 
-export default TableTransaksiTerakhir;
+export default TableCheckout;

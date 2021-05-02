@@ -7,7 +7,7 @@ const TableCustomers = (props) => {
   return (
     <div>
       <Table data={props.listdata} autoHeight>
-        <Column width={60} align="center">
+        <Column width={60} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {
@@ -24,7 +24,7 @@ const TableCustomers = (props) => {
           <Cell dataKey="address" />
         </Column>
         <Column flexGrow={0.8}>
-          <HeaderCell>Kontak</HeaderCell>
+          <HeaderCell>No. HP</HeaderCell>
           <Cell dataKey="contact" />
         </Column>
         <Column flexGrow={1}>
@@ -39,21 +39,21 @@ const TableCustomers = (props) => {
                   <ButtonToolbar>
                     <IconButton
                       icon={<Icon icon="edit" />}
-                      appearance="primary"
+                      appearance="ghost"
                       color="blue"
                       size="xs"
                       onClick={handleAction}
                     >
-                      Edit
+                      <span className="is-desktop">Edit</span>
                     </IconButton>
                     <IconButton
                       icon={<Icon icon="trash" />}
-                      appearance="primary"
+                      appearance="ghost"
                       color="red"
                       size="xs"
                       onClick={handleAction}
                     >
-                      Hapus
+                      <span className="is-desktop">Hapus</span>
                     </IconButton>
                   </ButtonToolbar>
                 </div>

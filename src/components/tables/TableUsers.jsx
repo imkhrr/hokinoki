@@ -7,7 +7,7 @@ const TableUsers = (props) => {
   return (
     <div>
       <Table data={props.listdata} autoHeight>
-        <Column width={60} align="center">
+        <Column width={60} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {
@@ -20,12 +20,16 @@ const TableUsers = (props) => {
           <Cell dataKey="name" />
         </Column>
         <Column flexGrow={0.8}>
+          <HeaderCell>Role</HeaderCell>
+          <Cell dataKey="role" />
+        </Column>
+        <Column flexGrow={0.8}>
           <HeaderCell>Username</HeaderCell>
           <Cell dataKey="username" />
         </Column>
         <Column flexGrow={0.8}>
-          <HeaderCell>Alamat</HeaderCell>
-          <Cell dataKey="address" />
+          <HeaderCell>Password</HeaderCell>
+          <Cell dataKey="password" />
         </Column>
         <Column flexGrow={1}>
           <HeaderCell>Action</HeaderCell>
@@ -39,21 +43,21 @@ const TableUsers = (props) => {
                   <ButtonToolbar>
                     <IconButton
                       icon={<Icon icon="edit" />}
-                      appearance="primary"
+                      appearance="ghost"
                       color="blue"
                       size="xs"
                       onClick={handleAction}
                     >
-                      Edit
+                      <span className="is-desktop">Edit</span>
                     </IconButton>
                     <IconButton
                       icon={<Icon icon="trash" />}
-                      appearance="primary"
+                      appearance="ghost"
                       color="red"
                       size="xs"
                       onClick={handleAction}
                     >
-                      Hapus
+                      <span className="is-desktop">Hapus</span>
                     </IconButton>
                   </ButtonToolbar>
                 </div>

@@ -15,7 +15,7 @@ class Dashboard extends Component {
       <div>
         <NavigasiBar />
         <Grid fluid>
-          <Row className="px-1 py-2">
+          <Row className="px-2 py-2">
             <Col xsHidden smHidden xs={24} sm={24} md={4}>
               <div className="pr-4">
                 <SideBar />

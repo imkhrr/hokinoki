@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import Router from "./router";
+import { authenticated } from "./store/User";
+import Loading from "./components/Loading";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App(props) {
+  const setAuth = useSetRecoilState(authenticated);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(false);
+    const getUser = async () => {
+      try {
+        let { data } = await axios.get("me");
+        setAuth({ check: true, user: data.data });
+        setMounted(true);
+      } catch (error) {
+        setMounted(true);
+        console.clear();
+      }
+    };
+    getUser();
+  }, [setAuth]);
+
+  if (mounted) {
+    return (
+      <div>
+        <Router />
+      </div>
+    );
+  }
+
+  return <Loading />;
 }
 
 export default App;

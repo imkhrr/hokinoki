@@ -1,0 +1,25 @@
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.customscroll::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f5f5f5;
+}
+
+.customscroll::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background-color: #e3f2fd;
+}
+
+.rs-table-scrollbar-horizontal {
+  height: 6px !important;
+}
+
+.rs-table-scrollbar-handle {
+  background-color: #2196f3 !important;
+}
+
+.rs-table-scrollbar-horizontal .rs-table-scrollbar-handle {
+  height: 6px !important;
+}

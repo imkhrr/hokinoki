@@ -46,10 +46,6 @@ code {
   width: 100% !important;
 }
 
-.rs-panel-body {
-  padding-top: 0.5em !important;
-}
-
 .rs-nav-item-active > .rs-nav-item-content {
   color: #2196f3 !important;
 }

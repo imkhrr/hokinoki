@@ -7,7 +7,7 @@ const TableUsers = (props) => {
   return (
     <div>
       <Table data={props.listdata} autoHeight>
-        <Column width={60} align="center" fixed>
+        <Column width={50} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
             {(rowData, rowIndex) => {

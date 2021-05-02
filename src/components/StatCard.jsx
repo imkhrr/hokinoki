@@ -9,14 +9,14 @@ const StatCard = (props) => {
         bordered
       >
         <Row>
-          <Col xs={24} sm={18} md={18}>
+          <Col xs={18} sm={18} md={18}>
             <span className="t4">{props.viewdate}</span>
             <div>
               <span className="t0">{props.count}</span>
             </div>
             <span className="t3">{props.cardname}</span>
           </Col>
-          <Col xs={24} sm={6} md={6}>
+          <Col xs={6} sm={6} md={6}>
             <div className="pt-4">
               <Icon icon={props.iconname} size="2x" />
             </div>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from "rsuite";
+import { Grid, Row, Col, Icon, Input, InputGroup, Button } from "rsuite";
 
 import TableTransaksiTerakhir from "../../components/tables/transactions/TableTransaksiTerakhir";
 
@@ -44,8 +44,21 @@ class TransaksiTerakhir extends Component {
       <Grid fluid>
         <Row>
           <Col xs={24} sm={24} md={24}>
-            <div className="pb-2">
+            <div className="pb-2 flex jc-sb ai-c">
               <span className="t2 pr-1">Transaksi Terakhir</span>
+              <div className="flex jc-sb">
+                <InputGroup size="xs">
+                  <Input placeholder="Keyword" />
+                  <InputGroup.Addon>
+                    <Icon icon="search" />
+                  </InputGroup.Addon>
+                </InputGroup>
+                <div className="pl-2">
+                  <Button appearance="primary" size="xs">
+                    Filter
+                  </Button>
+                </div>
+              </div>
             </div>
             <div className="pb-2">
               <TableTransaksiTerakhir listdata={transData} />

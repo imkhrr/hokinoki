@@ -49,6 +49,7 @@ function NavigasiBar(props) {
               trigger={"hover"}
               icon={<Icon icon="user-circle-o" />}
               title={auth.user.name}
+              placement="bottomEnd"
             >
               <NavLink to="/settings">
                 <Dropdown.Item

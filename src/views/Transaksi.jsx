@@ -22,7 +22,7 @@ class Transaksi extends Component {
                 <SideBar />
               </div>
             </Col>
-            <Col xs={24} sm={24} md={20}>
+            <Col className="px-0px" xs={24} sm={24} md={20}>
               <div style={{ minHeight: "77vh" }}>
                 {transIndex === 0 && <TransaksiTerakhir />}
                 {transIndex === 1 && <TambahTransaksi />}
@@ -46,7 +46,7 @@ class Transaksi extends Component {
                 <div className="flex jc-sb px-5px pt-2">
                   <IconButton
                     icon={<Icon icon="chevron-left" />}
-                    appearance="ghost"
+                    appearance="default"
                     onClick={() => this.setState({ transIndex: 0 })}
                   >
                     Back
@@ -65,7 +65,7 @@ class Transaksi extends Component {
                 <div className="flex jc-sb px-5px pt-2">
                   <IconButton
                     icon={<Icon icon="ban" />}
-                    appearance="ghost"
+                    appearance="default"
                     onClick={() => this.setState({ transIndex: 1 })}
                   >
                     Cancel

@@ -1,16 +1,23 @@
 import React, { Component } from "react";
 import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
-import DashboardCharts from "../components/DashboardCharts";
-import StatCard from "../components/StatCard";
-
-import { Button, ButtonToolbar, Col, Row, Panel, Grid, Icon } from "rsuite";
 import BestSellerCard from "../components/BestSellerCard";
+import StatCard from "../components/StatCard";
+import BarCharts from "../components/charts/BarCharts";
+import LineCharts from "../components/charts/LineCharts";
+import AreaCharts from "../components/charts/AreaCharts";
+
+import { Col, Row, Panel, Grid, Radio, RadioGroup } from "rsuite";
 
 class Dashboard extends Component {
-  state = {};
-
+  state = {
+    chartType: 1,
+    dataType: 1,
+  };
   render() {
+    const chartType = this.state.chartType;
+    const dataType = this.state.dataType;
+
     return (
       <div>
         <NavigasiBar />
@@ -22,15 +29,14 @@ class Dashboard extends Component {
               </div>
             </Col>
             <Col xs={24} sm={24} md={20}>
-              <div className="pb-1 flex" style={{ alignItems: "center" }}>
+              <div className="pb-1 flex ai-c">
                 <span className="t2 pr-1">Statistik</span>
-                <ButtonToolbar>
-                  <Button size="xs" appearance="primary">
-                    Harian
-                  </Button>
-                  <Button size="xs">Mingguan</Button>
-                  <Button size="xs">Bulanan</Button>
-                </ButtonToolbar>
+
+                <RadioGroup name="radioList" inline>
+                  <Radio value="harian">Harian</Radio>
+                  <Radio value="mingguan">Mingguan</Radio>
+                  <Radio value="bulanan">Bulanan</Radio>
+                </RadioGroup>
               </div>
               <Row gutter={16}>
                 <StatCard
@@ -66,19 +72,38 @@ class Dashboard extends Component {
                   iconname="attribution"
                 />
               </Row>
-              <div className="pb-1 pt-2 flex" style={{ alignItems: "center" }}>
+              <div className="pb-1 pt-2 flex ai-c">
                 <span className="t2 pr-1">Grafik</span>
-                <ButtonToolbar>
-                  <Button appearance="primary" size="xs">
-                    Bar Chart
-                  </Button>
-                  <Button size="xs">Line Chart</Button>
-                </ButtonToolbar>
+                <RadioGroup name="radioList" inline>
+                  <Radio
+                    name="bar"
+                    value="1"
+                    onChange={() => this.setState({ chartType: 1 })}
+                  >
+                    Bar
+                  </Radio>
+                  <Radio
+                    name="line"
+                    value="2"
+                    onChange={() => this.setState({ chartType: 2 })}
+                  >
+                    Line
+                  </Radio>
+                  <Radio
+                    name="area"
+                    value="3"
+                    onChange={() => this.setState({ chartType: 3 })}
+                  >
+                    Area
+                  </Radio>
+                </RadioGroup>
               </div>
               <Row gutter={16}>
                 <Col className="py-1" xs={24} sm={24} md={18}>
                   <Panel bordered>
-                    <DashboardCharts />
+                    {chartType === 1 && <BarCharts />}
+                    {chartType === 2 && <LineCharts />}
+                    {chartType === 3 && <AreaCharts />}
                   </Panel>
                 </Col>
                 <Col className="py-1" xs={24} sm={24} md={6}>

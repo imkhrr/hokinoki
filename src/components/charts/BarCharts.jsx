@@ -9,7 +9,7 @@ import {
   Legend,
 } from "recharts";
 
-class DashboardCharts extends Component {
+class BarCharts extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -87,4 +87,4 @@ class DashboardCharts extends Component {
   }
 }
 
-export default DashboardCharts;
+export default BarCharts;

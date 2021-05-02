@@ -55,25 +55,26 @@ class Checkout extends Component {
               <Form fluid className="pt-2">
                 <FormGroup>
                   <ControlLabel>Nama</ControlLabel>
-                  <FormControl name="name" />
+                  <FormControl size="sm" name="name" />
                 </FormGroup>
                 <FormGroup>
                   <ControlLabel>Tanggal Transaksi</ControlLabel>
-                  <FormControl name="date" />
+                  <FormControl size="sm" name="date" />
                 </FormGroup>
                 <FormGroup>
                   <ControlLabel>No. Struk</ControlLabel>
-                  <FormControl name="struk" />
+                  <FormControl size="sm" name="struk" />
                 </FormGroup>
                 <FormGroup>
                   <ControlLabel>Catatan</ControlLabel>
                   <FormControl
-                    rows={3}
+                    size="sm"
+                    rows={4}
                     name="textarea"
                     componentClass="textarea"
                   />
                 </FormGroup>
-                <div className="flex jc-sb">
+                <div className="flex jc-sb pt-4">
                   <span>Total Bayar</span>
                   <div>
                     <span>Rp. </span>

@@ -65,14 +65,6 @@ class SideBar extends Component {
             <span className="pl-1">Customers</span>
           </Nav.Item>
         </NavLink>
-        <NavLink exact to="/suppliers">
-          <Nav.Item
-            eventKey="suppliers"
-            icon={<Icon className="is-indigo" icon="truck" />}
-          >
-            <span className="pl-1">Suppliers</span>
-          </Nav.Item>
-        </NavLink>
         <br />
         <span className="pl-1 t4">LAPORAN</span>
         <NavLink exact to="/penjualan">

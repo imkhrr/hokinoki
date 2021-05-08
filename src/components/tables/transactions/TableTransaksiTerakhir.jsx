@@ -15,16 +15,16 @@ const TableTransaksiTerakhir = (props) => {
             }}
           </Cell>
         </Column>
-        <Column flexGrow={1.5} sortable>
+        <Column flexGrow={1.5}>
           <HeaderCell>Kode Transaksi</HeaderCell>
           <Cell dataKey="list" />
         </Column>
 
-        <Column flexGrow={0.8} sortable>
+        <Column flexGrow={0.8}>
           <HeaderCell>Pembeli</HeaderCell>
           <Cell dataKey="buyer" />
         </Column>
-        <Column flexGrow={0.8} align="center" sortable>
+        <Column flexGrow={0.8} align="center">
           <HeaderCell>Tanggal Transaksi</HeaderCell>
           <Cell dataKey="date" />
         </Column>

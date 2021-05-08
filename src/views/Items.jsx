@@ -41,15 +41,15 @@ class Items extends Component {
     const showModal = this.state.showModal;
     return (
       <div>
-        <NavigasiBar />
         <Grid fluid>
-          <Row className="px-2 py-2">
-            <Col xsHidden smHidden xs={24} sm={24} md={4}>
-              <div className="pr-4">
+          <Row>
+            <Col xsHidden smHidden xs={24} sm={24} md={4} className="px-0px">
+              <div className="pr-1">
                 <SideBar />
               </div>
             </Col>
-            <Col xs={24} sm={24} md={20}>
+            <Col xs={24} sm={24} md={20} className="px-0px">
+              <NavigasiBar title="Items" />
               <AddModal
                 title="Tambah Barang"
                 size="xs"
@@ -81,24 +81,26 @@ class Items extends Component {
                 show={showModal}
                 onHide={() => this.setState({ showModal: false })}
               />
-              <div style={{ minHeight: "77vh" }}>
-                <div className="pb-2">
-                  <span className="t2 pr-1">Data Barang</span>
+              <div className="p-3 animate__animated animate__fadeIn">
+                <div style={{ minHeight: "77vh" }}>
+                  <div className="pb-2">
+                    <span className="t3 pr-1">Data Barang</span>
+                  </div>
+                  <div>
+                    <TableItems listdata={itemsData} />
+                  </div>
                 </div>
-                <div>
-                  <TableItems listdata={itemsData} />
-                </div>
-              </div>
 
-              <div className="flex jc-sb px-5px pt-2">
-                <div></div>
-                <IconButton
-                  icon={<Icon icon="plus" />}
-                  appearance="primary"
-                  onClick={() => this.setState({ showModal: true })}
-                >
-                  Tambah Barang
-                </IconButton>
+                <div className="flex jc-sb pt-2">
+                  <div></div>
+                  <IconButton
+                    icon={<Icon icon="plus" />}
+                    appearance="primary"
+                    onClick={() => this.setState({ showModal: true })}
+                  >
+                    Tambah Barang
+                  </IconButton>
+                </div>
               </div>
             </Col>
           </Row>

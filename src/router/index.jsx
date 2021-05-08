@@ -8,87 +8,69 @@ import LoginPage from "../views/LoginPage";
 import NotFound from "../views/NotFound";
 import Transaksi from "../views/Transaksi";
 import Customers from "../views/Customers";
+import Suppliers from "../views/Suppliers";
 import Settings from "../views/Settings";
 
 function Router(props) {
-    return (
-        <div>
-            <BrowserRouter>
-                <Switch>
-                    {/* Authenticated Route */}
-                    {/* <Route exact path="/">
-                        <Middleware.Authenticated render={<Dashboard />} />
-                    </Route>
+  return (
+    <div>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <Middleware.Authenticated>
+              <Dashboard />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/transaksi">
-                        <Middleware.Authenticated render={<Transaksi />} />
-                    </Route>
+          <Route path="/transaksi">
+            <Middleware.Authenticated>
+              <Transaksi />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/items">
-                        <Middleware.Authenticated render={<Items />} />
-                    </Route>
+          <Route path="/items">
+            <Middleware.Authenticated>
+              <Items />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/users">
-                        <Middleware.Authenticated render={<Users />} />
-                    </Route>
+          <Route path="/users">
+            <Middleware.Authenticated>
+              <Users />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/customers">
-                        <Middleware.Authenticated render={<Customers />} />
-                    </Route>
+          <Route path="/customers">
+            <Middleware.Authenticated>
+              <Customers />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/settings">
-                        <Middleware.Authenticated render={<Settings />} />
-                    </Route> */}
+          <Route path="/suppliers">
+            <Middleware.Authenticated>
+              <Suppliers />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route exact path="/">
-                        <Middleware.Authenticated>
-                            <Dashboard />
-                        </Middleware.Authenticated>
-                    </Route>
+          <Route path="/settings">
+            <Middleware.Authenticated>
+              <Settings />
+            </Middleware.Authenticated>
+          </Route>
 
-                    <Route path="/transaksi">
-                        <Middleware.Authenticated>
-                            <Transaksi />
-                        </Middleware.Authenticated>
-                    </Route>
+          {/* Guest Route */}
+          <Route path="/login">
+            <Middleware.Guest>
+              <LoginPage />
+            </Middleware.Guest>
+          </Route>
 
-                    <Route path="/items">
-                        <Middleware.Authenticated>
-                            <Items />
-                        </Middleware.Authenticated>
-                    </Route>
-
-                    <Route path="/users">
-                        <Middleware.Authenticated>
-                            <Users />
-                        </Middleware.Authenticated>
-                    </Route>
-
-                    <Route path="/customers">
-                        <Middleware.Authenticated>
-                            <Customers />
-                        </Middleware.Authenticated>
-                    </Route>
-
-                    <Route path="/settings">
-                        <Middleware.Authenticated>
-                            <Settings />
-                        </Middleware.Authenticated>
-                    </Route>
-
-                    {/* Guest Route */}
-                    <Route path="/login">
-                        <Middleware.Guest>
-                            <LoginPage />
-                        </Middleware.Guest>
-                    </Route>
-
-                    {/* Error Route */}
-                    <Route component={NotFound} />
-                </Switch>
-            </BrowserRouter>
-        </div>
-    );
+          {/* Error Route */}
+          <Route component={NotFound} />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default Router;

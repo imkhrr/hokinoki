@@ -91,22 +91,24 @@ class TambahTransaksi extends Component {
 
     return (
       <Grid fluid>
-        <Row>
-          <Col xs={24} sm={24} md={18}>
-            <div className="pb-2">
-              <span className="t2 pr-1">Tambah Transaksi</span>
+        <Row className="animate__animated animate__fadeIn">
+          <Col xs={24} sm={24} md={17} className="px-0px">
+            <div className="pb-2 ">
+              <span className="t3 pr-1">Tambah Transaksi</span>
             </div>
-            <div className="pb-2">
+            <div className="pb-4" style={{ paddingTop: 4 }}>
               <TableTambahTransaksi listdata={addData} />
             </div>
           </Col>
-          <Col xs={24} sm={24} md={6}>
-            <div className="pb-2 flex jc-sb ai-c">
-              <div>
-                <span className="t2 pr-1">Keranjang</span>
-                <Tag color="blue">7</Tag>
-              </div>
-              <div>
+          <Col xs={24} sm={24} md={7} className="px-0px">
+            <div className="pl-2">
+              <div className="pb-2 flex jc-sb">
+                <div>
+                  <span className="t3 pr-1">Keranjang</span>
+
+                  <Tag color="blue">7</Tag>
+                </div>
+
                 <IconButton
                   size="xs"
                   appearance="ghost"
@@ -115,48 +117,47 @@ class TambahTransaksi extends Component {
                   Clear All
                 </IconButton>
               </div>
-            </div>
-            <Panel
-              className="customscroll"
-              style={{ height: "69vh", overflowY: "scroll" }}
-              bordered
-            >
-              <List style={{ boxShadow: "none" }} sortable>
-                {checkoutData.map((item, index) => (
-                  <List.Item
-                    // style={{ boxShadow: "none" }}
-                    key={item["name"]}
-                    index={index}
-                  >
-                    <div className="flex jc-sb">
-                      <span className="bold">{item["name"]}</span>
-                      <span>Rp. {item["subtotal"]}</span>
-                    </div>
-                    <br />
-                    <div className="flex jc-sb">
-                      <InputGroup style={{ width: 80 }}>
-                        <InputGroup.Button size="xs">-</InputGroup.Button>
-                        <Input
-                          value={item["count"]}
+              <Panel
+                className="customscroll is-bg-white"
+                style={{ height: "69vh", overflowY: "scroll" }}
+              >
+                <List style={{ boxShadow: "none" }} sortable>
+                  {checkoutData.map((item, index) => (
+                    <List.Item
+                      // style={{ boxShadow: "none" }}
+                      key={item["name"]}
+                      index={index}
+                    >
+                      <div className="flex jc-sb">
+                        <span className="bold">{item["name"]}</span>
+                        <span>Rp. {item["subtotal"]}</span>
+                      </div>
+                      <br />
+                      <div className="flex jc-sb">
+                        <InputGroup style={{ width: 80 }}>
+                          <InputGroup.Button size="xs">-</InputGroup.Button>
+                          <Input
+                            value={item["count"]}
+                            size="xs"
+                            max={99}
+                            min={1}
+                          />
+                          <InputGroup.Button size="xs">+</InputGroup.Button>
+                        </InputGroup>
+                        <IconButton
+                          appearance="ghost"
+                          color="red"
                           size="xs"
-                          max={99}
-                          min={1}
-                        />
-                        <InputGroup.Button size="xs">+</InputGroup.Button>
-                      </InputGroup>
-                      <IconButton
-                        appearance="ghost"
-                        color="red"
-                        size="xs"
-                        icon={<Icon icon="trash" />}
-                      >
-                        Hapus
-                      </IconButton>
-                    </div>
-                  </List.Item>
-                ))}
-              </List>
-            </Panel>
+                          icon={<Icon icon="trash" />}
+                        >
+                          Hapus
+                        </IconButton>
+                      </div>
+                    </List.Item>
+                  ))}
+                </List>
+              </Panel>
+            </div>
           </Col>
         </Row>
       </Grid>

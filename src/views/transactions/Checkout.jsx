@@ -37,51 +37,56 @@ class Checkout extends Component {
 
     return (
       <Grid fluid>
-        <Row>
-          <Col xs={24} sm={24} md={18}>
+        <Row className="animate__animated animate__fadeIn">
+          <Col xs={24} sm={24} md={17} className="px-0px">
             <div className="pb-2">
-              <span className="t2 pr-1">Checkout</span>
+              <span className="t3 pr-1">Checkout</span>
             </div>
-            <div className="pb-2">
+            <div className="pb-2" style={{ paddingTop: 4 }}>
               <TableCheckout listdata={checkoutData} />
             </div>
           </Col>
-          <Col xs={24} sm={24} md={6}>
-            <div className="pb-2">
-              <span className="t2 pr-1">Data Pelanggan</span>
+          <Col xs={24} sm={24} md={7} className="px-0px">
+            <div className="pl-2">
+              <div className="pb-2">
+                <span className="t3 pr-1">Data Pelanggan</span>
+              </div>
+              <div style={{ paddingTop: 4 }}>
+                {" "}
+                <Panel className="is-bg-white" style={{ minHeight: "69vh" }}>
+                  <Form fluid className="pt-2">
+                    <FormGroup>
+                      <ControlLabel>Nama</ControlLabel>
+                      <FormControl size="sm" name="name" />
+                    </FormGroup>
+                    <FormGroup>
+                      <ControlLabel>Tanggal Transaksi</ControlLabel>
+                      <FormControl size="sm" name="date" />
+                    </FormGroup>
+                    <FormGroup>
+                      <ControlLabel>No. Struk</ControlLabel>
+                      <FormControl size="sm" name="struk" />
+                    </FormGroup>
+                    <FormGroup>
+                      <ControlLabel>Catatan</ControlLabel>
+                      <FormControl
+                        size="sm"
+                        rows={4}
+                        name="textarea"
+                        componentClass="textarea"
+                      />
+                    </FormGroup>
+                    <div className="flex jc-sb pt-4">
+                      <span>Total Bayar</span>
+                      <div>
+                        <span>Rp. </span>
+                        <span className="bold">160.000</span>
+                      </div>
+                    </div>
+                  </Form>
+                </Panel>
+              </div>
             </div>
-            <Panel style={{ minHeight: "69vh" }} bordered>
-              <Form fluid className="pt-2">
-                <FormGroup>
-                  <ControlLabel>Nama</ControlLabel>
-                  <FormControl size="sm" name="name" />
-                </FormGroup>
-                <FormGroup>
-                  <ControlLabel>Tanggal Transaksi</ControlLabel>
-                  <FormControl size="sm" name="date" />
-                </FormGroup>
-                <FormGroup>
-                  <ControlLabel>No. Struk</ControlLabel>
-                  <FormControl size="sm" name="struk" />
-                </FormGroup>
-                <FormGroup>
-                  <ControlLabel>Catatan</ControlLabel>
-                  <FormControl
-                    size="sm"
-                    rows={4}
-                    name="textarea"
-                    componentClass="textarea"
-                  />
-                </FormGroup>
-                <div className="flex jc-sb pt-4">
-                  <span>Total Bayar</span>
-                  <div>
-                    <span>Rp. </span>
-                    <span className="bold">160.000</span>
-                  </div>
-                </div>
-              </Form>
-            </Panel>
           </Col>
         </Row>
       </Grid>

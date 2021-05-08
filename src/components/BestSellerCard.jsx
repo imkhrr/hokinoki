@@ -30,6 +30,8 @@ const BestSellerCard = (props) => {
               <li>Pepaya</li>
               <li>Bawang Merah</li>
               <li>Gula</li>
+              <li>Cabe Rawit</li>
+              <li>Terong</li>
             </ul>
           </Col>
           <Col xs={4} sm={4} md={9}>
@@ -42,6 +44,8 @@ const BestSellerCard = (props) => {
                 <li>14</li>
                 <li>8</li>
                 <li>4</li>
+                <li>2</li>
+                <li>2</li>
                 <li>2</li>
               </ul>
             </div>

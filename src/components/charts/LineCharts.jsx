@@ -7,6 +7,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 class LineCharts extends Component {
@@ -67,22 +68,22 @@ class LineCharts extends Component {
       },
     ];
     return (
-      <LineChart
-        data={data}
-        margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-        width={750}
-        height={260}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line dataKey="terjual" stroke="#f44336" />
-        <Line dataKey="pelanggan" stroke="#e91e63" />
-        <Line dataKey="transaksi" stroke="#9c27b0" />
-        <Line dataKey="stok_opname" stroke="#3f51b5" />
-      </LineChart>
+      <ResponsiveContainer width="100%" height={227}>
+        <LineChart
+          data={data}
+          margin={{ top: 30, right: 30, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line dataKey="terjual" stroke="#f44336" />
+          <Line dataKey="pelanggan" stroke="#e91e63" />
+          <Line dataKey="transaksi" stroke="#9c27b0" />
+          <Line dataKey="stok_opname" stroke="#3f51b5" />
+        </LineChart>
+      </ResponsiveContainer>
     );
   }
 }

@@ -30,7 +30,6 @@ class Dashboard extends Component {
                         <Col xs={24} sm={24} md={20}>
                             <div className="pb-1 flex ai-c">
                                 <span className="t2 pr-1">Statistik</span>
-
                                 <RadioGroup name="radioList" inline>
                                     <Radio value="harian">Harian</Radio>
                                     <Radio value="mingguan">Mingguan</Radio>
@@ -67,7 +66,7 @@ class Dashboard extends Component {
                                     textcolor="white"
                                     viewdate="Hari ini"
                                     count="19"
-                                    cardname="Stok Opname"
+                                    cardname="Stok Barang"
                                     iconname="attribution"
                                 />
                             </Row>

@@ -12,12 +12,15 @@ import {
     ErrorMessage,
     Notification,
 } from "rsuite";
+import { useHistory } from "react-router";
 
 function LoginPage(props) {
     const setAuth = useSetRecoilState(authenticated);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({ status: true, data: [] });
+    const history = useHistory();
+
 
     const data = { username, password };
 
@@ -27,6 +30,7 @@ function LoginPage(props) {
             let response = await axios.post("login", data);
             localStorage.setItem("userToken", response.data.token);
             setAuth({ check: true, user: response.data.data });
+            history.push('/');
         } catch (e) {
             setErrors({ status: true, data: e.response.data.errors });
             if (e.response.data.errors.message) {
@@ -40,8 +44,8 @@ function LoginPage(props) {
     };
     return (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", }} >
-            <Panel style={{ width: 350 }} header={<h4>Login</h4>} bordered>
-                <Form onSubmit={auth}>
+            <Panel style={{ width: 350 }} bordered>
+                <Form onSubmit={ auth }>
                     <FormGroup>
                         <ControlLabel>Username</ControlLabel>
                         <Input onChange={(value) => setUsername(value)} name="name" placeholder="Username" />
@@ -52,7 +56,6 @@ function LoginPage(props) {
                         <ControlLabel>Password</ControlLabel>
                         <Input onChange={(value) => setPassword(value)} name="password" type="password" placeholder="••••••••" />
                         <ErrorMessage className="is-red" show={errors.data.password ? true : false} placement="bottomStart"> {errors.data.password} </ErrorMessage>
-
                     </FormGroup>
                     <FormGroup>
                         <Button type='submit' appearance="primary" block> Submit </Button>

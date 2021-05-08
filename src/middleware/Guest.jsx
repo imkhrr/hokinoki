@@ -11,7 +11,7 @@ function Guest(props) {
     history.push('/');
   }
 
-  return props.render;
+  return props.children;
 }
 
 export default Guest;

@@ -39,18 +39,10 @@ function NavigasiBar(props) {
                 </Nav>
                 <Nav pullRight>
                     <div className="is-mobile">
-                        <Nav.Item
-                            icon={<Icon icon="bars" size="lg" />}
-                            onSelect={toggleNavbar}
-                        ></Nav.Item>
+                        <Nav.Item icon={<Icon icon="bars" size="lg" />} onSelect={toggleNavbar} />
                     </div>
                     <div className="is-desktop">
-                        <Dropdown
-                            trigger={"hover"}
-                            icon={<Icon icon="user-circle-o" />}
-                            title={auth.user.name}
-                            placement="bottomEnd"
-                        >
+                        <Dropdown trigger={"hover"} icon={<Icon icon="user-circle-o" />} title={auth.user.name} placement="bottomEnd" >
                             <NavLink to="/settings">
                                 <Dropdown.Item componentClass="div" icon={<Icon icon="setting" />} style={{ width: 147 }} > Settings </Dropdown.Item>
                             </NavLink>

@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonToolbar, Table, Icon, IconButton, Tag } from "rsuite";
+import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 
 const { Column, HeaderCell, Cell } = Table;
 

@@ -11,33 +11,42 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  InputNumber,
 } from "rsuite";
-import TableItems from "../components/tables/TableItems";
+import TableSuppliers from "../components/tables/TableSuppliers";
 import AddModal from "../components/AddModal";
 
-class Items extends Component {
-  state = {
-    showModal: false,
-  };
+class Suppliers extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
-    const itemsData = [
+    const suppliersData = [
       {
         id: 1,
-        name: "Nanas",
-        category: "Buah",
-        price: "5.000",
-        stock: "15",
+        name: "Wildan Affandi",
+        items: "Tomat, Selada, Bawang",
+        address: "Jl. Bintang",
       },
       {
-        id: 2,
-        name: "Anggur Merah",
-        category: "Minuman",
-        price: "75.000",
-        stock: "999",
+        id: 1,
+        name: "Putra Buah",
+        items: "Apel, Jeruk, Semangka",
+        address: "Jl. Jupiter",
+      },
+      {
+        id: 1,
+        name: "PT. Indofood",
+        items: "Bumbu jadi",
+        address: "Jl. Surya Kencana",
+      },
+      {
+        id: 1,
+        name: "PT. Kapal Api",
+        items: "Kopi Sachet",
+        address: "Jl. Apel",
       },
     ];
-
     const showModal = this.state.showModal;
     return (
       <div>
@@ -51,7 +60,7 @@ class Items extends Component {
             </Col>
             <Col xs={24} sm={24} md={20}>
               <AddModal
-                title="Tambah Barang"
+                title="Tambah Suppliers"
                 size="xs"
                 content={
                   <Form fluid>
@@ -60,20 +69,13 @@ class Items extends Component {
                       <FormControl name="name" />
                     </FormGroup>
                     <FormGroup>
-                      <ControlLabel>Kategori</ControlLabel>
-                      <FormControl name="category" />
+                      <ControlLabel>Barang</ControlLabel>
+                      <FormControl name="items" />
                     </FormGroup>
-
-                    <Form className="flex jc-sb" fluid>
-                      <FormGroup>
-                        <ControlLabel>Harga</ControlLabel>
-                        <InputNumber style={{ width: "170px" }} prefix="Rp." />
-                      </FormGroup>
-                      <FormGroup>
-                        <ControlLabel>Stock</ControlLabel>
-                        <InputNumber style={{ width: "170px" }} />
-                      </FormGroup>
-                    </Form>
+                    <FormGroup>
+                      <ControlLabel>Alamat</ControlLabel>
+                      <FormControl name="address" />
+                    </FormGroup>
                   </Form>
                 }
                 yes={() => this.setState({ showModal: false })}
@@ -83,10 +85,10 @@ class Items extends Component {
               />
               <div style={{ minHeight: "77vh" }}>
                 <div className="pb-2">
-                  <span className="t2 pr-1">Data Barang</span>
+                  <span className="t2 pr-1">Data Suppliers</span>
                 </div>
                 <div>
-                  <TableItems listdata={itemsData} />
+                  <TableSuppliers listdata={suppliersData} />
                 </div>
               </div>
 
@@ -97,7 +99,7 @@ class Items extends Component {
                   appearance="primary"
                   onClick={() => this.setState({ showModal: true })}
                 >
-                  Tambah Barang
+                  Tambah Suppliers
                 </IconButton>
               </div>
             </Col>
@@ -108,4 +110,4 @@ class Items extends Component {
   }
 }
 
-export default Items;
+export default Suppliers;

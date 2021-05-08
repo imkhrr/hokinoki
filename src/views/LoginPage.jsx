@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { authenticated } from "../store/User";
-import FormError from "../components/FormError";
 import {
     Panel,
     FormGroup,

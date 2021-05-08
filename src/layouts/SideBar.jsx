@@ -13,13 +13,13 @@ class SideBar extends Component {
             <span className="t2">HOKI NOKI</span>
           </div>
           <br /> */}
-          <div className="is-mobile">
+          {/* <div className="is-mobile">
             <span className="pl-1 t4">ACCOUNT</span>
             <Nav.Item icon={<Icon className="is-blue" icon="user-circle-o" />}>
               <span className="pl-1">Administrator</span>
             </Nav.Item>
             <br />
-          </div>
+          </div> */}
 
           <span className="pl-1 t4">MAIN MENU</span>
           <NavLink exact to="/">

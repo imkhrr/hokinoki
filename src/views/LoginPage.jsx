@@ -49,9 +49,13 @@ function LoginPage(props) {
         alignItems: "center",
         height: "100vh",
       }}
+      className="animate__animated animate__fadeIn"
     >
-      <Panel className="is-bg-white" style={{ width: 350 }} bordered>
+      <Panel className="is-bg-white" style={{ width: 350 }} shaded>
         <Form onSubmit={auth}>
+          <FormGroup className="pb-2">
+            <span className="t2">Login</span>
+          </FormGroup>
           <FormGroup>
             <ControlLabel>Username</ControlLabel>
             <Input
@@ -64,10 +68,8 @@ function LoginPage(props) {
               show={errors.data.username ? true : false}
               placement="bottomStart"
             >
-              {" "}
-              {errors.data.username}{" "}
+              {errors.data.username}
             </ErrorMessage>
-            {/* {errors.data.username ? <ErrorMessage show={errors.status} placement="bottomStart"> {errors.data.username[0]} </ErrorMessage> : ""} */}
           </FormGroup>
           <FormGroup>
             <ControlLabel>Password</ControlLabel>
@@ -82,14 +84,12 @@ function LoginPage(props) {
               show={errors.data.password ? true : false}
               placement="bottomStart"
             >
-              {" "}
-              {errors.data.password}{" "}
+              {errors.data.password}
             </ErrorMessage>
           </FormGroup>
-          <FormGroup>
+          <FormGroup className="pt-2">
             <Button type="submit" appearance="primary" block>
-              {" "}
-              Submit{" "}
+              Submit
             </Button>
           </FormGroup>
         </Form>

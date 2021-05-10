@@ -1,14 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
+import { usersTable } from "../../store/DataTable";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableUsers = (props) => {
 
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useRecoilState(usersTable);
+    const [event, setEvent] = useState(props.event);
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
@@ -36,7 +39,7 @@ const TableUsers = (props) => {
     const getData = async (e) => {
         setLoading(true);
         try {
-            let { data } = await axios.post(`customers/table?page=${page}`, request);
+            let { data } = await axios.post(`table/users?page=${page}`, request);
             setTableData(data);
             setLoading(false);
         } catch (e) {
@@ -46,11 +49,11 @@ const TableUsers = (props) => {
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType]);
+    }, [page, length, column, sortType, event]);
 
     return (
         <div>
-            <Table loading={loading} data={tableData} Height={ 300 }>
+            <Table loading={loading} data={tableData.data} height={ 400 }>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -102,7 +105,20 @@ const TableUsers = (props) => {
                     </Cell>
                 </Column>
             </Table>
-            <TablePagination />
+            <TablePagination
+                lengthMenu={[
+                    { value: 10, label: 10 },
+                    { value: 50, label: 50 },
+                    { value: 100, label: 100 },
+                    { value: 100, label: "all" },
+                ]}
+                total={tableData.total}
+                activePage={tableData.current_page}
+                displayLength={tableData.per_page}
+                onChangePage={handleChangePage}
+                onChangeLength={handleChangeLength}
+
+            />
         </div>
     );
 };

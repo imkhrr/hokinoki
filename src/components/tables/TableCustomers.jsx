@@ -1,13 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
+import { customersTable } from "../../store/DataTable";
+import { customerModal } from "../../store/Modal";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableCustomers = (props) => {
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useRecoilState(customersTable);
+    const [modal, setModal] = useRecoilState(customerModal);
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
@@ -16,12 +20,11 @@ const TableCustomers = (props) => {
     const request = { sortType, column, length }
 
     const handleChangePage = (e) => {
-        console.log(e);
         setPage(e);
     };
 
     const handleChangeLength = (e) => {
-        console.log(e);
+        console.clear();
         setLength(e);
         setPage(1);
     };
@@ -29,7 +32,6 @@ const TableCustomers = (props) => {
     const handleSortColumn = (sortColumn, sortType) => {
         setColumn(sortColumn);
         setSortType(sortType);
-        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
     }
 
     const getData = async (e) => {
@@ -45,11 +47,11 @@ const TableCustomers = (props) => {
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType]);
+    }, [modal.eventSuccess, page, length, column, sortType]);
 
     return (
         <div>
-            <Table loading={loading} data={tableData.data} height={350}>
+            <Table loading={loading} data={tableData.data} height={400} >
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -90,6 +92,17 @@ const TableCustomers = (props) => {
                                 }
                                 getData();
                             }
+
+                            function handleUpdate() {
+                                setModal({
+                                    ...modal,
+                                    title: 'Edit data Pelanggan',
+                                    size: 'xs',
+                                    show: true,
+                                    formData: rowData,
+                                    update: true
+                                })
+                            }
                             return (
                                 <div>
                                     <ButtonToolbar>
@@ -98,6 +111,7 @@ const TableCustomers = (props) => {
                                             appearance="ghost"
                                             color="blue"
                                             size="xs"
+                                            onClick={handleUpdate}
                                         >
                                             <span className="is-desktop">Edit</span>
                                         </IconButton>
@@ -122,7 +136,6 @@ const TableCustomers = (props) => {
                     { value: 10, label: 10 },
                     { value: 50, label: 50 },
                     { value: 100, label: 100 },
-                    { value: 100, label: "all" },
                 ]}
                 total={tableData.total}
                 activePage={tableData.current_page}

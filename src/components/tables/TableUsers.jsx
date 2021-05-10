@@ -7,27 +7,50 @@ const { Column, HeaderCell, Cell } = Table;
 
 const TableUsers = (props) => {
 
+
     const [tableData, setTableData] = useState([]);
+    const [column, setColumn] = useState('id');
+    const [sortType, setSortType] = useState('asc');
+    const [length, setLength] = useState(10);
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const request = { sortType, column, length }
+
+    const handleChangePage = (e) => {
+        console.log(e);
+        setPage(e);
+    };
+
+    const handleChangeLength = (e) => {
+        console.log(e);
+        setLength(e);
+        setPage(1);
+    };
+
+    const handleSortColumn = (sortColumn, sortType) => {
+        setColumn(sortColumn);
+        setSortType(sortType);
+        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
+    }
 
     const getData = async (e) => {
         setLoading(true);
         try {
-            let { data } = await axios.get('users');
+            let { data } = await axios.post(`customers/table?page=${page}`, request);
             setTableData(data);
-            setLoading(false)
+            setLoading(false);
         } catch (e) {
-            console.log(e.response.data);
-        };
-    };
+            console.log(e.response);
+        }
+    }
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [page, length, column, sortType]);
 
     return (
         <div>
-            <Table loading={ loading } data={ tableData } autoHeight>
+            <Table loading={loading} data={tableData} Height={ 300 }>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>

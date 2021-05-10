@@ -8,26 +8,50 @@ const { Column, HeaderCell, Cell } = Table;
 const TableItems = (props) => {
 
     const [tableData, setTableData] = useState([]);
+    const [column, setColumn] = useState('id');
+    const [sortType, setSortType] = useState('asc');
+    const [length, setLength] = useState(10);
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const request = { sortType, column, length }
+
+    const handleChangePage = (e) => {
+        console.log(e);
+        setPage(e);
+    };
+
+    const handleChangeLength = (e) => {
+        console.log(e);
+        setLength(e);
+        setPage(1);
+    };
+
+    const handleSortColumn = (sortColumn, sortType) => {
+        setColumn(sortColumn);
+        setSortType(sortType);
+        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
+    }
 
     const getData = async (e) => {
         setLoading(true);
         try {
-            let { data } = await axios.get('commodities');
+            let { data } = await axios.post(`table/commodities?page=${page}`, request);
             setTableData(data);
             setLoading(false);
         } catch (e) {
+            setLoading(false);
             console.log(e.response);
         }
     }
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [page, length, column, sortType]);
+
 
     return (
         <div>
-            <Table loading={ loading } data={ tableData } autoHeight>
+            <Table loading={loading} data={tableData.data} height={ 350 }>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -103,7 +127,20 @@ const TableItems = (props) => {
                     </Cell>
                 </Column>
             </Table>
-            <TablePagination />
+            <TablePagination
+                lengthMenu={[
+                    { value: 10, label: 10 },
+                    { value: 50, label: 50 },
+                    { value: 100, label: 100 },
+                    { value: tableData.total, label: "all" },
+                ]}
+                total={tableData.total}
+                activePage={tableData.current_page}
+                displayLength={tableData.per_page}
+                onChangePage={handleChangePage}
+                onChangeLength={handleChangeLength}
+
+            />
         </div>
     );
 };

@@ -8,7 +8,7 @@ import { Loader } from "rsuite";
 function App(props) {
     const setAuth = useSetRecoilState(authenticated);
     const [mounted, setMounted] = useState(false);
-
+   
     useEffect(() => {
         setMounted(false);
         const getUser = async () => {

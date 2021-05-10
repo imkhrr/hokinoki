@@ -5,6 +5,7 @@ import { Col, Row, Grid, IconButton, Icon } from "rsuite";
 import TransaksiTerakhir from "./transactions/TransaksiTerakhir";
 import TambahTransaksi from "./transactions/TambahTransaksi";
 import Checkout from "./transactions/Checkout";
+// import SideBar2 from "../layouts/SideBar2";
 
 class Transaksi extends Component {
   state = {

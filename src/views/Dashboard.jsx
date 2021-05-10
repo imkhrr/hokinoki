@@ -3,19 +3,16 @@ import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
 import BestSellerCard from "../components/BestSellerCard";
 import StatCard from "../components/StatCard";
-import BarCharts from "../components/charts/BarCharts";
-import LineCharts from "../components/charts/LineCharts";
-import AreaCharts from "../components/charts/AreaCharts";
+import DashboardChart from "../components/charts/DashboardChart";
+// import SideBar2 from "../layouts/SideBar2";
 
-import { Col, Row, Panel, Grid, ButtonToolbar, Button } from "rsuite";
+import { Col, Row, Panel, Grid, } from "rsuite";
 
 class Dashboard extends Component {
   state = {
-    chartType: 1,
     dataType: 1,
   };
   render() {
-    const chartType = this.state.chartType;
     return (
       <div>
         <Grid fluid>
@@ -30,31 +27,6 @@ class Dashboard extends Component {
               <div className="p-3 animate__animated animate__fadeIn">
                 <div className="pb-1 flex jc-sb ai-c">
                   <span className="t3 pr-2">Statistik</span>
-
-                  {/* <Dropdown title="Harian" appearance="primary" size="xs">
-                    <Dropdown.Item>
-                      <span>Harian</span>
-                    </Dropdown.Item>
-
-                    <Dropdown.Item>
-                      <span>Mingguan</span>
-                    </Dropdown.Item>
-                    <Dropdown.Item>
-                      <span>Bulanan</span>
-                    </Dropdown.Item>
-                  </Dropdown> */}
-
-                  <ButtonToolbar>
-                    <Button appearance="primary" size="xs">
-                      Harian
-                    </Button>
-                    <Button appearance="ghost" size="xs">
-                      Mingguan
-                    </Button>
-                    <Button appearance="ghost" size="xs">
-                      Bulanan
-                    </Button>
-                  </ButtonToolbar>
                 </div>
                 <Row gutter={16}>
                   <StatCard
@@ -96,34 +68,8 @@ class Dashboard extends Component {
                     <Panel className="is-bg-white">
                       <div className="pb-2 flex jc-sb ai-c">
                         <span className="t3 pr-2">Grafik</span>
-                        <ButtonToolbar>
-                          <Button
-                            appearance="primary"
-                            size="xs"
-                            onClick={() => this.setState({ chartType: 1 })}
-                          >
-                            Bar
-                          </Button>
-                          <Button
-                            appearance="ghost"
-                            size="xs"
-                            onClick={() => this.setState({ chartType: 2 })}
-                          >
-                            Line
-                          </Button>
-                          <Button
-                            appearance="ghost"
-                            size="xs"
-                            onClick={() => this.setState({ chartType: 3 })}
-                          >
-                            Area
-                          </Button>
-                        </ButtonToolbar>
                       </div>
-                      {/* <BarCharts /> */}
-                      {chartType === 1 && <BarCharts />}
-                      {chartType === 2 && <LineCharts />}
-                      {chartType === 3 && <AreaCharts />}
+                      <DashboardChart />
                     </Panel>
                   </Col>
                   <Col className="py-2" xs={24} sm={24} md={6}>

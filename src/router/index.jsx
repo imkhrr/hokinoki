@@ -8,7 +8,6 @@ import LoginPage from "../views/LoginPage";
 import NotFound from "../views/NotFound";
 import Transaksi from "../views/Transaksi";
 import Customers from "../views/Customers";
-import Suppliers from "../views/Suppliers";
 import Settings from "../views/Settings";
 
 function Router(props) {
@@ -43,12 +42,6 @@ function Router(props) {
           <Route path="/customers">
             <Middleware.Authenticated>
               <Customers />
-            </Middleware.Authenticated>
-          </Route>
-
-          <Route path="/suppliers">
-            <Middleware.Authenticated>
-              <Suppliers />
             </Middleware.Authenticated>
           </Route>
 

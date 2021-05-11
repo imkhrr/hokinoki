@@ -11,7 +11,6 @@ const TableUsers = (props) => {
 
 
     const [tableData, setTableData] = useRecoilState(usersTable);
-    const [event, setEvent] = useState(props.event);
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
@@ -49,7 +48,7 @@ const TableUsers = (props) => {
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType, event]);
+    }, [page, length, column, sortType]);
 
     return (
         <div>

@@ -90,7 +90,7 @@ const TableCustomers = (props) => {
                                         description: 'Data tidak dapat dihapus'
                                     })
                                 }
-                                getData();
+                                getData()
                             }
 
                             function handleUpdate() {

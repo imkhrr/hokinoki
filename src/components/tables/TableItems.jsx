@@ -48,7 +48,7 @@ const TableItems = (props) => {
             console.log(e.response);
         }
     }
-
+    
     useEffect(() => {
         getData();
     }, [modal.eventSuccess, page, length, column, sortType]);
@@ -56,7 +56,7 @@ const TableItems = (props) => {
 
     return (
         <div>
-            <Table loading={loading} data={tableData.data} height={ 400 }>
+            <Table loading={loading} data={tableData.data} height={400}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -118,7 +118,7 @@ const TableItems = (props) => {
                                         description: 'Data tidak dapat dihapus'
                                     })
                                 }
-                                getData();
+                                getData()
                             }
 
                             function handleUpdate() {

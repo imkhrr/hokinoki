@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
 import BestSellerCard from "../components/BestSellerCard";

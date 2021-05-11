@@ -7,7 +7,6 @@ function Authenticated(props) {
     // State and Variable Declarations
     const auth = useRecoilValue(authenticated);
     const history = useHistory();
-    console.log(auth.data);
     if (!auth.check) {
         history.push('/login');
     };

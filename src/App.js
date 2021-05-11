@@ -15,11 +15,10 @@ function App(props) {
             try {
                 let { data } = await axios.get("me");
                 setAuth({ check: true, user: data.data });
-                console.log(data.data.role);
                 setMounted(true);
             } catch (error) {
                 setMounted(true);
-                // console.clear();
+                console.clear();
             }
         };
         getUser();

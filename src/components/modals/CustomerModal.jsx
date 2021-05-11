@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, ErrorMessage } from "rsuite";
 import { customerModal } from "../../store/Modal";
 
 const CustomerModal = (props) => {
@@ -10,8 +10,9 @@ const CustomerModal = (props) => {
     const [name, setName] = useState('');
     const [address, setAdrress] = useState('');
     const [contact1, setContact1] = useState('');
+    const [contact2, setContact2] = useState('');
 
-    const request = { name, address, contact1 };
+    const request = { name, address, contact1, contact2 };
 
     const modalClose = () => {
         setModalData({
@@ -31,7 +32,7 @@ const CustomerModal = (props) => {
                 description: data.message
             })
             modalClose();
-        } catch (error) {
+        } catch (e) {
             Notification.error({
                 title: 'Gagal',
                 description: 'Terjadi kesalahan, gagal menyimpan data'
@@ -69,6 +70,7 @@ const CustomerModal = (props) => {
             setName(modalData.formData.name);
             setAdrress(modalData.formData.address);
             setContact1(modalData.formData.contact_1);
+            setContact2(modalData.formData.contact_2);
         }
         formData();
     }, [modalData.formData])
@@ -82,15 +84,37 @@ const CustomerModal = (props) => {
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Nama</ControlLabel>
-                        <FormControl name="name" onChange={(val) => setName(val)} value={name || ""} />
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>Alamat</ControlLabel>
-                        <FormControl name="address" onChange={(val) => setAdrress(val)} value={address || ""} />
+                        <FormControl
+                            placeholder="Nama Pelanggan"
+                            onChange={(val) => setName(val)}
+                            value={name || ""}
+                        />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>No. HP</ControlLabel>
-                        <FormControl name="phone" onChange={(val) => setContact1(val)} value={contact1 || ""} />
+                        <FormControl
+                            placeholder="Nomor Handphone 1"
+                            onChange={(val) => setContact1(val)}
+                            value={contact1 || ""}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <FormControl
+                            placeholder="Nomor Handphone 2"
+                            onChange={(val) => setContact2(val)}
+                            value={contact2 || ""}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <ControlLabel>Alamat</ControlLabel>
+                        <FormControl
+                            placeholder="Alamat Lengkap"
+                            componentClass="textarea"
+                            rows={4}
+                            name="address"
+                            onChange={(val) => setAdrress(val)}
+                            value={address || ""}
+                        />
                     </FormGroup>
                 </Form></Modal.Body>
             <Modal.Footer>

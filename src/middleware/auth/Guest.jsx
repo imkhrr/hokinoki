@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { authenticated } from "../store/User";
+import { authenticated } from "../../store/User";
 
 function Guest(props) {
   // State and Variable Declarations

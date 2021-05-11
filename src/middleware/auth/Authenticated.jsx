@@ -1,24 +1,16 @@
 import { useHistory } from 'react-router';
 import { useRecoilValue } from 'recoil';
-import { authenticated } from '../store/User';
-// import LoginPage from '../views/LoginPage';
-// import NotFound from '../views/NotFound';
+import { authenticated } from '../../store/User';
 
 function Authenticated(props) {
 
     // State and Variable Declarations
     const auth = useRecoilValue(authenticated);
     const history = useHistory();
-
-
+    console.log(auth.data);
     if (!auth.check) {
-        history.push('/login')
-        // return <LoginPage />
+        history.push('/login');
     };
-
-    // if (props.role || props.permission) {
-    //     return <NotFound />
-    // }
 
     return props.children;
 }

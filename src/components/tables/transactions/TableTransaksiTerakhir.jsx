@@ -1,12 +1,13 @@
 import React from "react";
 import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
+import TablePagination from "rsuite/lib/Table/TablePagination";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableTransaksiTerakhir = (props) => {
   return (
     <div>
-      <Table data={props.listdata} autoHeight>
+      <Table data={props.listdata} height={400}>
         <Column width={50} align="center" fixed>
           <HeaderCell>No.</HeaderCell>
           <Cell>
@@ -64,6 +65,15 @@ const TableTransaksiTerakhir = (props) => {
           </Cell>
         </Column>
       </Table>
+
+      <TablePagination
+        lengthMenu={[
+          { value: 10, label: 10 },
+          { value: 50, label: 50 },
+          { value: 100, label: 100 },
+          { value: 100, label: "all" },
+        ]}
+      />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import "./styles/colors.css";
 import "./styles/typography.css";
 import "./styles/spacing.css";
 import "./styles/scroll.css";
+import "./styles/position.css";
 import "rsuite/dist/styles/rsuite-default.css";
 
 import App from "./App";

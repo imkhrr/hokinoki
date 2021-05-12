@@ -1,0 +1,21 @@
+#wrapper {
+  margin: 0;
+
+  position: relative;
+
+  height: 100%;
+
+  overflow: hidden;
+}
+
+#sidebar {
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  bottom: 0;
+
+  height: 100%;
+}

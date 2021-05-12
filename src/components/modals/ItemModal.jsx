@@ -1,14 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, InputNumber } from "rsuite";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, InputNumber, SelectPicker, InputPicker } from "rsuite";
 import { itemModal } from "../../store/Modal";
 
 const ItemModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(itemModal);
+    const [categories, setCategories] = useState('');
     const [name, setName] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState([]);
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
 
@@ -19,18 +20,21 @@ const ItemModal = (props) => {
             ...modalData,
             show: false,
             formData: [],
+            update: false,
             eventSuccess: false
         });
     }
 
-    const formData = () => {
-        console.log(modalData);
-        setName(modalData.formData.name);
-        // setCategory(modalData.formData.commodity_type.name);
-        setPrice(modalData.formData.sell_price);
-        setStock(modalData.formData.stock);
-
+    const modalShow = async () => {
+        setCategory("");
+        try {
+            let { data } = await axios.get('info/commodity-types');
+            setCategories(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
 
     const insertData = async () => {
         try {
@@ -38,7 +42,7 @@ const ItemModal = (props) => {
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data barang berhasil disimpan'
+                description: data.message
             })
             modalClose();
         } catch (error) {
@@ -55,7 +59,7 @@ const ItemModal = (props) => {
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data barang berhasil diupdate'
+                description: data.message
             })
             modalClose();
         } catch (error) {
@@ -75,12 +79,22 @@ const ItemModal = (props) => {
         }
     }
 
+
     useEffect(() => {
+        const formData = () => {
+            setName(modalData.formData.name);
+            if (modalData.update) {
+                setCategory(modalData.formData.commodity_type.id)
+            }
+            setPrice(modalData.formData.sell_price);
+            setStock(modalData.formData.stock);
+        }
         formData();
-    }, [modalData])
+        console.log(modalData);
+    }, [modalData.formData])
 
     return (
-        <Modal backdrop="static" size={modalData.size} show={modalData.show} onHide={modalClose} >
+        <Modal backdrop="static" size={modalData.size} show={modalData.show} onHide={modalClose} onShow={modalShow}>
             <Modal.Header>
                 <Modal.Title>{modalData.title}</Modal.Title>
             </Modal.Header>
@@ -88,23 +102,34 @@ const ItemModal = (props) => {
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Nama</ControlLabel>
-                        <FormControl onChange={(val) => setName(val)} value={name} />
+                        <FormControl onChange={(val) => setName(val)} value={name || ""} />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Kategori</ControlLabel>
-                        <FormControl onChange={(val) => setCategory(val)} value={category} readOnly={true} />
+                        <InputPicker
+                            data={Object.values(categories)}
+                            placeholder="pilih kategori"
+                            valueKey="id"
+                            onSelect={(e) => setCategory(e)}
+                            value={category || ""}
+                            cleanable={true}
+                            block
+                        />
                     </FormGroup>
-
-                    <Form className="flex jc-sb" fluid>
-                        <FormGroup>
-                            <ControlLabel>Harga</ControlLabel>
-                            <InputNumber style={{ width: "170px" }} prefix="Rp." onChange={(val) => setPrice(val)} value={price}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <ControlLabel>Stock</ControlLabel>
-                            <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(val)} value={stock}/>
-                        </FormGroup>
-                    </Form>
+                    <FormGroup>
+                        <ControlLabel>Kategori</ControlLabel>
+                        <FormControl readOnly />
+                    </FormGroup>
+                </Form>
+                <Form className="flex jc-sb" fluid>
+                    <FormGroup>
+                        <ControlLabel>Harga</ControlLabel>
+                        <InputNumber style={{ width: "170px" }} prefix="Rp." onChange={(val) => setPrice(val)} value={price || ""} />
+                    </FormGroup>
+                    <FormGroup>
+                        <ControlLabel>Stock</ControlLabel>
+                        <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(val)} value={stock || ""} />
+                    </FormGroup>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

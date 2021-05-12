@@ -12,7 +12,15 @@
   font-weight: normal;
 }
 
+@font-face {
+  font-family: "Gecko-Lunch";
+  src: local("Gecko-Lunch"),
+    url("../assets/fonts/Gecko-Lunch.ttf") format("truetype");
+  font-weight: normal;
+}
+
 html {
+  height: 100%;
   scroll-behavior: smooth;
 }
 

@@ -7,7 +7,8 @@ const itemModal = atom({
         size: 'xs',
         show: false,
         formData: [],
-        update: false
+        update: false,
+        eventSuccess: false
     },
 });
 
@@ -18,7 +19,8 @@ const userModal = atom({
         size: 'xs',
         show: false,
         formData: [],
-        update: false
+        update: false,
+        eventSuccess: false
     },
 });
 

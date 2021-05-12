@@ -22,20 +22,13 @@ const CustomerModal = (props) => {
         });
     }
 
-    const formData = () => {
-        setName(modalData.formData.name);
-        setAdrress(modalData.formData.address);
-        setContact1(modalData.formData.contact_1);
-
-    }
-
     const insertData = async () => {
         try {
             let { data } = await axios.post(`customers`, request)
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data pelanggan berhasil disimpan'
+                description: data.message
             })
             modalClose();
         } catch (error) {
@@ -52,7 +45,7 @@ const CustomerModal = (props) => {
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data pelanggan berhasil diupdate'
+                description: data.message
             })
             modalClose();
         } catch (error) {
@@ -72,6 +65,11 @@ const CustomerModal = (props) => {
     }
 
     useEffect(() => {
+        const formData = () => {
+            setName(modalData.formData.name);
+            setAdrress(modalData.formData.address);
+            setContact1(modalData.formData.contact_1);
+        }
         formData();
     }, [modalData.formData])
 
@@ -84,15 +82,15 @@ const CustomerModal = (props) => {
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Nama</ControlLabel>
-                        <FormControl name="name" onChange={(val) => setName(val)} value={name} />
+                        <FormControl name="name" onChange={(val) => setName(val)} value={name || ""} />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Alamat</ControlLabel>
-                        <FormControl name="address" onChange={(val) => setAdrress(val)} value={address} />
+                        <FormControl name="address" onChange={(val) => setAdrress(val)} value={address || ""} />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>No. HP</ControlLabel>
-                        <FormControl name="phone" onChange={(val) => setContact1(val)} value={contact1} />
+                        <FormControl name="phone" onChange={(val) => setContact1(val)} value={contact1 || ""} />
                     </FormGroup>
                 </Form></Modal.Body>
             <Modal.Footer>

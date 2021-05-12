@@ -14,13 +14,15 @@ class NotFound extends Component {
           alignItems: "center",
           height: "100vh",
         }}
-        className="animate__animated animate__fadeIn"
+        className="animate__animated animate__fadeIn animate__fast"
       >
         <div>
-          <div>
-            <p className="bold t0 is-red">404</p>
-            <span className="bold">Not Found</span>
-          </div>
+          <a href="/">
+            <p className="bold t0 is-red" style={{ cursor: "pointer" }}>
+              404
+            </p>
+          </a>
+          <span className="bold">Not Found</span>
         </div>
       </div>
     );

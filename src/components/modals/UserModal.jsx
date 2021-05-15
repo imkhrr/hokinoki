@@ -2,11 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
-import { customersModal } from "../../store/Modal";
+import { userModal } from "../../store/Modal";
 
-const CustomerModal = (props) => {
+const UserModal = (props) => {
 
-    const [modalData, setModalData] = useRecoilState(customersModal);
+    const [modalData, setModalData] = useRecoilState(userModal);
     const [name, setName] = useState('');
     const [address, setAdrress] = useState('');
     const [contact1, setContact1] = useState('');
@@ -85,17 +85,22 @@ const CustomerModal = (props) => {
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Nama</ControlLabel>
-                        <FormControl name="name" onChange={(val) => setName(val)} value={name} />
+                        <FormControl name="name" />
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>Alamat</ControlLabel>
-                        <FormControl name="address" onChange={(val) => setAdrress(val)} value={address} />
+                        <ControlLabel>Role</ControlLabel>
+                        <FormControl name="role" />
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>No. HP</ControlLabel>
-                        <FormControl name="phone" onChange={(val) => setContact1(val)} value={contact1} />
+                        <ControlLabel>Username</ControlLabel>
+                        <FormControl name="username" />
                     </FormGroup>
-                </Form></Modal.Body>
+                    <FormGroup>
+                        <ControlLabel>Password</ControlLabel>
+                        <FormControl name="password" />
+                    </FormGroup>
+                </Form>
+            </Modal.Body>
             <Modal.Footer>
                 <Button onClick={saveData} appearance="primary" block> Simpan </Button>
                 <Button onClick={modalClose} appearance="default" block> Batal </Button>
@@ -104,4 +109,4 @@ const CustomerModal = (props) => {
     );
 };
 
-export default CustomerModal;
+export default UserModal;

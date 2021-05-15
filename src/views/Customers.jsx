@@ -53,7 +53,7 @@ function Customers(props) {
                                         }) 
                                     }}
                                 >
-                                    Tambah User
+                                    Tambah Pelanggan
                                 </IconButton>
                             </div>
                         </div>

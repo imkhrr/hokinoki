@@ -15,7 +15,11 @@ import "rsuite/dist/styles/rsuite-default.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+// API Local
 axios.defaults.baseURL = "http://127.0.0.1:8000/api";
+// API Public Laptop
+// axios.defaults.baseURL = "http://30.30.30.3:8000/api";
+
 axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem("userToken")}`;
     return config;
@@ -27,7 +31,7 @@ ReactDOM.render(
             <App />
         </RecoilRoot>
     </React.StrictMode>,
-  document.getElementById("root")
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

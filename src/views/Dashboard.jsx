@@ -53,7 +53,7 @@ function Dashboard() {
                                 <StatCard
                                     bgcolor="pink"
                                     textcolor="white"
-                                    viewdate="Hari ini"
+                                    viewdate="Total"
                                     count={ customer }
                                     cardname="Pelanggan"
                                     iconname="peoples"

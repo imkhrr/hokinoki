@@ -24,9 +24,7 @@ function Router(props) {
 
                     <Route path="/transaksi">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="admin">
-                                <Transaksi />
-                            </RestrictedPage>
+                            <Transaksi />
                         </Middleware.Authenticated>
                     </Route>
 

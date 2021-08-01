@@ -39,7 +39,7 @@ const TableUsers = (props) => {
         setLoading(true);
         try {
             let { data } = await axios.post(`table/users?page=${page}`, request);
-            setTableData(data);
+            setTableData(data.data);
             setLoading(false);
         } catch (e) {
             console.log(e.response);

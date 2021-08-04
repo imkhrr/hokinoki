@@ -7,7 +7,7 @@ function RestrictedPage(props) {
 
     const auth = useRecoilValue(authenticated);
 
-    if (auth.user.role == props.forRole) {
+    if (auth.user.role === props.forRole) {
         return <NotFound />;
     }
 

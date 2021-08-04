@@ -12,41 +12,56 @@ import {
     InputGroup,
     Input,
     InputNumber,
-    Button,
 } from "rsuite";
-import { Cart } from "../../store/Trans";
+import { Cart, Page } from "../../store/Trans";
 import TableTambahTransaksi from "../../components/tables/transactions/TableTambahTransaksi";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 
 function TambahTransaksi() {
 
     const [shopCart, setShopCart] = useRecoilState(Cart);
+    const setTransIndex = useSetRecoilState(Page);
     const clearCart = useResetRecoilState(Cart);
+
+    const [itemSearch, setItemSearch] = useState('');
+    const [inputVal, setInputVal] = useState('')
 
     const curr = new Intl.NumberFormat('id-ID', {
         style: "currency",
         currency: "IDR"
     });
 
+    useEffect(() => {
+        const timeout = setTimeout(() => setItemSearch(inputVal), 500);
+        return () => clearTimeout(timeout);
+    }, [inputVal])
 
     return (
         <Grid fluid>
             <Row className="animate__animated animate__fadeIn">
-                <Col xs={24} sm={24} md={17} className="px-0px">
-                    <div className="pb-2 flex jc-sb">
-                        <span className="t3 pr-1">Penjualan</span>
+                <Col xs={24} sm={24} md={17} className="px-0">
+                    <div className="flex jc-sb pb-1">
+                        <IconButton
+                            icon={<Icon icon="chevron-left" />}
+                            appearance="default"
+                            size="sm"
+                            onClick={() => setTransIndex(0)}
+                        >
+                        <span className="t3 pl-1">Penjualan</span>
+                        </IconButton>
                         <div className="flex jc-sb ai-c">
                             <InputGroup size="xs">
-                                <Input placeholder="Cari Barang" />
+                                <Input placeholder="Cari Barang" onChange={val => setInputVal(val)} />
                                 <InputGroup.Addon>
                                     <Icon icon="search" />
                                 </InputGroup.Addon>
                             </InputGroup>
                         </div>
                     </div>
-                    <div className="pb-4" style={{ paddingTop: 4 }}>
-                        <TableTambahTransaksi />
+                    <div style={{ paddingTop: 4}}>
+                        <TableTambahTransaksi search={itemSearch} />
                     </div>
+                    
                 </Col>
                 <Col xs={24} sm={24} md={7} className="px-0px">
                     <div className="pl-2">
@@ -67,55 +82,76 @@ function TambahTransaksi() {
                             </IconButton>
                         </div>
                         <Panel
-                            className="customscroll is-bg-white"
-                            style={{ height: "69vh", overflowY: "scroll" }}
+                            className="is-bg-white"
+                            style={{ minHeight: "80vh" }}
                         >
-                            <List style={{ boxShadow: "none" }}>
-                                {
-                                    shopCart.map((item, index) => (
-                                        <List.Item key={item["id"]} index={index} >
-                                            <div className="flex jc-sb">
-                                                <span className="bold">{item["name"]}</span>
-                                                <span>{curr.format(item["count"] * item["price"]).slice(0, -3)}</span>
-                                                {/* <span>Rp. {item["price"]}</span> */}
-                                            </div>
-                                            <br />
-                                            <div className="flex jc-sb">
-                                                <InputGroup style={{ width: 80 }}>
-                                                    <InputNumber
-                                                        defaultValue={1}
-                                                        value={item["count"]}
-                                                        onChange={(val) => {
+                            <div
+                                style={{ 
+                                    height: "60vh", 
+                                    overflowY: "scroll",
+                                    marginBottom: "2rem"
+                                }}
+                            >
+                                <List style={{ boxShadow: "none" }} >
+                                    {
+                                        shopCart.map((item, index) => (
+                                            <List.Item key={item["id"]} index={index} >
+                                                <div className="flex jc-sb">
+                                                    <span className="bold">{item["name"]}</span>
+                                                    <span>{curr.format(item["count"] * item["price"]).slice(0, -3)}</span>
+                                                    {/* <span>Rp. {item["price"]}</span> */}
+                                                </div>
+                                                <br />
+                                                <div className="flex jc-sb">
+                                                    <InputGroup style={{ width: 80 }}>
+                                                        <InputNumber
+                                                            defaultValue={1}
+                                                            value={item["count"]}
+                                                            onChange={(val) => {
+                                                                let _shopCart = [...shopCart];
+                                                                _shopCart[index] = {
+                                                                    ..._shopCart[index],
+                                                                    count: parseInt(val)
+                                                                };
+                                                                setShopCart(_shopCart);
+                                                            }}
+                                                            size="xs"
+                                                            max={shopCart[index].limit}
+                                                            min={1}
+                                                        />
+                                                    </InputGroup>
+                                                    <IconButton
+                                                        appearance="ghost"
+                                                        color="red"
+                                                        size="xs"
+                                                        icon={<Icon icon="trash" />}
+                                                        onClick={() => {
                                                             let _shopCart = [...shopCart];
-                                                            _shopCart[index] = {
-                                                                ..._shopCart[index],
-                                                                count: parseInt(val)
-                                                            };
+                                                            _shopCart.splice(index, 1)
                                                             setShopCart(_shopCart);
                                                         }}
-                                                        size="xs"
-                                                        max={99}
-                                                        min={1}
-                                                    />
-                                                </InputGroup>
-                                                <IconButton
-                                                    appearance="ghost"
-                                                    color="red"
-                                                    size="xs"
-                                                    icon={<Icon icon="trash" />}
-                                                    onClick={ () => {
-                                                        let _shopCart = [...shopCart];
-                                                        _shopCart.splice(index, 1)
-                                                        setShopCart(_shopCart);
-                                                    }}
-                                                >
-                                                    Hapus
-                                                </IconButton>
-                                            </div>
-                                        </List.Item>
-                                    ))
-                                }
-                            </List>
+                                                    >
+                                                        Hapus
+                                                    </IconButton>
+                                                </div>
+                                            </List.Item>
+                                        ))
+                                    }
+                                </List>
+                            </div>
+                            <div>
+                                <hr />
+                                <IconButton
+                                    disabled={!shopCart.length}
+                                    icon={<Icon icon="shopping-cart" />}
+                                    appearance="primary"
+                                    block
+                                    onClick={() => setTransIndex(2)}
+                                >
+                                    Checkout
+                                </IconButton>
+                            </div>
+
                         </Panel>
                     </div>
                 </Col>

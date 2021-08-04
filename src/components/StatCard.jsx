@@ -3,7 +3,7 @@ import { Col, Row, Panel, Icon } from "rsuite";
 
 const StatCard = (props) => {
   return (
-    <Col className="py-1" xs={24} sm={12} md={6}>
+    <Col className="py-1" xs={24} sm={8} md={8}>
       <Panel
         className={`is-bg-${props.bgcolor} is-${props.textcolor}`}
         bordered

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
     Grid,
     Row,
@@ -12,40 +13,58 @@ import {
     ControlLabel,
     DatePicker,
     InputGroup,
-    Input,
+    Toggle,
+    Icon,
+    SelectPicker,
+    IconButton,
 } from "rsuite";
 
 import TableCheckout from "../../components/tables/transactions/TableCheckout";
-import { Cart } from "../../store/Trans";
+import { Cart, Page } from "../../store/Trans";
+import { authenticated } from "../../store/User";
+
 
 function Checkout() {
 
     const checkoutCart = useRecoilValue(Cart);
+    const setTransIndex = useSetRecoilState(Page);
+    const auth = useRecoilValue(authenticated);
+
+    const [isMember, setIsMember] = useState(false);
+    const [name, setName] = useState('');
     const [cash, setCash] = useState(0);
-    const [date, setDate] = useState(new Date);
-    const [discount, setDiscount] = useState(0)
+    const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+    const [discount, setDiscount] = useState(0);
+    const [customers, setCustomers] = useState([]);
+    const [note, setNote] = useState('');
 
-    const payAmount = () => {
+    const customerDropdown = () => {
+        if (customers.length === 0) {
+            setTimeout(() => {
+                axios.get('dropdown/customers')
+                    .then(res => setCustomers(res.data))
+            }, 1000);
+        }
+    }
+
+    const totalPrice = () => {
         let total = 0;
-
         checkoutCart.map((val, index) => {
             total = total + parseInt(val["count"] * val["price"]);
+            return 0;
         })
-
-        if (discount > 0) {
-            total = total - parseInt(discount)
-        }
-
         return total;
+    }
+
+    const priceToPay = () => {
+        return totalPrice() - discount;
     }
 
     const moneyChange = () => {
         let res = 0
-
         if (cash > 0) {
-            res = parseInt(cash) - payAmount();
+            res = parseInt(cash) - priceToPay();
         }
-
         return res;
     }
 
@@ -54,36 +73,63 @@ function Checkout() {
         currency: "IDR"
     });
 
+    const request = {
+        name, isMember, discount, date, cash,
+        note, checkoutCart,
+        cost: totalPrice(),
+        user: auth.user.id
+    };
+
+    // const recordSales = async () => {
+
+    //     try {
+    //         let { data } = await axios.post('transactions/record-sales', request);
+    //         console.log(data);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
+
     return (
         <Grid fluid>
             <Row className="animate__animated animate__fadeIn">
-                <Col xs={24} sm={24} md={17} className="px-0px">
-                    <div className="pb-2">
-                        <span className="t3 pr-1">Checkout</span>
+                <Col xs={24} sm={24} md={17} className="px-0">
+                    <div className="pb-1">
+                        <IconButton
+                            icon={<Icon icon="chevron-left" />}
+                            appearance="default"
+                            size="sm"
+                            onClick={() => setTransIndex(1)}
+                        >
+                            <span className="t3 pl-1">Checkout</span>
+                        </IconButton>
                     </div>
                     <div className="pb-2" style={{ paddingTop: 4 }}>
                         <TableCheckout />
+                    </div>
+                    <div className="pb-2" style={{ paddingTop: 4 }}>
+                        <Panel className="is-bg-white p-0 bold">
+                            <div className="flex jc-sb">
+                                <span className="t3">Total Harga</span>
+                                <span> {curr.format(totalPrice())} </span>
+                            </div>
+                        </Panel>
                     </div>
                 </Col>
                 <Col xs={24} sm={24} md={7} className="px-0px">
                     <div className="pl-2">
                         <div className="pb-2">
                             <span className="t3 pr-1">Struk Pembayaran</span>
+                            <span className="t4 pr-1">#2108023009</span>
                         </div>
                         <div style={{ paddingTop: 4 }}>
                             {" "}
-                            <Panel className="is-bg-white" style={{ minHeight: "69vh" }}>
+                            <Panel className="is-bg-white" style={{ minHeight: "80vh" }}>
                                 <Form fluid className="pt-2">
                                     <Row>
-                                        <Col md={12}>
+                                        <Col md={24}>
                                             <FormGroup>
-                                                <ControlLabel>No. Struk</ControlLabel>
-                                                <FormControl size="sm" name="struk" readOnly />
-                                            </FormGroup>
-                                        </Col>
-                                        <Col md={12}>
-                                            <FormGroup>
-                                                <ControlLabel>Tanggal</ControlLabel>
+                                                <ControlLabel>Tanggal Pembelian</ControlLabel>
                                                 <DatePicker oneTap block
                                                     cleanable={false}
                                                     ranges={[]}
@@ -97,34 +143,70 @@ function Checkout() {
                                         </Col>
                                     </Row>
                                     <FormGroup>
-                                        <ControlLabel>Nama</ControlLabel>
-                                        <FormControl size="sm" name="Nama" />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <ControlLabel>Jumlah Uang</ControlLabel>
-                                        <InputGroup size="sm" style={{ width: '100%' }}>
-                                            <NumberFormat
-                                                placeholder='Rp. 0'
-                                                style={{ textAlign: 'right' }}
-                                                className='rs-input'
-                                                thousandSeparator={'.'}
-                                                decimalSeparator={','}
-                                                prefix={'Rp. '}
-                                                onValueChange={(val) => { setCash(val.floatValue) }}
+                                        <div className="flex jc-sb">
+                                            <ControlLabel>Nama</ControlLabel>
+                                            <Toggle
+                                                size="sm"
+                                                checkedChildren={<Icon icon="people-group" />}
+                                                unCheckedChildren={<Icon icon="people-group" />}
+                                                onChange={(val) => setIsMember(val)}
                                             />
-                                        </InputGroup>
+                                        </div>
+                                        {
+                                            isMember ?
+                                                <SelectPicker
+                                                    data={customers}
+                                                    onOpen={customerDropdown()}
+                                                    onSearch={customerDropdown()}
+                                                    size="sm"
+                                                    placeholder="Member"
+                                                    renderMenu={menu => {
+                                                        if (customers.length === 0) {
+                                                            return (
+                                                                <p style={{ padding: 4, color: '#999', textAlign: 'center' }}>
+                                                                    <Icon icon="spinner" spin /> Loading
+                                                                </p>
+                                                            );
+                                                        }
+                                                        return menu;
+                                                    }}
+                                                    onChange={val => setName(val)}
+                                                    block
+                                                />
+                                                :
+                                                <FormControl
+                                                    size="sm"
+                                                    placeholder="Non Member"
+                                                    name="Nama"
+                                                    onChange={val => setName(val)}
+                                                />
+                                        }
                                     </FormGroup>
                                     <FormGroup>
                                         <ControlLabel>Diskon</ControlLabel>
                                         <InputGroup size="sm" style={{ width: '100%' }}>
+                                            <InputGroup.Addon>Rp. </InputGroup.Addon>
                                             <NumberFormat
-                                                placeholder='Rp. 0'
+                                                placeholder='0'
                                                 style={{ textAlign: 'right' }}
                                                 className='rs-input'
                                                 thousandSeparator={'.'}
                                                 decimalSeparator={','}
-                                                prefix={'Rp. '}
                                                 onValueChange={(val) => { setDiscount(val.floatValue) }}
+                                            />
+                                        </InputGroup>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <ControlLabel>Jumlah Uang</ControlLabel>
+                                        <InputGroup size="sm" style={{ width: '100%' }}>
+                                            <InputGroup.Addon>Rp. </InputGroup.Addon>
+                                            <NumberFormat
+                                                placeholder='0'
+                                                style={{ textAlign: 'right' }}
+                                                className='rs-input'
+                                                thousandSeparator={'.'}
+                                                decimalSeparator={','}
+                                                onValueChange={(val) => { setCash(val.floatValue) }}
                                             />
                                         </InputGroup>
                                     </FormGroup>
@@ -135,30 +217,62 @@ function Checkout() {
                                             rows={2}
                                             name="textarea"
                                             componentClass="textarea"
+                                            onChange={val => setNote(val)}
                                         />
                                     </FormGroup>
-                                    <div className="flex jc-sb pt-3">
-                                        <span>Total Bayar</span>
-                                        <div>
-                                            {/* <span>Rp. </span> */}
-                                            <span className="bold">{curr.format(payAmount())}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex jc-sb">
-                                        <span>Dibayar</span>
-                                        <div>
-                                            {/* <span>Rp. </span> */}
-                                            <span className="bold">{curr.format(cash ?? 0)}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex jc-sb">
-                                        <span>Kembali</span>
-                                        <div>
-                                            {/* <span>Rp. </span> */}
-                                            <span className="bold">{curr.format(moneyChange())}</span>
-                                        </div>
-                                    </div>
+                                    <Row>
+                                        <Col md={12}>Total Bayar</Col>
+                                        <Col md={12}>
+                                            <div className="flex jc-sb bold">
+                                                <span>Rp. </span>
+                                                <span>
+                                                    {curr.format(priceToPay()).slice(3)}
+                                                </span>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12}>Dibayar</Col>
+                                        <Col md={12}>
+                                            <div className="flex jc-sb bold">
+                                                <span>Rp. </span>
+                                                <span>
+                                                    {curr.format(cash ?? 0).slice(3)}
+                                                </span>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12}>Kembali</Col>
+                                        <Col md={12}>
+                                            <div className="flex jc-sb bold">
+                                                <span>Rp. </span>
+                                                <span>
+                                                    {curr.format(moneyChange() > 0 ? moneyChange() : 0).slice(3)}
+                                                </span>
+                                            </div>
+                                        </Col>
+                                    </Row>
                                 </Form>
+
+                                <IconButton
+                                    style={{ marginTop: "1.5rem" }}
+                                    icon={<Icon icon="save" />}
+                                    appearance="primary"
+                                    color="green"
+                                    onClick={async () => {
+                                        console.log(request);
+                                        try {
+                                            let { data } = await axios.post('transactions/record-sales', request);
+                                            console.log(data);
+                                        } catch (e) {
+                                            console.log(e);
+                                        }
+                                    }}
+                                    block
+                                >
+                                    Simpan
+                                </IconButton>
                             </Panel>
                         </div>
                     </div>

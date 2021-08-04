@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
 import {
@@ -6,7 +6,9 @@ import {
     Row,
     Grid,
     Icon,
-    IconButton
+    IconButton,
+    InputGroup,
+    Input
 } from "rsuite";
 import TableItems from "../components/tables/TableItems";
 import ItemModal from "../components/modals/ItemModal";
@@ -16,6 +18,13 @@ import { itemModal } from "../store/Modal";
 function Items() {
 
     const [modal, setModal] = useRecoilState(itemModal);
+    const [search, setSearch] = useState('');
+    const [inputVal, setInputVal] = useState('');
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setSearch(inputVal), 500);
+        return () => clearTimeout(timeout);
+    }, [inputVal])
 
     return (
         <div>
@@ -31,11 +40,19 @@ function Items() {
                         <ItemModal />
                         <div className="p-3 animate__animated animate__fadeIn">
                             <div style={{ minHeight: "77vh" }}>
-                                <div className="pb-2">
+                                <div className="pb-2 flex jc-sb">
                                     <span className="t3 pr-1">Data Barang</span>
+                                    <div className="flex jc-sb ai-c">
+                                        <InputGroup size="xs">
+                                            <Input placeholder="Search" onChange={ (e) => { setInputVal(e) } } />
+                                            <InputGroup.Addon>
+                                                <Icon icon="search" />
+                                            </InputGroup.Addon>
+                                        </InputGroup>
+                                    </div>
                                 </div>
                                 <div>
-                                    <TableItems />
+                                    <TableItems search={ search } />
                                 </div>
                             </div>
 

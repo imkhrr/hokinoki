@@ -12,11 +12,14 @@ import axios from "axios";
 function Dashboard() {
 
     const [customer, setCustomer] = useState(0);
+    const [sale, setSale] = useState(0);
 
     const statData = async (e) => {
         try {
-            let { data } = await axios.get('dashboard/customer');
-            setCustomer(data)
+            let customerStat = await axios.get('dashboard/customer');
+            let saleStat = await axios.get('dashboard/sale');
+            setCustomer(customerStat.data);
+            setSale(saleStat.data);
         } catch (error) {
             
         }
@@ -46,34 +49,34 @@ function Dashboard() {
                                     bgcolor="red"
                                     textcolor="white"
                                     viewdate="Hari ini"
-                                    count="89"
-                                    cardname="Item Terjual"
+                                    count={ sale }
+                                    cardname="Terjual"
                                     iconname="shopping-bag"
                                 />
                                 <StatCard
                                     bgcolor="pink"
                                     textcolor="white"
-                                    viewdate="Total"
-                                    count={ customer }
-                                    cardname="Pelanggan"
-                                    iconname="peoples"
-                                />
-                                <StatCard
-                                    bgcolor="purple"
-                                    textcolor="white"
                                     viewdate="Hari ini"
-                                    count="42"
+                                    count={sale}
                                     cardname="Transaksi"
                                     iconname="shopping-cart"
                                 />
                                 <StatCard
+                                    bgcolor="purple"
+                                    textcolor="white"
+                                    viewdate="Total"
+                                    count={customer}
+                                    cardname="Pelanggan"
+                                    iconname="peoples"
+                                />
+                                {/* <StatCard
                                     bgcolor="indigo"
                                     textcolor="white"
                                     viewdate="Hari ini"
                                     count="19"
                                     cardname="Stok Barang"
                                     iconname="attribution"
-                                />
+                                /> */}
                             </Row>
 
                             <Row gutter={16}>

@@ -1,13 +1,54 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
+import { transTable } from "../../../store/DataTable";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableTransaksiTerakhir = (props) => {
+
+    const [tableData, setTableData] = useRecoilState(transTable);
+    // const [modal, setModal] = useRecoilState(transTable);
+    const [column, setColumn] = useState('id');
+    const [sortType, setSortType] = useState('asc');
+    const [length, setLength] = useState(10);
+    const [page, setPage] = useState(1);
+    // const [loading, setLoading] = useState(true);
+    const request = { sortType, column, length };
+
+    const handleChangePage = (e) => {
+        setPage(e);
+    };
+
+    const handleChangeLength = (e) => {
+        console.clear();
+        setLength(e);
+        setPage(1);
+    };
+
+    const handleSortColumn = (sortColumn, sortType) => {
+        setColumn(sortColumn);
+        setSortType(sortType);
+    }
+
+    const getData = async () => {
+        try {
+            let { data } = await axios.post(`table/last-trans?page=?${page}`, request);
+            setTableData(data);
+        } catch (e) {
+            
+        }
+    }
+
+    useEffect(() => {
+        getData();
+    }, [page, length, column, sortType]);
+
     return (
         <div>
-            <Table data={props.listdata} height={400}>
+            <Table data={tableData.data} height={375}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -18,7 +59,7 @@ const TableTransaksiTerakhir = (props) => {
                 </Column>
                 <Column flexGrow={1.5}>
                     <HeaderCell>Kode Transaksi</HeaderCell>
-                    <Cell dataKey="list" />
+                    <Cell dataKey="code" />
                 </Column>
 
                 <Column flexGrow={0.8}>
@@ -71,9 +112,11 @@ const TableTransaksiTerakhir = (props) => {
                     { value: 50, label: 50 },
                     { value: 100, label: 100 },
                 ]}
-                total={100}
-                activePage={1}
-
+                total={tableData.total}
+                activePage={tableData.current_page}
+                displayLength={tableData.per_page}
+                onChangePage={handleChangePage}
+                onChangeLength={handleChangeLength}
             />
         </div>
     );

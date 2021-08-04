@@ -5,4 +5,13 @@ const Cart = atom({
     default: []
 });
 
-export { Cart };
+const Page = atom({
+    key: "Page",
+    default: 0
+});
+
+const CheckoutSave = atom({
+    key: "Checkout",
+    default: []
+});
+export { Cart, CheckoutSave, Page };

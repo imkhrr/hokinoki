@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Icon, Input, InputGroup, Button } from "rsuite";
+import { Grid, Row, Col, Icon, Input, InputGroup } from "rsuite";
 
 import TableTransaksiTerakhir from "../../components/tables/transactions/TableTransaksiTerakhir";
 
@@ -19,16 +19,11 @@ class TransaksiTerakhir extends Component {
                             <span className="t3 pr-1">Transaksi Terakhir</span>
                             <div className="flex jc-sb ai-c">
                                 <InputGroup size="xs">
-                                    <Input placeholder="Keyword" />
+                                    <Input placeholder="Search" />
                                     <InputGroup.Addon>
                                         <Icon icon="search" />
                                     </InputGroup.Addon>
                                 </InputGroup>
-                                <div className="pl-2">
-                                    <Button appearance="primary" size="xs">
-                                        Filter
-                                    </Button>
-                                </div>
                             </div>
                         </div>
                         <div className="pb-2" style={{ paddingTop: 3 }}>

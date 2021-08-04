@@ -37,6 +37,7 @@ const UserModal = (props) => {
                 title: 'Sukses',
                 description: 'Data pelanggan berhasil disimpan'
             })
+            console.log(data);
             modalClose();
         } catch (error) {
             Notification.error({
@@ -64,7 +65,7 @@ const UserModal = (props) => {
     }
 
     const saveData = () => {
-        console.log(request);
+        // console.log(request);
         if (modalData.update) {
             updateData();
         } else {

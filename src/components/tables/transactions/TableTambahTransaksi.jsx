@@ -12,14 +12,7 @@ const TableTambahTransaksi = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
     const [shopCart, setShopCart] = useRecoilState(Cart);
-    
-    // const checkoutCart = useSetRecoilState(Cart);
-    // const [shopCart, setShopCart] = useState([]);
 
-    // useEffect(() => {
-    //     checkoutCart(shopCart);
-    //     console.log(shopCart);
-    // }, [shopCart])
 
     const curr = new Intl.NumberFormat('id-ID', {
         style: "currency",
@@ -31,11 +24,16 @@ const TableTambahTransaksi = (props) => {
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length }
+    const request = { sortType, column, length, search }
 
 
     const getData = async (e) => {
+        setSearch(props.search);
+        if (search.length > 0) {
+            setPage(1);
+        }
         setLoading(true);
         try {
             let { data } = await axios.post(`table/commodities?page=${page}`, request);
@@ -47,13 +45,22 @@ const TableTambahTransaksi = (props) => {
         }
     }
 
+    const handleChangePage = (e) => {
+        setPage(e);
+    };
+
+    const handleChangeLength = (e) => {
+        setLength(e);
+        setPage(1);
+    };
+
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType]);
+    }, [page, length, column, sortType, search, props.search]);
 
     return (
         <div>
-            <Table data={tableData.data} height={400}>
+            <Table data={tableData.data} loading={ loading } height={375}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -61,6 +68,10 @@ const TableTambahTransaksi = (props) => {
                             return rowIndex + 1;
                         }}
                     </Cell>
+                </Column>
+                <Column flexGrow={0.8}>
+                    <HeaderCell>Kode Barang</HeaderCell>
+                    <Cell dataKey="code" />
                 </Column>
                 <Column flexGrow={1.5}>
                     <HeaderCell>Nama Barang</HeaderCell>
@@ -88,7 +99,23 @@ const TableTambahTransaksi = (props) => {
                     <HeaderCell>Stok</HeaderCell>
                     <Cell dataKey="stock">
                         {(rowData) => {
-                            return <span className="bold ">{rowData.stock}</span>;
+
+                            let stock = rowData.stock;
+                            let warning = ''
+
+                            let index = shopCart.findIndex(obj => obj.id === rowData.id);
+
+                            if (index > -1) {
+                                stock = rowData.stock - shopCart[index].count;
+                                if (stock <= 0) {
+                                    warning = 'is-red';
+                                }
+                            }
+                            return (
+                                <span className={`bold ${warning}`}>
+                                    { stock }
+                                </span>
+                            )
                         }}
                     </Cell>
                 </Column>
@@ -96,20 +123,33 @@ const TableTambahTransaksi = (props) => {
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
+
+                            let stock = rowData.stock;
+                            let disable = false;
+
+                            let index = shopCart.findIndex(obj => obj.id === rowData.id);
+
+                            if (index > -1) {
+                                stock = rowData.stock - shopCart[index].count;
+                                if (stock  <= 0) {
+                                    disable = true;
+                                }
+                            }
+
                             function handleAction() {
+                                
                                 let itemData = {
                                     id: rowData.id,
                                     name: rowData.name,
                                     category: rowData.commodity_type.name,
                                     count: 1,
                                     sellPrice: rowData.sell_price,
-                                    price: rowData.sell_price
+                                    price: rowData.sell_price,
+                                    limit: rowData.stock
                                 }
 
-                                let index = shopCart.findIndex(obj => obj.id === rowData.id);
-
                                 if (index < 0) {
-                                    setShopCart([...shopCart, itemData])
+                                    setShopCart([...shopCart, itemData]); 
                                 } else {
                                     let _shopCart = [...shopCart];
                                     _shopCart[index] = {
@@ -118,6 +158,7 @@ const TableTambahTransaksi = (props) => {
                                     };
                                     setShopCart(_shopCart);
                                 }
+
 
                             }
                             return (
@@ -128,6 +169,7 @@ const TableTambahTransaksi = (props) => {
                                         color="blue"
                                         size="xs"
                                         onClick={handleAction}
+                                        disabled={ disable }
                                     >
                                         <span className="is-desktop">Tambah</span>
                                     </IconButton>
@@ -142,10 +184,13 @@ const TableTambahTransaksi = (props) => {
                     { value: 10, label: 10 },
                     { value: 50, label: 50 },
                     { value: 100, label: 100 },
+                    { value: tableData.total, label: "all" },
                 ]}
-                total={100}
-                activePage={1}
-
+                total={tableData.total}
+                activePage={tableData.current_page}
+                displayLength={tableData.per_page}
+                onChangePage={handleChangePage}
+                onChangeLength={handleChangeLength}
             />
         </div>
     );

@@ -17,8 +17,9 @@ const TableItems = (props) => {
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length }
+    const request = { sortType, column, length, search }
 
     const handleChangePage = (e) => {
         console.log(e);
@@ -38,6 +39,7 @@ const TableItems = (props) => {
     }
 
     const getData = async (e) => {
+        setSearch(props.search);
         setLoading(true);
         try {
             let { data } = await axios.post(`table/commodities?page=${page}`, request);
@@ -51,7 +53,7 @@ const TableItems = (props) => {
     
     useEffect(() => {
         getData();
-    }, [modal.eventSuccess, page, length, column, sortType]);
+    }, [modal.eventSuccess, page, length, column, sortType, search, props.search]);
 
 
     return (

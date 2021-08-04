@@ -5,7 +5,7 @@ function Restricted(props) {
 
     const auth = useRecoilValue(authenticated);
 
-    if (auth.user.role == props.forRole || auth.user.role == "") {
+    if (auth.user.role === props.forRole || auth.user.role === "") {
         return ''
     }
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
+import { useRecoilValue } from "recoil";
+import { Table } from "rsuite";
 import { Cart } from "../../../store/Trans";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -8,7 +8,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 const TableCheckout = (props) => {
 
-    const [checkoutCart, setCheckoutCart] = useRecoilState(Cart);
+    const checkoutCart = useRecoilValue(Cart);
 
     const curr = new Intl.NumberFormat('id-ID', {
         style: "currency",
@@ -17,8 +17,8 @@ const TableCheckout = (props) => {
     
     return (
         <div>
-            <Table data={checkoutCart} height={400}>
-                <Column width={50} align="center" fixed>
+            <Table data={checkoutCart} height={375}>
+                <Column flexGrow={0.1} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
                         {(rowData, rowIndex) => {
@@ -26,11 +26,11 @@ const TableCheckout = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={2}>
+                <Column flexGrow={0.5}>
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.8} align="center">
+                <Column flexGrow={0.1} align="center">
                     <HeaderCell>Jumlah</HeaderCell>
                     <Cell dataKey="count">
                         {(rowData) => {
@@ -38,7 +38,7 @@ const TableCheckout = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.8} align="right">
+                <Column flexGrow={0.2} align="right">
                     <HeaderCell>Harga</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -46,37 +46,11 @@ const TableCheckout = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.8} align="right">
+                <Column flexGrow={0.2} align="right">
                     <HeaderCell>SubTotal</HeaderCell>
                     <Cell>
                         {(rowData) => {
                             return curr.format(rowData.count * rowData.price).slice(0, -3);
-                        }}
-                    </Cell>
-                </Column>
-                <Column flexGrow={0.8}>
-                    <HeaderCell>Action</HeaderCell>
-
-                    <Cell>
-                        {(rowData) => {
-                            function handleAction() {
-                                alert(`id: ${rowData.id}`);
-                            }
-                            return (
-                                <div>
-                                    <ButtonToolbar>
-                                        <IconButton
-                                            icon={<Icon icon="trash" />}
-                                            appearance="ghost"
-                                            color="red"
-                                            size="xs"
-                                            onClick={handleAction}
-                                        >
-                                            <span className="is-desktop">Hapus</span>
-                                        </IconButton>
-                                    </ButtonToolbar>
-                                </div>
-                            );
                         }}
                     </Cell>
                 </Column>

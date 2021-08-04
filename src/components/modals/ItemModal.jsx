@@ -1,19 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, InputNumber, SelectPicker, InputPicker } from "rsuite";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, InputNumber, SelectPicker } from "rsuite";
 import { itemModal } from "../../store/Modal";
 
 const ItemModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(itemModal);
-    const [categories, setCategories] = useState('');
+    const [categories, setCategories] = useState([]);
     const [name, setName] = useState('');
     const [category, setCategory] = useState([]);
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
 
-    const request = { name, price };
+    const request = { name, category, price };
 
     const modalClose = () => {
         setModalData({
@@ -28,7 +28,7 @@ const ItemModal = (props) => {
     const modalShow = async () => {
         setCategory("");
         try {
-            let { data } = await axios.get('info/commodity-types');
+            let { data } = await axios.get('dropdown/commodity-types');
             setCategories(data);
         } catch (error) {
             console.log(error);
@@ -71,7 +71,7 @@ const ItemModal = (props) => {
     }
 
     const saveData = () => {
-        console.log(request);
+        // console.log(request);
         if (modalData.update) {
             updateData();
         } else {
@@ -90,7 +90,7 @@ const ItemModal = (props) => {
             setStock(modalData.formData.stock);
         }
         formData();
-        console.log(modalData);
+        // console.log(modalData);
     }, [modalData.formData])
 
     return (
@@ -106,18 +106,19 @@ const ItemModal = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Kategori</ControlLabel>
-                        <InputPicker
-                            data={Object.values(categories)}
-                            placeholder="pilih kategori"
+                        <SelectPicker
+                            data={categories}
+                            placeholder="Pilih Kategori"
                             valueKey="id"
-                            onSelect={(e) => setCategory(e)}
+                            onChange={(e) => setCategory(e)}
                             value={category || ""}
-                            cleanable={true}
+                            cleanable={false}
+                            searchable={false}
                             block
                         />
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>Kategori</ControlLabel>
+                        <ControlLabel>Unit</ControlLabel>
                         <FormControl readOnly />
                     </FormGroup>
                 </Form>

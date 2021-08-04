@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, ErrorMessage } from "rsuite";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
 import { customerModal } from "../../store/Modal";
 
 const CustomerModal = (props) => {

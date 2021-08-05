@@ -8,7 +8,7 @@ import { Cart } from "../../../store/Trans";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableTambahTransaksi = (props) => {
+const TableAddTransactions = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
     const [shopCart, setShopCart] = useRecoilState(Cart);
@@ -196,4 +196,4 @@ const TableTambahTransaksi = (props) => {
     );
 };
 
-export default TableTambahTransaksi;
+export default TableAddTransactions;

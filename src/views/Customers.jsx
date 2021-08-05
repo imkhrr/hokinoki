@@ -38,7 +38,7 @@ function Customers(props) {
                                     <TableCustomers />
                                 </div>
                             </div>
-                            <div className="flex jc-sb pt-2">
+                            <div className="flex jc-sb pt-1">
                                 <div></div>
                                 <IconButton
                                     icon={<Icon icon="plus" />}

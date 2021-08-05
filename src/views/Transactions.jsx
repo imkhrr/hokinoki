@@ -2,13 +2,13 @@ import React from "react";
 import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
 import { Col, Row, Grid, IconButton, Icon } from "rsuite";
-import TransaksiTerakhir from "./transactions/TransaksiTerakhir";
-import TambahTransaksi from "./transactions/TambahTransaksi";
+import AddTransactions from "./transactions/AddTransactions";
+import SellTransactions from "./transactions/SellTransactions";
 import Checkout from "./transactions/Checkout";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Cart, Page } from "../store/Trans";
 
-function Transaksi() {
+function Transactions() {
 
     const shopCart = useRecoilValue(Cart);
     const [transIndex, setTransIndex] = useRecoilState(Page);
@@ -26,8 +26,8 @@ function Transaksi() {
                         <NavigasiBar title="Transaksi" />
                         <div className="px-3 pt-3 animate__animated animate__fadeIn">
                             <div style={{ minHeight: "77vh" }}>
-                                {transIndex === 0 && <TransaksiTerakhir />}
-                                {transIndex === 1 && <TambahTransaksi />}
+                                {transIndex === 0 && <SellTransactions />}
+                                {transIndex === 1 && <AddTransactions />}
                                 {transIndex === 2 && <Checkout />}
                             </div>
                             {transIndex === 0 && (
@@ -50,4 +50,4 @@ function Transaksi() {
     );
 }
 
-export default Transaksi;
+export default Transactions;

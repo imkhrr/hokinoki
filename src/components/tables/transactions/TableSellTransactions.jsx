@@ -7,7 +7,7 @@ import { transTable } from "../../../store/DataTable";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableTransaksiTerakhir = (props) => {
+const TableSellTransactions = (props) => {
 
     const [tableData, setTableData] = useRecoilState(transTable);
     // const [modal, setModal] = useRecoilState(transTable);
@@ -122,4 +122,4 @@ const TableTransaksiTerakhir = (props) => {
     );
 };
 
-export default TableTransaksiTerakhir;
+export default TableSellTransactions;

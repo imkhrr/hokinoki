@@ -14,10 +14,10 @@ import {
     InputNumber,
 } from "rsuite";
 import { Cart, Page } from "../../store/Trans";
-import TableTambahTransaksi from "../../components/tables/transactions/TableTambahTransaksi";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import TableAddTransactions from "../../components/tables/transactions/TableAddTransactions";
 
-function TambahTransaksi() {
+function AddTransactions() {
 
     const [shopCart, setShopCart] = useRecoilState(Cart);
     const setTransIndex = useSetRecoilState(Page);
@@ -47,7 +47,7 @@ function TambahTransaksi() {
                             size="sm"
                             onClick={() => setTransIndex(0)}
                         >
-                        <span className="t3 pl-1">Penjualan</span>
+                            <span className="t3 pl-1">Penjualan</span>
                         </IconButton>
                         <div className="flex jc-sb ai-c">
                             <InputGroup size="xs">
@@ -58,10 +58,10 @@ function TambahTransaksi() {
                             </InputGroup>
                         </div>
                     </div>
-                    <div style={{ paddingTop: 4}}>
-                        <TableTambahTransaksi search={itemSearch} />
+                    <div style={{ paddingTop: 4 }}>
+                        <TableAddTransactions search={itemSearch} />
                     </div>
-                    
+
                 </Col>
                 <Col xs={24} sm={24} md={7} className="px-0px">
                     <div className="pl-2">
@@ -86,8 +86,8 @@ function TambahTransaksi() {
                             style={{ minHeight: "80vh" }}
                         >
                             <div
-                                style={{ 
-                                    height: "60vh", 
+                                style={{
+                                    height: "60vh",
                                     overflowY: "scroll",
                                     marginBottom: "2rem"
                                 }}
@@ -158,7 +158,6 @@ function TambahTransaksi() {
             </Row>
         </Grid>
     );
-    // }
 }
 
-export default TambahTransaksi;
+export default AddTransactions;

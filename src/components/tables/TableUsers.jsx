@@ -39,7 +39,7 @@ const TableUsers = (props) => {
         setLoading(true);
         try {
             let { data } = await axios.post(`table/users?page=${page}`, request);
-            setTableData(data.data);
+            setTableData(data);
             setLoading(false);
         } catch (e) {
             console.log(e.response);
@@ -47,6 +47,7 @@ const TableUsers = (props) => {
     }
 
     useEffect(() => {
+        console.log(tableData);
         getData();
     }, [page, length, column, sortType]);
 

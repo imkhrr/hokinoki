@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { itemsTable } from "../../store/DataTable";
-import { itemModal } from "../../store/Modal";
+import { itemsTable } from "../../../store/DataTable";
+import { Storehouse } from "../../../store/Trans";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableItems = (props) => {
+const TableStockOpname = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
-    const [modal, setModal] = useRecoilState(itemModal);
+    const [storehouse, setStorehouse] = useRecoilState(Storehouse);
 
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
@@ -53,7 +53,7 @@ const TableItems = (props) => {
     
     useEffect(() => {
         getData();
-    }, [modal.eventSuccess, page, length, column, sortType, search, props.search]);
+    }, [ page, length, column, sortType, search, props.search ]);
 
 
     return (
@@ -67,7 +67,7 @@ const TableItems = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.5}>
+                <Column flexGrow={0.75}>
                     <HeaderCell>Kode Barang</HeaderCell>
                     <Cell dataKey="code" />
                 </Column>
@@ -75,80 +75,34 @@ const TableItems = (props) => {
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.8} align="left">
-                    <HeaderCell>Kategori</HeaderCell>
-                    <Cell>
-                        {(rowData) => {
-                            if (rowData.commodity_type.name) {
-                                return rowData.commodity_type.name;
-                            }
-                        }}
-                    </Cell>
+                <Column flexGrow={0.5}>
+                    <HeaderCell>Stok Lama</HeaderCell>
+                    <Cell dataKey="stock" />
                 </Column>
-                <Column flexGrow={0.5} align="left">
-                    <HeaderCell>Unit</HeaderCell>
-                    <Cell>
-                        {(rowData) => {
-                            if (rowData.commodity_unit.name) {
-                                return rowData.commodity_unit.name;
-                            }
-                        }}
-                    </Cell>
+                <Column flexGrow={0.5}>
+                    <HeaderCell>Stok Baru</HeaderCell>
+                    <Cell dataKey="" />
                 </Column>
-                <Column flexGrow={0.5} align="right">
-                    <HeaderCell>Harga</HeaderCell>
-                    <Cell dataKey="sell_price" />
-                </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={0.75}>
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            async function handleDelete() {
-                                try {
-                                    let { data } = await axios.delete(`/commodities/${rowData.id}`);
-                                    Notification.success({
-                                        title: 'Berhasil',
-                                        description: data.message
-                                    })
-                                } catch (e) {
-                                    Notification.error({
-                                        title: 'Gagal',
-                                        description: 'Data tidak dapat dihapus'
-                                    })
-                                }
-                                getData()
-                            }
-
-                            function handleUpdate() {
-                                setModal({
-                                    ...modal,
-                                    title: 'Edit data Barang',
-                                    size: 'xs',
-                                    show: true,
-                                    formData: rowData,
-                                    update: true
-                                })
+                            
+                            function handleRestock() {
+                                setStorehouse({...storehouse, data: rowData});
+                                console.log(storehouse);
                             }
                             return (
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
-                                            icon={<Icon icon="edit" />}
+                                            icon={<Icon icon="plus-square" />}
                                             appearance="ghost"
                                             color="blue"
                                             size="xs"
-                                            onClick={handleUpdate}
+                                            onClick={handleRestock}
                                         >
-                                            <span className="is-desktop">Edit</span>
-                                        </IconButton>
-                                        <IconButton
-                                            icon={<Icon icon="trash" />}
-                                            appearance="ghost"
-                                            color="red"
-                                            size="xs"
-                                            onClick={handleDelete}
-                                        >
-                                            <span className="is-desktop">Hapus</span>
+                                            <span className="is-desktop">Update</span>
                                         </IconButton>
                                     </ButtonToolbar>
                                 </div>
@@ -175,4 +129,4 @@ const TableItems = (props) => {
     );
 };
 
-export default TableItems;
+export default TableStockOpname;

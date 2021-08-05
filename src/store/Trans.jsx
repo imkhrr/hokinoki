@@ -14,4 +14,13 @@ const CheckoutSave = atom({
     key: "Checkout",
     default: []
 });
-export { Cart, CheckoutSave, Page };
+
+const Storehouse = atom({
+    key: "Storehouse",
+    default: [{
+        panelOpen: false,
+        type: 'restock',
+        data: []
+    }]
+})
+export { Cart, CheckoutSave, Page, Storehouse };

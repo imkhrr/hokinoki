@@ -6,9 +6,12 @@ import Users from "../views/Users";
 import Dashboard from "../views/Dashboard";
 import LoginPage from "../views/LoginPage";
 import NotFound from "../views/NotFound";
-import Transaksi from "../views/Transaksi";
+import Transactions from "../views/Transactions";
 import Customers from "../views/Customers";
 import Settings from "../views/Settings";
+import StoreHouse from "../views/StroreHouse";
+
+
 import RestrictedPage from "../middleware/forbiden/RestrictedPage";
 
 function Router(props) {
@@ -22,9 +25,9 @@ function Router(props) {
                         </Middleware.Authenticated>
                     </Route>
 
-                    <Route path="/transaksi">
+                    <Route path="/transactions">
                         <Middleware.Authenticated>
-                            <Transaksi />
+                            <Transactions />
                         </Middleware.Authenticated>
                     </Route>
 
@@ -48,6 +51,30 @@ function Router(props) {
                         <Middleware.Authenticated>
                             <RestrictedPage forRole="cashier">
                                 <Customers />
+                            </RestrictedPage>
+                        </Middleware.Authenticated>
+                    </Route>
+
+                    <Route path="/storehouse">
+                        <Middleware.Authenticated>
+                            <RestrictedPage forRole="cashier">
+                                <StoreHouse />
+                            </RestrictedPage>
+                        </Middleware.Authenticated>
+                    </Route>
+
+                    <Route path="/selling-report">
+                        <Middleware.Authenticated>
+                            <RestrictedPage forRole="cashier">
+                                <StoreHouse />
+                            </RestrictedPage>
+                        </Middleware.Authenticated>
+                    </Route>
+
+                    <Route path="/statistics">
+                        <Middleware.Authenticated>
+                            <RestrictedPage forRole="cashier">
+                                <StoreHouse />
                             </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>

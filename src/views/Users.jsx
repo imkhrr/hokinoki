@@ -10,12 +10,12 @@ import {
 } from "rsuite";
 import TableUsers from "../components/tables/TableUsers";
 import UserModal from "../components/modals/UserModal";
-import { itemModal } from "../store/Modal";
+import { userModal } from "../store/Modal";
 import { useRecoilState } from "recoil";
 
 function Users() {
 
-    const [modal, setModal] = useRecoilState(itemModal);
+    const [modal, setModal] = useRecoilState(userModal);
 
 
     return (
@@ -48,7 +48,7 @@ function Users() {
                                     onClick={(e) => {
                                         setModal({
                                             ...modal,
-                                            title: 'Tambah Data Pelanggan',
+                                            title: 'Tambah Data Pengguna',
                                             show: true,
                                             formData: [],
                                             update: false

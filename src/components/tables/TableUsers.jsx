@@ -19,12 +19,10 @@ const TableUsers = (props) => {
     const request = { sortType, column, length }
 
     const handleChangePage = (e) => {
-        console.log(e);
         setPage(e);
     };
 
     const handleChangeLength = (e) => {
-        console.log(e);
         setLength(e);
         setPage(1);
     };
@@ -32,7 +30,6 @@ const TableUsers = (props) => {
     const handleSortColumn = (sortColumn, sortType) => {
         setColumn(sortColumn);
         setSortType(sortType);
-        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
     }
 
     const getData = async (e) => {
@@ -47,7 +44,6 @@ const TableUsers = (props) => {
     }
 
     useEffect(() => {
-        console.log(tableData);
         getData();
     }, [page, length, column, sortType]);
 

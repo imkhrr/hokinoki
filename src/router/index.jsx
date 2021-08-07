@@ -13,6 +13,7 @@ import StoreHouse from "../views/StroreHouse";
 
 
 import RestrictedPage from "../middleware/forbiden/RestrictedPage";
+import SellReport from "../views/SellReport";
 
 function Router(props) {
     return (
@@ -55,7 +56,7 @@ function Router(props) {
                         </Middleware.Authenticated>
                     </Route>
 
-                    <Route path="/storehouse">
+                    <Route path="/storehouse" >
                         <Middleware.Authenticated>
                             <RestrictedPage forRole="cashier">
                                 <StoreHouse />
@@ -66,7 +67,7 @@ function Router(props) {
                     <Route path="/selling-report">
                         <Middleware.Authenticated>
                             <RestrictedPage forRole="cashier">
-                                <StoreHouse />
+                                <SellReport />
                             </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>

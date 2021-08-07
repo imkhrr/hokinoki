@@ -101,7 +101,7 @@ const TableAddTransactions = (props) => {
                         {(rowData) => {
 
                             let stock = rowData.stock;
-                            let warning = ''
+                            let warning = !stock && 'is-red'
 
                             let index = shopCart.findIndex(obj => obj.id === rowData.id);
 
@@ -125,7 +125,7 @@ const TableAddTransactions = (props) => {
                         {(rowData) => {
 
                             let stock = rowData.stock;
-                            let disable = false;
+                            let disable = stock ? false : true;
 
                             let index = shopCart.findIndex(obj => obj.id === rowData.id);
 

@@ -4,7 +4,6 @@ import SideBar from "../layouts/SideBar";
 import BestSellerCard from "../components/BestSellerCard";
 import StatCard from "../components/StatCard";
 import DashboardChart from "../components/charts/DashboardChart";
-// import SideBar2 from "../layouts/SideBar2";
 
 import { Col, Row, Panel, Grid, } from "rsuite";
 import axios from "axios";
@@ -13,22 +12,44 @@ function Dashboard() {
 
     const [customer, setCustomer] = useState(0);
     const [sale, setSale] = useState(0);
-
-    const statData = async (e) => {
-        try {
-            let customerStat = await axios.get('dashboard/customer');
-            let saleStat = await axios.get('dashboard/sale');
-            setCustomer(customerStat.data);
-            setSale(saleStat.data);
-        } catch (error) {
-            
-        }
-    }
+    const [itemSold, setItemSold] = useState(0);
+    const [bestSeller, setBestSeller] = useState([]);
 
     useEffect(() => {
-        statData()
-    },[])
+        axios.get('dashboard/customer')
+            .then((response) => {
+                setCustomer(response.data)
+            })
+            .catch((e) => {
+                console.log(e);
+            });
 
+        axios.get('dashboard/sale')
+            .then((response) => {
+                setSale(response.data)
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+
+        axios.get('dashboard/item-sold')
+            .then((response) => {
+                setItemSold(response.data)
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+
+        axios.get('dashboard/best-seller')
+            .then((response) => {
+                setBestSeller(response.data)
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, [])
+
+    
     return (
         <div>
             <Grid fluid>
@@ -49,7 +70,7 @@ function Dashboard() {
                                     bgcolor="red"
                                     textcolor="white"
                                     viewdate="Hari ini"
-                                    count={ sale }
+                                    count={itemSold}
                                     cardname="Terjual"
                                     iconname="shopping-bag"
                                 />
@@ -66,7 +87,7 @@ function Dashboard() {
                                     textcolor="white"
                                     viewdate="Total"
                                     count={customer}
-                                    cardname="Pelanggan"
+                                    cardname="Member"
                                     iconname="peoples"
                                 />
                                 {/* <StatCard
@@ -93,6 +114,7 @@ function Dashboard() {
                                         viewdate="Hari ini"
                                         cardname="Best Seller"
                                         iconname="line-chart"
+                                        listData={bestSeller}
                                     />
                                 </Col>
                             </Row>

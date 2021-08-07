@@ -17,10 +17,9 @@ const CheckoutSave = atom({
 
 const Storehouse = atom({
     key: "Storehouse",
-    default: [{
-        panelOpen: false,
-        type: 'restock',
-        data: []
-    }]
+    default: {
+        type: '',
+        data: [],
+    }
 })
 export { Cart, CheckoutSave, Page, Storehouse };

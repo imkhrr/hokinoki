@@ -10,12 +10,12 @@ import {
     InputGroup,
     Input
 } from "rsuite";
-import TableItems from "../components/tables/TableItems";
 import ItemModal from "../components/modals/ItemModal";
 import { useRecoilState } from "recoil";
 import { itemModal } from "../store/Modal";
+import TableSellReport from "../components/tables/TableSellReport";
 
-function Items() {
+function SellReport() {
 
     const [modal, setModal] = useRecoilState(itemModal);
     const [search, setSearch] = useState('');
@@ -36,12 +36,12 @@ function Items() {
                         </div>
                     </Col>
                     <Col xs={24} sm={24} md={20} className="px-0px">
-                        <NavigasiBar title="Barang" />
+                        <NavigasiBar title="Penjualan" />
                         <ItemModal />
                         <div className="p-3 animate__animated animate__fadeIn">
                             <div style={{ minHeight: "77vh" }}>
                                 <div className="pb-2 flex jc-sb">
-                                    <span className="t3 pr-1">Data Barang</span>
+                                    <span className="t3 pr-1">Laporan Penjualan</span>
                                     <div className="flex jc-sb ai-c">
                                         <InputGroup size="xs">
                                             <Input placeholder="Search" onChange={ (e) => { setInputVal(e) } } />
@@ -52,7 +52,7 @@ function Items() {
                                     </div>
                                 </div>
                                 <div>
-                                    <TableItems search={ search } />
+                                    <TableSellReport />
                                 </div>
                             </div>
 
@@ -82,4 +82,4 @@ function Items() {
     );
 }
 
-export default Items;
+export default SellReport;

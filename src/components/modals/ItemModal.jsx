@@ -8,8 +8,10 @@ const ItemModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(itemModal);
     const [categories, setCategories] = useState([]);
+    const [units, setUnits] = useState([]);
     const [name, setName] = useState('');
     const [category, setCategory] = useState([]);
+    const [unit, setUnit] = useState([]);
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
 
@@ -28,8 +30,10 @@ const ItemModal = (props) => {
     const modalShow = async () => {
         setCategory("");
         try {
-            let { data } = await axios.get('dropdown/commodity-types');
-            setCategories(data);
+            let types = await axios.get('dropdown/commodity-types');
+            let units = await axios.get('dropdown/commodity-units');
+            setCategories(types.data);
+            setUnits(units.data);
         } catch (error) {
             console.log(error);
         }
@@ -90,7 +94,6 @@ const ItemModal = (props) => {
             setStock(modalData.formData.stock);
         }
         formData();
-        // console.log(modalData);
     }, [modalData.formData])
 
     return (
@@ -119,7 +122,16 @@ const ItemModal = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Unit</ControlLabel>
-                        <FormControl readOnly />
+                        <SelectPicker
+                            data={units}
+                            placeholder="Pilih Kategori"
+                            valueKey="id"
+                            onChange={(e) => setUnit(e)}
+                            value={unit || ""}
+                            cleanable={false}
+                            searchable={false}
+                            block
+                        />
                     </FormGroup>
                 </Form>
                 <Form className="flex jc-sb" fluid>

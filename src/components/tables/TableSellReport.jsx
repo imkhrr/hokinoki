@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { itemsTable } from "../../../store/DataTable";
-import { Storehouse } from "../../../store/Trans";
+import { itemsTable } from "../../store/DataTable";
+import { itemModal } from "../../store/Modal";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const TableStockOpname = (props) => {
+const TableSellReport = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
-    const [storehouse, setStorehouse] = useRecoilState(Storehouse);
+    const [modal, setModal] = useRecoilState(itemModal);
 
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
@@ -53,7 +53,7 @@ const TableStockOpname = (props) => {
     
     useEffect(() => {
         getData();
-    }, [ page, length, column, sortType, search, props.search ]);
+    }, [modal.eventSuccess, page, length, column, sortType, search, props.search]);
 
 
     return (
@@ -67,41 +67,63 @@ const TableStockOpname = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.75}>
-                    <HeaderCell>Kode Barang</HeaderCell>
-                    <Cell dataKey="code" />
-                </Column>
-                <Column flexGrow={1.5}>
-                    <HeaderCell>Nama Barang</HeaderCell>
-                    <Cell dataKey="name" />
-                </Column>
-                <Column flexGrow={0.5}>
-                    <HeaderCell>Stok Lama</HeaderCell>
-                    <Cell dataKey="stock" />
-                </Column>
-                <Column flexGrow={0.5}>
-                    <HeaderCell>Stok Baru</HeaderCell>
-                    <Cell dataKey="" />
+                <Column flexGrow={1}>
+                    <HeaderCell>Tanggal Laporan</HeaderCell>
+                    <Cell></Cell>
                 </Column>
                 <Column flexGrow={0.75}>
+                    <HeaderCell>Barang Terjual</HeaderCell>
+                    <Cell></Cell>
+                </Column>
+                <Column flexGrow={0.75} align="left">
+                    <HeaderCell>Jumlah Transakasi</HeaderCell>
+                    <Cell></Cell>
+                </Column>
+                <Column flexGrow={1} align="right">
+                    <HeaderCell>Total Pendapatan</HeaderCell>
+                    <Cell dataKey="sell_price" />
+                </Column>
+                <Column flexGrow={1}>
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            
-                            function handleRestock() {
-                                setStorehouse({ type: 'opname', data: rowData });
+                            async function handleDelete() {
+                                try {
+                                    let { data } = await axios.delete(`/commodities/${rowData.id}`);
+                                    Notification.success({
+                                        title: 'Berhasil',
+                                        description: data.message
+                                    })
+                                } catch (e) {
+                                    Notification.error({
+                                        title: 'Gagal',
+                                        description: 'Data tidak dapat dihapus'
+                                    })
+                                }
+                                getData()
+                            }
+
+                            function handleUpdate() {
+                                setModal({
+                                    ...modal,
+                                    title: 'Edit data Barang',
+                                    size: 'xs',
+                                    show: true,
+                                    formData: rowData,
+                                    update: true
+                                })
                             }
                             return (
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
-                                            icon={<Icon icon="plus-square" />}
+                                            icon={<Icon icon="edit" />}
                                             appearance="ghost"
                                             color="blue"
                                             size="xs"
-                                            onClick={handleRestock}
+                                            onClick={handleUpdate}
                                         >
-                                            <span className="is-desktop">Update</span>
+                                            <span className="is-desktop">Lihat Detail</span>
                                         </IconButton>
                                     </ButtonToolbar>
                                 </div>
@@ -128,4 +150,4 @@ const TableStockOpname = (props) => {
     );
 };
 
-export default TableStockOpname;
+export default TableSellReport;

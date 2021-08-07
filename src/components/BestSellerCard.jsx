@@ -1,43 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Col, Row, Panel, Icon } from "rsuite";
+import { Panel, Icon, Placeholder } from "rsuite";
 
 const BestSellerCard = (props) => {
 
+    // const [loading, setLoading] = useState(true);
+    const [animateIn, setAnimateIn] = useState()
+    const [data, setData] = useState([])
 
-  return (
-    <Panel className="is-bg-teal is-white" bordered>
-      <div className="flex jc-sb">
-        <div>
-          <span className="t4">{props.viewdate}</span>
-          <div>
-            <span className="t3">{props.cardname}</span>
-          </div>
-        </div>
+    useEffect(() => {
+        setData(props.listData)
+    }, [props.listData])
 
-        <div className="pt-1 pr-1">
-          <Icon icon={props.iconname} size="2x" />
-        </div>
-      </div>
+    return (
+        <Panel className="is-bg-teal is-white" bordered style={{ height: "55vh" }}>
+            <div className="flex jc-sb">
+                <div>
+                    <span className="t4">{props.viewdate}</span>
+                    <div>
+                        <span className="t3">{props.cardname}</span>
+                    </div>
+                </div>
 
-      <div className="pt-2">
-        <Row>
-          <Col xs={20} sm={20} md={15}>
-            <ul className="pl-0" style={{ listStyle: "none" }}>
-              <li>Nanas Muda</li>
-            </ul>
-          </Col>
-          <Col xs={4} sm={4} md={9}>
-            <div className="pr-1">
-              <ul style={{ listStyle: "none", textAlign: "right" }}>
-                <li>32</li>
-              </ul>
+                <div className="pt-1 pr-1">
+                    <Icon icon={props.iconname} size="2x" />
+                </div>
             </div>
-          </Col>
-        </Row>
-      </div>
-    </Panel>
-  );
+            <div className="pt-2">
+                {
+                    data.map((item, index) => (
+                        <dl key={index} className={`animate__animated animate__fadeIn animate__delay-${index}s`}>
+                            <dt className="t3" style={{ fontWeight: "normal" }}>{item.commodity.name}</dt>
+                            <dd className="flex jc-sb" >
+                                <span style={{ fontWeight: "lighter" }}>Total Penjualan</span>
+                                <span style={{ fontWeight: 780 }}>{item.total_sold}</span>
+                            </dd>
+                        </dl>
+                    ))
+                }
+            </div>
+        </Panel>
+    );
 };
 
 export default BestSellerCard;

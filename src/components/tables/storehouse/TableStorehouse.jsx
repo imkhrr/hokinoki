@@ -84,7 +84,7 @@ const TableStorehouse = (props) => {
                     <Cell>
                         {(rowData) => {
                             function handleRestock() {
-                                setStorehouse({ ...storehouse, panelOpen: true, data: rowData });
+                                setStorehouse({type: 'restock', data: rowData});
                             };
                             return (
                                 <div>

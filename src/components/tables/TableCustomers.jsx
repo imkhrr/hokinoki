@@ -30,6 +30,7 @@ const TableCustomers = (props) => {
     };
 
     const handleSortColumn = (sortColumn, sortType) => {
+        console.log(sortColumn, sortType);
         setColumn(sortColumn);
         setSortType(sortType);
     }
@@ -49,9 +50,14 @@ const TableCustomers = (props) => {
         getData();
     }, [modal.eventSuccess, page, length, column, sortType]);
 
+
     return (
         <div>
-            <Table loading={loading} data={tableData.data} height={400} >
+            <Table
+                loading={loading}
+                data={tableData.data}
+                height={400}
+            >
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>

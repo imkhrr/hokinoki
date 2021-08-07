@@ -3,16 +3,21 @@ import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
 import { Col, Row, Grid, IconButton, Icon, InputGroup, Input, Panel, Tag, FormGroup, ControlLabel, FormControl, InputNumber } from "rsuite";
 import TableStoreHouse from "../components/tables/storehouse/TableStorehouse";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilTransactionObserver_UNSTABLE, useResetRecoilState } from "recoil";
 import { Storehouse } from "../store/Trans";
 import TableStockOpname from "../components/tables/storehouse/TableStockOpname";
+import { authenticated } from "../store/User";
 
 function StoreHouse() {
 
     const [storehouse, setStorehouse] = useRecoilState(Storehouse);
+    const [user, setUser] = useRecoilState(authenticated);
     const storehouseReset = useResetRecoilState(Storehouse);
     const [animateIn, setAnimateIn] = useState(true);
+    const [panel, setPanel] = useState(false);
     const [togglePage, setTogglePage] = useState(false);
+
+    const date = new Date();
 
     const panelRestock = () => {
 
@@ -49,6 +54,7 @@ function StoreHouse() {
                             setAnimateIn(false);
                             setTimeout(() => {
                                 setAnimateIn(true);
+                                setPanel(false);
                                 storehouseReset();
                             }, 600)
                         }}
@@ -67,6 +73,7 @@ function StoreHouse() {
                             setAnimateIn(false);
                             setTimeout(() => {
                                 setAnimateIn(true);
+                                setPanel(false);
                                 storehouseReset();
                             }, 600)
                         }}
@@ -85,6 +92,18 @@ function StoreHouse() {
                 <div className="flex jc-sb">
                     <span className="t3 mb-3">Stock Opname </span>
                 </div>
+                <dl style={{ marginTop: '1rem' }}>
+                    <dt>Nama :</dt>
+                    <dd> { user.user.name } </dd>
+                    <dt>Tanggal : </dt>
+                    <dd> { date.toISOString().slice(0, 10) } </dd>
+                </dl>
+                <dl className="inline-flex">
+                    <dt>Jumlah Barang </dt>
+                    <dd> : 40 </dd>
+                    <dt>Barang Terupdate </dt>
+                    <dd> : 20 </dd>
+                </dl>
                 <hr />
                 <div className="flex jc-sb mt-3">
                     <IconButton
@@ -97,6 +116,7 @@ function StoreHouse() {
                             setTogglePage(false)
                             setTimeout(() => {
                                 setAnimateIn(true);
+                                setPanel(false);
                                 storehouseReset()
                             }, 600)
                         }}
@@ -115,6 +135,7 @@ function StoreHouse() {
                             setAnimateIn(false);
                             setTimeout(() => {
                                 setAnimateIn(true);
+                                setPanel(false);
                                 storehouseReset();
                             }, 600)
                         }}
@@ -126,24 +147,41 @@ function StoreHouse() {
         )
     }
 
+    const panelOpen = () => {
+        if (storehouse.data.length != 0 && panel == false) {
+            setPanel(true);
+        }
+    }
+
     useEffect(() => {
         if (togglePage) {
-            if (storehouse.panelOpen) {
+            if (panel) {
                 setAnimateIn(false)
                 setTimeout(() => {
-                    setAnimateIn(true)
-                    setStorehouse({ ...storehouse, panelOpen: true, type: 'opname', })
+                    setAnimateIn(true);
+                    setPanel(true);
+                    setStorehouse({ ...storehouse, type: 'opname' })
                 }, 600);
             } else {
-                setStorehouse({ ...storehouse, panelOpen: true, type: 'opname', })
+                setPanel(true);
+                setStorehouse({ ...storehouse, type: 'opname' })
             }
         } else {
-            setTimeout(() => {
-                storehouseReset();
-            }, 600);
+            if (panel) {
+                setTimeout(() => {
+                    storehouseReset();
+                    setPanel(false);
+                }, 600);
+            } else {
+                // storehouseReset();
+                setStorehouse({ ...storehouse, type: 'restock' })
+            }
         }
     }, [togglePage])
 
+    useEffect(() => {
+        panelOpen()
+    }, [storehouse])
 
     return (
         <div>
@@ -199,7 +237,7 @@ function StoreHouse() {
                                             </IconButton>
                                         </Panel>
                                         {
-                                            storehouse.panelOpen && (
+                                            panel && (
                                                 <Panel className={`is-bg-white animate__animated ${animateIn ? 'animate__slideInRight' : 'animate__slideOutRight'}`} >
                                                     {storehouse.type === 'opname' ? panelOpname() : panelRestock()}
                                                 </Panel>

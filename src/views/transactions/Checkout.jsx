@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import moment from "moment";
+import React, { useState } from "react";
 import NumberFormat from "react-number-format";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import {
     Grid,
     Row,
@@ -27,13 +28,14 @@ import { authenticated } from "../../store/User";
 function Checkout() {
 
     const checkoutCart = useRecoilValue(Cart);
+    const resetCart = useResetRecoilState(Cart);
     const setTransIndex = useSetRecoilState(Page);
     const auth = useRecoilValue(authenticated);
 
     const [isMember, setIsMember] = useState(false);
     const [name, setName] = useState('');
     const [cash, setCash] = useState(0);
-    const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+    const [date, setDate] = useState(new Date());
     const [discount, setDiscount] = useState(0);
     const [customers, setCustomers] = useState([]);
     const [note, setNote] = useState('');
@@ -74,21 +76,27 @@ function Checkout() {
     });
 
     const request = {
-        name, isMember, discount, date, cash,
+        name, 
+        isMember, 
+        discount, 
+        date: moment(date).format("YYYY-MM-DD"),
+        cash,
         note, checkoutCart,
         cost: totalPrice(),
         user: auth.user.id
     };
 
-    // const recordSales = async () => {
-
-    //     try {
-    //         let { data } = await axios.post('transactions/record-sales', request);
-    //         console.log(data);
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+    const recordSales = async () => {
+        try {
+            // console.log(request);
+            let { data } = await axios.post('transactions/record-sales', request);
+            resetCart();
+            setTransIndex(0);
+            // console.log(data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     return (
         <Grid fluid>
@@ -131,12 +139,12 @@ function Checkout() {
                                             <FormGroup>
                                                 <ControlLabel>Tanggal Pembelian</ControlLabel>
                                                 <DatePicker oneTap block
+                                                    value={date}
                                                     cleanable={false}
                                                     ranges={[]}
                                                     size="sm"
                                                     placeholder="Tanggal"
                                                     placement="auto"
-                                                    value={date}
                                                     onChange={(value) => { setDate(value) }}
                                                 />
                                             </FormGroup>
@@ -260,15 +268,7 @@ function Checkout() {
                                     icon={<Icon icon="save" />}
                                     appearance="primary"
                                     color="green"
-                                    onClick={async () => {
-                                        console.log(request);
-                                        try {
-                                            let { data } = await axios.post('transactions/record-sales', request);
-                                            console.log(data);
-                                        } catch (e) {
-                                            console.log(e);
-                                        }
-                                    }}
+                                    onClick={() => recordSales()}
                                     block
                                 >
                                     Simpan

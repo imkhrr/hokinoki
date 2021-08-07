@@ -57,18 +57,39 @@ const TableSellTransactions = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={1.5}>
+                <Column flexGrow={0.7}>
                     <HeaderCell>Kode Transaksi</HeaderCell>
-                    <Cell dataKey="code" />
+                    <Cell dataKey="transaction_code" />
                 </Column>
-
-                <Column flexGrow={0.8}>
+                <Column flexGrow={1.3}>
                     <HeaderCell>Pembeli</HeaderCell>
-                    <Cell dataKey="buyer" />
+                    <Cell>
+                        {
+                            (rowData) => {
+                                return rowData.customer != null ? rowData.customer.name : rowData.non_customer
+                            }
+                        }
+                    </Cell>
+                </Column>
+                <Column flexGrow={0.7}>
+                    <HeaderCell>Kasir</HeaderCell>
+                    <Cell>
+                        {
+                            (rowData) => {
+                                return rowData.transaction.user.name
+                            }
+                        }
+                    </Cell>
                 </Column>
                 <Column flexGrow={0.8} align="center">
                     <HeaderCell>Tanggal Transaksi</HeaderCell>
-                    <Cell dataKey="date" />
+                    <Cell>
+                        {
+                            (rowData) => {
+                                return rowData.transaction.date
+                            }
+                        }
+                    </Cell>
                 </Column>
                 <Column flexGrow={1}>
                     <HeaderCell>Action</HeaderCell>

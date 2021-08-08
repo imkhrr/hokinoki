@@ -75,7 +75,7 @@ const TableStockOpname = (props) => {
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.5}>
+                <Column flexGrow={0.5} align="right">
                     <HeaderCell>Stok Lama</HeaderCell>
                     <Cell dataKey="stock" />
                 </Column>
@@ -83,7 +83,7 @@ const TableStockOpname = (props) => {
                     <HeaderCell>Stok Baru</HeaderCell>
                     <Cell dataKey="" />
                 </Column>
-                <Column flexGrow={0.75}>
+                <Column flexGrow={1.5} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -95,13 +95,13 @@ const TableStockOpname = (props) => {
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
-                                            icon={<Icon icon="plus-square" />}
-                                            appearance="ghost"
+                                            icon={<Icon icon="cubes"/>}
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleRestock}
                                         >
-                                            <span className="is-desktop">Update</span>
+                                            <span className="is-tablet">Update</span>
                                         </IconButton>
                                     </ButtonToolbar>
                                 </div>

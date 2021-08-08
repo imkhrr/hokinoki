@@ -75,11 +75,11 @@ const TableStorehouse = (props) => {
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.5}>
+                <Column flexGrow={0.5} align="right">
                     <HeaderCell>Stok</HeaderCell>
                     <Cell dataKey="stock" />
                 </Column>
-                <Column flexGrow={0.75}>
+                <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -91,12 +91,12 @@ const TableStorehouse = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="plus-square" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleRestock}
                                         >
-                                            <span className="is-desktop">Restock</span>
+                                            <span className="is-tablet">Restock</span>
                                         </IconButton>
                                     </ButtonToolbar>
                                 </div>

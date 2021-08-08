@@ -41,18 +41,18 @@ function SideBar() {
                     <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/selling-report" icon={<Icon className="is-deep-orange" icon="money" />}>
                         <span className="pl-1">Penjualan</span>
                     </Nav.Item>
-                    <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/statistics" icon={<Icon className="is-gray" icon="pie-chart" />}>
+                    {/* <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/statistics" icon={<Icon className="is-gray" icon="pie-chart" />}>
                         <span className="pl-1">Statistik</span>
-                    </Nav.Item>
+                    </Nav.Item> */}
                 </Nav>
             </Restricted>
             <div className="is-mobile">
                 <br />
                 <span className="pl-1 t4">EXTRA</span>
                 <Nav vertical>
-                    <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/settings" icon={<Icon className="is-gray" icon="setting" />} style={{ marginTop: "6px" }} >
+                    {/* <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/settings" icon={<Icon className="is-gray" icon="setting" />} style={{ marginTop: "6px" }} >
                         <span className="pl-1">Settings</span>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item componentClass={NavLink} activeClassName="rs-nav-item-active" to="/logout" icon={<Icon className="is-gray" icon="sign-out" />} style={{ marginTop: "6px" }} >
                         <span className="pl-1">Logout</span>
                     </Nav.Item>

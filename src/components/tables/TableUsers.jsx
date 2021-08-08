@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
+import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { usersTable } from "../../store/DataTable";
+import { userModal } from "../../store/Modal";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -11,12 +12,15 @@ const TableUsers = (props) => {
 
 
     const [tableData, setTableData] = useRecoilState(usersTable);
+    const [modal, setModal] = useRecoilState(userModal);
+
     const [column, setColumn] = useState('id');
     const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const request = { sortType, column, length }
+
 
     const handleChangePage = (e) => {
         setPage(e);
@@ -45,11 +49,11 @@ const TableUsers = (props) => {
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType]);
+    }, [page, length, column, sortType, modal.eventSuccess]);
 
     return (
         <div>
-            <Table loading={loading} data={tableData.data} height={ 400 }>
+            <Table loading={loading} data={tableData.data} height={400}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -66,31 +70,54 @@ const TableUsers = (props) => {
                     <HeaderCell>Username</HeaderCell>
                     <Cell dataKey="username" />
                 </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            function handleAction() {
-                                alert(`id:${rowData.name}`);
+                            async function handleDelete() {
+                                try {
+                                    let { data } = await axios.delete(`/users/${rowData.id}`);
+                                    Notification.success({
+                                        title: 'Success',
+                                        description: data.message
+                                    })
+                                } catch (e) {
+                                    Notification.error({
+                                        title: 'Error',
+                                        description: 'Oopss, Something wrong!!'
+                                    })
+                                }
+                                getData()
+                            }
+
+                            function handleUpdate() {
+                                setModal({
+                                    ...modal,
+                                    title: 'Edit data Pengguna',
+                                    size: 'xs',
+                                    show: true,
+                                    formData: rowData,
+                                    update: true
+                                })
                             }
                             return (
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="edit" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
-                                            onClick={handleAction}
+                                            onClick={handleUpdate}
                                         >
                                             <span className="is-desktop">Edit</span>
                                         </IconButton>
                                         <IconButton
                                             icon={<Icon icon="trash" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="red"
                                             size="xs"
-                                            onClick={handleAction}
+                                            onClick={handleDelete}
                                         >
                                             <span className="is-desktop">Hapus</span>
                                         </IconButton>

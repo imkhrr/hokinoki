@@ -1,16 +1,17 @@
 import axios from "axios";
+import moment from "moment/min/moment-with-locales";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { itemsTable } from "../../store/DataTable";
+import { sellReportTable } from "../../store/DataTable";
 import { itemModal } from "../../store/Modal";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableSellReport = (props) => {
 
-    const [tableData, setTableData] = useRecoilState(itemsTable);
+    const [tableData, setTableData] = useRecoilState(sellReportTable);
     const [modal, setModal] = useRecoilState(itemModal);
 
     const [column, setColumn] = useState('id');
@@ -20,6 +21,11 @@ const TableSellReport = (props) => {
     const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
     const request = { sortType, column, length, search }
+
+    const curr = new Intl.NumberFormat('id-ID', {
+        style: "currency",
+        currency: "IDR"
+    });
 
     const handleChangePage = (e) => {
         console.log(e);
@@ -42,7 +48,7 @@ const TableSellReport = (props) => {
         setSearch(props.search);
         setLoading(true);
         try {
-            let { data } = await axios.post(`table/commodities?page=${page}`, request);
+            let { data } = await axios.post(`transactions/report?page=${page}`, request);
             setTableData(data);
             setLoading(false);
         } catch (e) {
@@ -50,7 +56,7 @@ const TableSellReport = (props) => {
             console.log(e.response);
         }
     }
-    
+
     useEffect(() => {
         getData();
     }, [modal.eventSuccess, page, length, column, sortType, search, props.search]);
@@ -58,7 +64,7 @@ const TableSellReport = (props) => {
 
     return (
         <div>
-            <Table loading={loading} data={tableData.data} height={400}>
+            <Table loading={loading} data={tableData.data} height={400} >
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -69,21 +75,41 @@ const TableSellReport = (props) => {
                 </Column>
                 <Column flexGrow={1}>
                     <HeaderCell>Tanggal Laporan</HeaderCell>
-                    <Cell></Cell>
+                    <Cell>
+                        {
+                            (rowData) => {
+                                const dateReport = moment(rowData.date).locale('id')
+                                return dateReport.format("dddd, DD MMMM YYYY")
+                            }
+                        }
+                    </Cell>
+
                 </Column>
-                <Column flexGrow={0.75}>
+                <Column flexGrow={0.5} align="right">
                     <HeaderCell>Barang Terjual</HeaderCell>
-                    <Cell></Cell>
+                    <Cell dataKey="items_sold" />
                 </Column>
-                <Column flexGrow={0.75} align="left">
+                <Column flexGrow={0.5} align="right">
                     <HeaderCell>Jumlah Transakasi</HeaderCell>
-                    <Cell></Cell>
+                    <Cell dataKey="total_transaction" />
+
                 </Column>
-                <Column flexGrow={1} align="right">
+                <Column flexGrow={0.7} align="right">
                     <HeaderCell>Total Pendapatan</HeaderCell>
-                    <Cell dataKey="sell_price" />
+                    <Cell>
+                        {
+                            (rowData) => {
+                                return (
+                                    <div className="flex jc-sb bold">
+                                        <span className="ml-5">Rp. </span>
+                                        <span>{curr.format(rowData.income).slice(3)}</span>
+                                    </div>
+                                )
+                            }
+                        }
+                    </Cell>
                 </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={0.5} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -118,7 +144,7 @@ const TableSellReport = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="edit" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleUpdate}

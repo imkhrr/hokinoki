@@ -99,7 +99,7 @@ const TableItems = (props) => {
                     <HeaderCell>Harga</HeaderCell>
                     <Cell dataKey="sell_price" />
                 </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -134,7 +134,7 @@ const TableItems = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="edit" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleUpdate}
@@ -143,7 +143,7 @@ const TableItems = (props) => {
                                         </IconButton>
                                         <IconButton
                                             icon={<Icon icon="trash" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="red"
                                             size="xs"
                                             onClick={handleDelete}

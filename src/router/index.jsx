@@ -79,12 +79,12 @@ function Router(props) {
                             </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
-
+{/* 
                     <Route path="/settings">
                         <Middleware.Authenticated>
                             <Settings />
                         </Middleware.Authenticated>
-                    </Route>
+                    </Route> */}
 
                     {/* Guest Route */}
                     <Route path="/login">

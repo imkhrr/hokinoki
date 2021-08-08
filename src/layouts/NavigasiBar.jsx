@@ -53,9 +53,9 @@ function NavigasiBar(props) {
                         <Icon icon="bell-o" size="lg" />
                     </Nav.Item>
                     <Dropdown icon={<Icon icon="gear" size="lg" />} placement="bottomEnd" noCaret >
-                        <NavLink to="/settings">
+                        {/* <NavLink to="/settings">
                             <Dropdown.Item componentClass="div" icon={<Icon icon="setting" />} style={{ width: 147 }} > <span className="pl-1">Pengaturan</span> </Dropdown.Item>
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink to="" onClick={Logout}>
                             <Dropdown.Item componentClass="div" icon={<Icon icon="sign-out" />} > <span className="pl-1">Keluar</span> </Dropdown.Item>
                         </NavLink>

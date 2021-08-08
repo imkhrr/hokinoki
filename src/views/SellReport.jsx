@@ -55,25 +55,6 @@ function SellReport() {
                                     <TableSellReport />
                                 </div>
                             </div>
-
-                            <div className="flex jc-sb pt-2">
-                                <div></div>
-                                <IconButton
-                                    icon={<Icon icon="plus" />}
-                                    appearance="primary"
-                                    onClick={(e) => {
-                                        setModal({
-                                            ...modal,
-                                            title: 'Tambah Data Barang',
-                                            show: true,
-                                            formData: [],
-                                            update: false
-                                        })
-                                    }}
-                                >
-                                    Tambah Barang
-                                    </IconButton>
-                            </div>
                         </div>
                     </Col>
                 </Row>

@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, InputNumber, SelectPicker } from "rsuite";
 import { itemModal } from "../../store/Modal";
 
 const ItemModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(itemModal);
+    const resetModal = useResetRecoilState(itemModal)
+
     const [categories, setCategories] = useState([]);
     const [units, setUnits] = useState([]);
     const [name, setName] = useState('');
@@ -15,28 +17,18 @@ const ItemModal = (props) => {
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
 
-    const request = { name, category, price };
+    const request = { name, category, price, unit };
 
     const modalClose = () => {
-        setModalData({
-            ...modalData,
-            show: false,
-            formData: [],
-            update: false,
-            eventSuccess: false
-        });
+        setModalData({ ...modalData, show: false })
+        setTimeout(() => {
+            resetModal();
+        }, 300);
     }
 
-    const modalShow = async () => {
-        setCategory("");
-        try {
-            let types = await axios.get('dropdown/commodity-types');
-            let units = await axios.get('dropdown/commodity-units');
-            setCategories(types.data);
-            setUnits(units.data);
-        } catch (error) {
-            console.log(error);
-        }
+    const modalShow = () => {
+        setCategory([]);
+        setUnit([]);
     }
 
 
@@ -83,17 +75,32 @@ const ItemModal = (props) => {
         }
     }
 
+    useEffect(() => {
+        axios.get('dropdown/commodity-units')
+            .then((response) => {
+                setUnits(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+            axios.get('dropdown/commodity-types')
+            .then((response) => {
+                setCategories(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [])
+
 
     useEffect(() => {
-        const formData = () => {
-            setName(modalData.formData.name);
-            if (modalData.update) {
-                setCategory(modalData.formData.commodity_type.id)
-            }
-            setPrice(modalData.formData.sell_price);
-            setStock(modalData.formData.stock);
+        setName(modalData.formData.name);
+        setPrice(modalData.formData.sell_price);
+        setStock(modalData.formData.stock);
+        if (modalData.update) {
+            setCategory(modalData.formData.commodity_type.id)
+            setUnit(modalData.formData.commodity_unit.id)
         }
-        formData();
     }, [modalData.formData])
 
     return (
@@ -124,7 +131,7 @@ const ItemModal = (props) => {
                         <ControlLabel>Unit</ControlLabel>
                         <SelectPicker
                             data={units}
-                            placeholder="Pilih Kategori"
+                            placeholder="Pilih Unit"
                             valueKey="id"
                             onChange={(e) => setUnit(e)}
                             value={unit || ""}

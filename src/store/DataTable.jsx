@@ -26,4 +26,11 @@ const transTable = atom({
     },
 });
 
-export { itemsTable, usersTable, customersTable, transTable };
+const sellReportTable = atom({
+    key: "sellReportTable",
+    default: {
+        data: [],
+    },
+});
+
+export { itemsTable, usersTable, customersTable, transTable, sellReportTable };

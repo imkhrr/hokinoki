@@ -79,7 +79,7 @@ const TableCustomers = (props) => {
                     <HeaderCell>No. HP</HeaderCell>
                     <Cell dataKey="contact_1" />
                 </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -114,7 +114,7 @@ const TableCustomers = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="edit" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleUpdate}
@@ -123,7 +123,7 @@ const TableCustomers = (props) => {
                                         </IconButton>
                                         <IconButton
                                             icon={<Icon icon="trash" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="red"
                                             size="xs"
                                             onClick={handleDelete}

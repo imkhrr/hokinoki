@@ -165,7 +165,7 @@ const TableAddTransactions = (props) => {
                                 <ButtonToolbar>
                                     <IconButton
                                         icon={<Icon icon="plus" />}
-                                        appearance="ghost"
+                                        // appearance="ghost"
                                         color="blue"
                                         size="xs"
                                         onClick={handleAction}

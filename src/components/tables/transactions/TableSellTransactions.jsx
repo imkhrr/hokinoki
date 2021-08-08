@@ -91,7 +91,7 @@ const TableSellTransactions = (props) => {
                         }
                     </Cell>
                 </Column>
-                <Column flexGrow={1}>
+                <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>
 
                     <Cell>
@@ -104,7 +104,7 @@ const TableSellTransactions = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="info" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="blue"
                                             size="xs"
                                             onClick={handleAction}
@@ -113,7 +113,7 @@ const TableSellTransactions = (props) => {
                                         </IconButton>
                                         <IconButton
                                             icon={<Icon icon="trash" />}
-                                            appearance="ghost"
+                                            // appearance="ghost"
                                             color="red"
                                             size="xs"
                                             onClick={handleAction}

@@ -1,41 +1,42 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, SelectPicker } from "rsuite";
 import { userModal } from "../../store/Modal";
 
 const UserModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(userModal);
-    const [name, setName] = useState('');
-    const [address, setAdrress] = useState('');
-    const [contact1, setContact1] = useState('');
+    const resetModal = useResetRecoilState(userModal)
 
-    const request = { name, address, contact1 };
+    const [name, setName] = useState('');
+    // const [role, setRole] = useState([]);
+    // const [roles, setRoles] = useState([]);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [changePassword, setChangePassword] = useState(true)
+
+    const request = { name, username, changePassword, password };
 
     const modalClose = () => {
-        setModalData({
-            ...modalData,
-            show: false,
-            formData: [],
-            eventSuccess: false
-        });
+        setChangePassword(true)
+        setModalData({ ...modalData, show: false })
+        setTimeout(() => {
+            resetModal();
+        }, 300);
     }
 
-    const formData = () => {
-        setName(modalData.formData.name);
-        setAdrress(modalData.formData.address);
-        setContact1(modalData.formData.contact_1);
-
-    }
+    // const modalShow = () => {
+    //     setRole([]);
+    // }
 
     const insertData = async () => {
         try {
-            let { data } = await axios.post(`customers`, request)
+            let { data } = await axios.post(`users`, request)
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data pelanggan berhasil disimpan'
+                description: 'Data pengguna berhasil disimpan'
             })
             console.log(data);
             modalClose();
@@ -49,11 +50,11 @@ const UserModal = (props) => {
 
     const updateData = async () => {
         try {
-            let { data } = await axios.patch(`customers/${modalData.formData.id}`, request)
+            let { data } = await axios.patch(`users/${modalData.formData.id}`, request)
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
-                description: 'Data pelanggan berhasil diupdate'
+                description: 'Data pengguna berhasil diupdate'
             })
             modalClose();
         } catch (error) {
@@ -65,7 +66,6 @@ const UserModal = (props) => {
     }
 
     const saveData = () => {
-        // console.log(request);
         if (modalData.update) {
             updateData();
         } else {
@@ -73,9 +73,30 @@ const UserModal = (props) => {
         }
     }
 
+    // useEffect(() => {
+
+    //     axios.get('dropdown/roles')
+    //         .then((response) => {
+    //             setRoles(response.data)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         })
+
+    // // }, [])
+    // useEffect(() => {
+    //     setChangePassword(true);
+    // }, [changePassword])
+
     useEffect(() => {
-        formData();
-    }, [modalData])
+        setName(modalData.formData.name);
+        setUsername(modalData.formData.username);
+        setPassword(modalData.formData.password);
+        if (modalData.update) {
+            //     setRole(modalData.formData.roles[0].id)
+            setChangePassword(false)
+        }
+    }, [modalData.formData])
 
     return (
         <Modal backdrop="static" size={modalData.size} show={modalData.show} onHide={modalClose} >
@@ -86,19 +107,33 @@ const UserModal = (props) => {
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Nama</ControlLabel>
-                        <FormControl name="name" />
+                        <FormControl onChange={(val) => setName(val)} value={name || ""} />
                     </FormGroup>
-                    <FormGroup>
+                    {/* <FormGroup>
                         <ControlLabel>Role</ControlLabel>
-                        <FormControl name="role" />
-                    </FormGroup>
+                        <SelectPicker
+                            data={roles}
+                            placeholder="Pilih jabatan"
+                            valueKey="id"
+                            onChange={(e) => setRole(e)}
+                            value={role || ""}
+                            cleanable={false}
+                            searchable={false}
+                            block
+                        />
+                    </FormGroup> */}
                     <FormGroup>
                         <ControlLabel>Username</ControlLabel>
-                        <FormControl name="username" />
+                        <FormControl onChange={(val) => setUsername(val)} value={username || ""} />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Password</ControlLabel>
-                        <FormControl name="password" />
+                        {
+                            !changePassword ?
+                                <Button onClick={() => setChangePassword(!changePassword)} appearance="primary" color="red" block> Ganti Password </Button>
+                                :
+                                <FormControl type="password" onChange={(val) => setPassword(val)} value={password || ""} />
+                        }
                     </FormGroup>
                 </Form>
             </Modal.Body>

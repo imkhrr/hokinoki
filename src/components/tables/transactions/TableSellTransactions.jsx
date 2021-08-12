@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
@@ -10,13 +10,9 @@ const { Column, HeaderCell, Cell } = Table;
 const TableSellTransactions = (props) => {
 
     const [tableData, setTableData] = useRecoilState(transTable);
-    // const [modal, setModal] = useRecoilState(transTable);
-    const [column, setColumn] = useState('id');
-    const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
-    // const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length };
+    const request = { length };
 
     const handleChangePage = (e) => {
         setPage(e);
@@ -28,23 +24,19 @@ const TableSellTransactions = (props) => {
         setPage(1);
     };
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setColumn(sortColumn);
-        setSortType(sortType);
-    }
-
-    const getData = async () => {
+    const getData = useCallback( async () => {
         try {
             let { data } = await axios.post(`table/last-trans?page=?${page}`, request);
             setTableData(data);
         } catch (e) {
             
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, length])
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType]);
+    }, [getData]);
 
     return (
         <div>

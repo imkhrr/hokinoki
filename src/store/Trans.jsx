@@ -19,6 +19,7 @@ const Storehouse = atom({
     key: "Storehouse",
     default: {
         type: '',
+        updated: false,
         data: [],
     }
 })

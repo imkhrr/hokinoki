@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification, SelectPicker } from "rsuite";
+import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
 import { userModal } from "../../store/Modal";
 
 const UserModal = (props) => {
@@ -10,8 +10,6 @@ const UserModal = (props) => {
     const resetModal = useResetRecoilState(userModal)
 
     const [name, setName] = useState('');
-    // const [role, setRole] = useState([]);
-    // const [roles, setRoles] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [changePassword, setChangePassword] = useState(true)
@@ -25,10 +23,6 @@ const UserModal = (props) => {
             resetModal();
         }, 300);
     }
-
-    // const modalShow = () => {
-    //     setRole([]);
-    // }
 
     const insertData = async () => {
         try {
@@ -50,7 +44,7 @@ const UserModal = (props) => {
 
     const updateData = async () => {
         try {
-            let { data } = await axios.patch(`users/${modalData.formData.id}`, request)
+            await axios.patch(`users/${modalData.formData.id}`, request)
             setModalData({ ...modalData, eventSuccess: true })
             Notification.success({
                 title: 'Sukses',
@@ -73,30 +67,14 @@ const UserModal = (props) => {
         }
     }
 
-    // useEffect(() => {
-
-    //     axios.get('dropdown/roles')
-    //         .then((response) => {
-    //             setRoles(response.data)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         })
-
-    // // }, [])
-    // useEffect(() => {
-    //     setChangePassword(true);
-    // }, [changePassword])
-
     useEffect(() => {
         setName(modalData.formData.name);
         setUsername(modalData.formData.username);
         setPassword(modalData.formData.password);
         if (modalData.update) {
-            //     setRole(modalData.formData.roles[0].id)
             setChangePassword(false)
         }
-    }, [modalData.formData])
+    }, [modalData.formData, modalData.update])
 
     return (
         <Modal backdrop="static" size={modalData.size} show={modalData.show} onHide={modalClose} >
@@ -109,19 +87,6 @@ const UserModal = (props) => {
                         <ControlLabel>Nama</ControlLabel>
                         <FormControl onChange={(val) => setName(val)} value={name || ""} />
                     </FormGroup>
-                    {/* <FormGroup>
-                        <ControlLabel>Role</ControlLabel>
-                        <SelectPicker
-                            data={roles}
-                            placeholder="Pilih jabatan"
-                            valueKey="id"
-                            onChange={(e) => setRole(e)}
-                            value={role || ""}
-                            cleanable={false}
-                            searchable={false}
-                            block
-                        />
-                    </FormGroup> */}
                     <FormGroup>
                         <ControlLabel>Username</ControlLabel>
                         <FormControl onChange={(val) => setUsername(val)} value={username || ""} />

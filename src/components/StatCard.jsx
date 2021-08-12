@@ -7,7 +7,7 @@ const StatCard = (props) => {
     const [count, setCount] = useState(0)
 
     useEffect(() => {
-        if (props.count != 0) {
+        if (props.count !== 0) {
             setAnimateIn('animate__flipOutX');
             setTimeout(() => {
                 setCount(props.count)

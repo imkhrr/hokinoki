@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { itemsTable } from "../../store/DataTable";
 import { itemModal } from "../../store/Modal";
+import Currency from "../../helper/Currency";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -13,13 +14,11 @@ const TableItems = (props) => {
     const [tableData, setTableData] = useRecoilState(itemsTable);
     const [modal, setModal] = useRecoilState(itemModal);
 
-    const [column, setColumn] = useState('id');
-    const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length, search }
+    const request = {length, search};
 
     const handleChangePage = (e) => {
         console.log(e);
@@ -32,13 +31,7 @@ const TableItems = (props) => {
         setPage(1);
     };
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setColumn(sortColumn);
-        setSortType(sortType);
-        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
-    }
-
-    const getData = async (e) => {
+    const getData = useCallback(async (e) => {
         setSearch(props.search);
         setLoading(true);
         try {
@@ -49,12 +42,12 @@ const TableItems = (props) => {
             setLoading(false);
             console.log(e.response);
         }
-    }
-    
-    useEffect(() => {
-        getData();
-    }, [modal.eventSuccess, page, length, column, sortType, search, props.search]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modal.eventSuccess, page, length, search, props.search])
 
+    useEffect(() => {
+       getData() 
+    }, [getData])
 
     return (
         <div>
@@ -97,7 +90,22 @@ const TableItems = (props) => {
                 </Column>
                 <Column flexGrow={0.5} align="right">
                     <HeaderCell>Harga</HeaderCell>
-                    <Cell dataKey="sell_price" />
+                    <Cell>
+                        {
+                            (rowData) => {
+                                return (
+                                    <div className="flex jc-sb bold">
+                                        <span>
+                                            Rp. 
+                                        </span>
+                                        <span>
+                                            {Currency(rowData.sell_price, [3])}
+                                        </span>
+                                    </div>
+                                )
+                            }
+                        }
+                    </Cell>
                 </Column>
                 <Column flexGrow={1} align="center">
                     <HeaderCell>Action</HeaderCell>

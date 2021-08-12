@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
@@ -14,13 +14,9 @@ const TableUsers = (props) => {
     const [tableData, setTableData] = useRecoilState(usersTable);
     const [modal, setModal] = useRecoilState(userModal);
 
-    const [column, setColumn] = useState('id');
-    const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length }
-
 
     const handleChangePage = (e) => {
         setPage(e);
@@ -31,25 +27,21 @@ const TableUsers = (props) => {
         setPage(1);
     };
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setColumn(sortColumn);
-        setSortType(sortType);
-    }
-
-    const getData = async (e) => {
+    const getData = useCallback(async (e) => {
         setLoading(true);
         try {
-            let { data } = await axios.post(`table/users?page=${page}`, request);
+            let { data } = await axios.post(`table/users?page=${page}`, length);
             setTableData(data);
             setLoading(false);
         } catch (e) {
             console.log(e.response);
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, length, modal.eventSuccess])
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType, modal.eventSuccess]);
+    }, [getData]);
 
     return (
         <div>

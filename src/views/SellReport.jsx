@@ -6,18 +6,14 @@ import {
     Row,
     Grid,
     Icon,
-    IconButton,
     InputGroup,
     Input
 } from "rsuite";
 import ItemModal from "../components/modals/ItemModal";
-import { useRecoilState } from "recoil";
-import { itemModal } from "../store/Modal";
 import TableSellReport from "../components/tables/TableSellReport";
 
 function SellReport() {
 
-    const [modal, setModal] = useRecoilState(itemModal);
     const [search, setSearch] = useState('');
     const [inputVal, setInputVal] = useState('');
 
@@ -52,7 +48,7 @@ function SellReport() {
                                     </div>
                                 </div>
                                 <div>
-                                    <TableSellReport />
+                                    <TableSellReport search={search} />
                                 </div>
                             </div>
                         </div>

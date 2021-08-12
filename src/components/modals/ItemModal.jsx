@@ -14,10 +14,16 @@ const ItemModal = (props) => {
     const [name, setName] = useState('');
     const [category, setCategory] = useState([]);
     const [unit, setUnit] = useState([]);
-    const [price, setPrice] = useState('');
-    const [stock, setStock] = useState('');
+    const [price, setPrice] = useState(0);
+    const [stock, setStock] = useState(0);
 
-    const request = { name, category, price, unit };
+    const request = { 
+        name, 
+        stock,
+        sell_price : price, 
+        unit_id : unit, 
+        type_id : category
+    };
 
     const modalClose = () => {
         setModalData({ ...modalData, show: false })
@@ -67,7 +73,7 @@ const ItemModal = (props) => {
     }
 
     const saveData = () => {
-        // console.log(request);
+        console.log(request);
         if (modalData.update) {
             updateData();
         } else {
@@ -101,7 +107,7 @@ const ItemModal = (props) => {
             setCategory(modalData.formData.commodity_type.id)
             setUnit(modalData.formData.commodity_unit.id)
         }
-    }, [modalData.formData])
+    }, [modalData.formData, modalData.update])
 
     return (
         <Modal backdrop="static" size={modalData.size} show={modalData.show} onHide={modalClose} onShow={modalShow}>
@@ -121,7 +127,7 @@ const ItemModal = (props) => {
                             placeholder="Pilih Kategori"
                             valueKey="id"
                             onChange={(e) => setCategory(e)}
-                            value={category || ""}
+                            value={category || []}
                             cleanable={false}
                             searchable={false}
                             block
@@ -134,7 +140,7 @@ const ItemModal = (props) => {
                             placeholder="Pilih Unit"
                             valueKey="id"
                             onChange={(e) => setUnit(e)}
-                            value={unit || ""}
+                            value={unit || []}
                             cleanable={false}
                             searchable={false}
                             block
@@ -144,11 +150,11 @@ const ItemModal = (props) => {
                 <Form className="flex jc-sb" fluid>
                     <FormGroup>
                         <ControlLabel>Harga</ControlLabel>
-                        <InputNumber style={{ width: "170px" }} prefix="Rp." onChange={(val) => setPrice(val)} value={price || ""} />
+                        <InputNumber style={{ width: "170px" }} prefix="Rp." onChange={(val) => setPrice(parseInt(val))} value={price || 0} />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Stock</ControlLabel>
-                        <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(val)} value={stock || ""} />
+                        <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(parseInt(val))} value={stock || 0} />
                     </FormGroup>
                 </Form>
             </Modal.Body>

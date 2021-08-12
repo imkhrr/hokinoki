@@ -73,3 +73,10 @@ code {
 .rs-nav-item > .rs-nav-item-content > .rs-icon {
   margin-right: 0px !important;
 }
+
+.table-content-editing .rs-input {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    width:90%;
+}

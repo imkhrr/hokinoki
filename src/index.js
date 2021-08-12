@@ -19,6 +19,9 @@ import reportWebVitals from "./reportWebVitals";
 axios.defaults.baseURL = "http://127.0.0.1:8000/api";
 // API Public Laptop
 // axios.defaults.baseURL = "http://30.30.30.3:8000/api";
+// API Server
+// axios.defaults.baseURL = "http://8eea092183b3.sn.mynetname.net:7373/api";
+
 
 axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem("userToken")}`;

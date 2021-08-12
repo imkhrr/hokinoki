@@ -8,7 +8,7 @@ import LoginPage from "../views/LoginPage";
 import NotFound from "../views/NotFound";
 import Transactions from "../views/Transactions";
 import Customers from "../views/Customers";
-import Settings from "../views/Settings";
+// import Settings from "../views/Settings";
 import StoreHouse from "../views/StroreHouse";
 
 

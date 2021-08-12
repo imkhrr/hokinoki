@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Panel, Icon, Placeholder } from "rsuite";
+import { Panel, Icon } from "rsuite";
 
 const BestSellerCard = (props) => {
 
-    // const [loading, setLoading] = useState(true);
-    const [animateIn, setAnimateIn] = useState()
     const [data, setData] = useState([])
 
     useEffect(() => {

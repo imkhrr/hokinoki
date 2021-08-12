@@ -18,6 +18,7 @@ import {
     Icon,
     SelectPicker,
     IconButton,
+    Notification,
 } from "rsuite";
 
 import TableCheckout from "../../components/tables/transactions/TableCheckout";
@@ -92,7 +93,10 @@ function Checkout() {
             let { data } = await axios.post('transactions/record-sales', request);
             resetCart();
             setTransIndex(0);
-            // console.log(data);
+            Notification.success({
+                title: "Success",
+                description: data.message
+            })
         } catch (e) {
             console.log(e);
         }
@@ -164,8 +168,7 @@ function Checkout() {
                                             isMember ?
                                                 <SelectPicker
                                                     data={customers}
-                                                    onOpen={customerDropdown()}
-                                                    onSearch={customerDropdown()}
+                                                    onOpen={customerDropdown}
                                                     size="sm"
                                                     placeholder="Member"
                                                     renderMenu={menu => {

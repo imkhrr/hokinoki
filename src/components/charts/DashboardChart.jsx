@@ -1,6 +1,5 @@
 import axios from "axios";
-import moment from "moment";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     BarChart,
     Bar,
@@ -15,8 +14,6 @@ import {
 function DashboardChart() {
 
     const [data, setData] = useState([])
-    const date = new Date();
-    const date_now = moment(date);
 
     useEffect(() => {
         axios.get('dashboard/graph')

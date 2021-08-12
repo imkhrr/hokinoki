@@ -1,26 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NavigasiBar from "../layouts/NavigasiBar";
 import SideBar from "../layouts/SideBar";
-import { Col, Row, Grid, IconButton, Icon, InputGroup, Input, Panel, Tag, FormGroup, ControlLabel, FormControl, InputNumber } from "rsuite";
-import TableStoreHouse from "../components/tables/storehouse/TableStorehouse";
-import { useRecoilState, useRecoilTransactionObserver_UNSTABLE, useResetRecoilState } from "recoil";
+import { Col, Row, Grid, IconButton, Icon, InputGroup, Input, Panel, Tag, FormGroup, ControlLabel, InputNumber, Notification } from "rsuite";
+import TableStoreHouse from "../components/tables/TableStorehouse";
+// import TableStockOpname from "../components/tables/storehouse/TableStockOpname";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { Storehouse } from "../store/Trans";
-import TableStockOpname from "../components/tables/storehouse/TableStockOpname";
 import { authenticated } from "../store/User";
+import axios from "axios";
 
 function StoreHouse() {
 
     const [storehouse, setStorehouse] = useRecoilState(Storehouse);
-    const [user, setUser] = useRecoilState(authenticated);
+    const auth = useRecoilValue(authenticated);
     const storehouseReset = useResetRecoilState(Storehouse);
     const [animateIn, setAnimateIn] = useState(true);
     const [panel, setPanel] = useState(false);
     const [togglePage, setTogglePage] = useState(false);
+    const [data, setData] = useState(1);
+    const [info, setInfo] = useState([])
 
     const date = new Date();
 
-    const panelRestock = () => {
+    const updateStock = async () => {
+        const request = {
+            stock: data,
+            data: { ...storehouse.data, user: auth.user.id }
+        };
+        try {
+            let { data } = await axios.patch(`transactions/restock/${storehouse.data.id}`, request)
+            Notification.success({
+                title: "Success",
+                description: data.message
+            })
+            setAnimateIn(false);
+            setStorehouse({ ...storehouse, updated: true });
+            setTimeout(() => {
+                setAnimateIn(true);
+                setPanel(false);
+                storehouseReset();
+            }, 600)
 
+        } catch (error) {
+            Notification.error({
+                title: "Error",
+                description: "Oops, Something Wrong!"
+            })
+        }
+    }
+
+    const panelRestock = () => {
         return (
             <div>
                 <div className="flex jc-sb">
@@ -40,6 +69,10 @@ function StoreHouse() {
                             defaultValue={1}
                             size="xs"
                             min={1}
+                            onChange={(e) => {
+                                setData(parseInt(e));
+                            }}
+                            scrollable
                         />
                     </InputGroup>
                 </FormGroup>
@@ -69,14 +102,7 @@ function StoreHouse() {
                         color="green"
                         size="sm"
                         block
-                        onClick={() => {
-                            setAnimateIn(false);
-                            setTimeout(() => {
-                                setAnimateIn(true);
-                                setPanel(false);
-                                storehouseReset();
-                            }, 600)
-                        }}
+                        onClick={updateStock}
                     >
                         Simpan
                     </IconButton>
@@ -86,7 +112,6 @@ function StoreHouse() {
     }
 
     const panelOpname = () => {
-
         return (
             <div>
                 <div className="flex jc-sb">
@@ -94,15 +119,15 @@ function StoreHouse() {
                 </div>
                 <dl style={{ marginTop: '1rem' }}>
                     <dt>Nama :</dt>
-                    <dd> { user.user.name } </dd>
+                    <dd> {auth.user.name} </dd>
                     <dt>Tanggal : </dt>
-                    <dd> { date.toISOString().slice(0, 10) } </dd>
+                    <dd> {date.toISOString().slice(0, 10)} </dd>
                 </dl>
                 <dl className="inline-flex">
                     <dt>Jumlah Barang </dt>
-                    <dd> : 40 </dd>
+                    <dd> : {info.tableData.total || 0} </dd>
                     <dt>Barang Terupdate </dt>
-                    <dd> : 20 </dd>
+                    <dd> : {info.opnameData.length || 0} </dd>
                 </dl>
                 <hr />
                 <div className="flex jc-sb mt-3">
@@ -148,10 +173,14 @@ function StoreHouse() {
     }
 
     const panelOpen = () => {
-        if (storehouse.data.length != 0 && panel == false) {
+        if (storehouse.data.length !== 0 && panel === false) {
             setPanel(true);
         }
     }
+
+    const getTableData = useCallback( (data) => {
+        setInfo(data);
+    }, [])
 
     useEffect(() => {
         if (togglePage) {
@@ -177,10 +206,12 @@ function StoreHouse() {
                 setStorehouse({ ...storehouse, type: 'restock' })
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [togglePage])
 
     useEffect(() => {
         panelOpen()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [storehouse])
 
     return (
@@ -209,7 +240,8 @@ function StoreHouse() {
                                         </div>
                                     </div>
                                     <div style={{ paddingTop: 4 }}>
-                                        {togglePage ? <TableStockOpname /> : <TableStoreHouse />}
+                                        {/* {togglePage ? <TableStockOpname /> : <TableStoreHouse />} */}
+                                        <TableStoreHouse info={getTableData}/>
                                     </div>
 
                                 </Col>

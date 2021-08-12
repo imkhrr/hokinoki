@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { itemsTable } from "../../../store/DataTable";
@@ -19,17 +19,22 @@ const TableAddTransactions = (props) => {
         currency: "IDR"
     });
 
-
-    const [column, setColumn] = useState('id');
-    const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length, search }
+    const request = { length, search }
 
+    const handleChangePage = (e) => {
+        setPage(e);
+    };
 
-    const getData = async (e) => {
+    const handleChangeLength = (e) => {
+        setLength(e);
+        setPage(1);
+    };
+
+    const getData = useCallback(async (e) => {
         setSearch(props.search);
         if (search.length > 0) {
             setPage(1);
@@ -43,24 +48,16 @@ const TableAddTransactions = (props) => {
             setLoading(false);
             console.log(e.response);
         }
-    }
-
-    const handleChangePage = (e) => {
-        setPage(e);
-    };
-
-    const handleChangeLength = (e) => {
-        setLength(e);
-        setPage(1);
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, length, search, props.search])
 
     useEffect(() => {
         getData();
-    }, [page, length, column, sortType, search, props.search]);
+    }, [getData]);
 
     return (
         <div>
-            <Table data={tableData.data} loading={ loading } height={375}>
+            <Table data={tableData.data} loading={loading} height={375}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -113,7 +110,7 @@ const TableAddTransactions = (props) => {
                             }
                             return (
                                 <span className={`bold ${warning}`}>
-                                    { stock }
+                                    {stock}
                                 </span>
                             )
                         }}
@@ -131,13 +128,13 @@ const TableAddTransactions = (props) => {
 
                             if (index > -1) {
                                 stock = rowData.stock - shopCart[index].count;
-                                if (stock  <= 0) {
+                                if (stock <= 0) {
                                     disable = true;
                                 }
                             }
 
                             function handleAction() {
-                                
+
                                 let itemData = {
                                     id: rowData.id,
                                     name: rowData.name,
@@ -149,7 +146,7 @@ const TableAddTransactions = (props) => {
                                 }
 
                                 if (index < 0) {
-                                    setShopCart([...shopCart, itemData]); 
+                                    setShopCart([...shopCart, itemData]);
                                 } else {
                                     let _shopCart = [...shopCart];
                                     _shopCart[index] = {
@@ -169,7 +166,7 @@ const TableAddTransactions = (props) => {
                                         color="blue"
                                         size="xs"
                                         onClick={handleAction}
-                                        disabled={ disable }
+                                        disabled={disable}
                                     >
                                         <span className="is-desktop">Tambah</span>
                                     </IconButton>

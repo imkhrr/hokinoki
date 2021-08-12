@@ -5,12 +5,11 @@ import { Col, Row, Grid, IconButton, Icon } from "rsuite";
 import AddTransactions from "./transactions/AddTransactions";
 import SellTransactions from "./transactions/SellTransactions";
 import Checkout from "./transactions/Checkout";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { Cart, Page } from "../store/Trans";
+import { useRecoilState } from "recoil";
+import { Page } from "../store/Trans";
 
 function Transactions() {
 
-    const shopCart = useRecoilValue(Cart);
     const [transIndex, setTransIndex] = useRecoilState(Page);
 
     return (

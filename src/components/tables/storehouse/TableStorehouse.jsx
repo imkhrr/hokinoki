@@ -55,6 +55,12 @@ const TableStorehouse = (props) => {
     useEffect(() => {
         getData();
     }, [page, length, column, sortType, search, props.search]);
+
+    useEffect(() => {
+        if (storehouse.updated) {
+            getData();
+        }
+    }, [storehouse.updated])
     
     return (
         <div>
@@ -90,8 +96,7 @@ const TableStorehouse = (props) => {
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
-                                            icon={<Icon icon="plus-square" />}
-                                            // appearance="ghost"
+                                            icon={<Icon icon="cubes" />}
                                             color="blue"
                                             size="xs"
                                             onClick={handleRestock}

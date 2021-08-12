@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { ButtonToolbar, Table, Icon, IconButton } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { itemsTable } from "../../../store/DataTable";
 import { Storehouse } from "../../../store/Trans";
@@ -11,15 +11,13 @@ const { Column, HeaderCell, Cell } = Table;
 const TableStockOpname = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
-    const [storehouse, setStorehouse] = useRecoilState(Storehouse);
+    const setStorehouse = useSetRecoilState(Storehouse);
 
-    const [column, setColumn] = useState('id');
-    const [sortType, setSortType] = useState('asc');
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
-    const request = { sortType, column, length, search }
+    const request = { length, search }
 
     const handleChangePage = (e) => {
         console.log(e);
@@ -32,13 +30,7 @@ const TableStockOpname = (props) => {
         setPage(1);
     };
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setColumn(sortColumn);
-        setSortType(sortType);
-        console.log(`Column : ${sortColumn}, 'Sort : ${sortType}`);
-    }
-
-    const getData = async (e) => {
+    const getData = useCallback(async (e) => {
         setSearch(props.search);
         setLoading(true);
         try {
@@ -49,11 +41,13 @@ const TableStockOpname = (props) => {
             setLoading(false);
             console.log(e.response);
         }
-    }
-    
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, length, search, props.search])
+
     useEffect(() => {
         getData();
-    }, [ page, length, column, sortType, search, props.search ]);
+    }, [getData]);
+
 
 
     return (
@@ -87,7 +81,7 @@ const TableStockOpname = (props) => {
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            
+
                             function handleRestock() {
                                 setStorehouse({ type: 'opname', data: rowData });
                             }
@@ -95,9 +89,8 @@ const TableStockOpname = (props) => {
                                 <div>
                                     <ButtonToolbar>
                                         <IconButton
-                                            icon={<Icon icon="cubes"/>}
-                                            // appearance="ghost"
-                                            color="blue"
+                                            icon={<Icon icon="exchange" />}
+                                            // color="blue"
                                             size="xs"
                                             onClick={handleRestock}
                                         >

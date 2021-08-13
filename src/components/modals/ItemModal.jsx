@@ -154,7 +154,7 @@ const ItemModal = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Stock</ControlLabel>
-                        <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(parseInt(val))} value={stock || 0} />
+                        <InputNumber style={{ width: "170px" }} onChange={(val) => setStock(parseInt(val))} value={stock || 0} disabled={modalData.update}/>
                     </FormGroup>
                 </Form>
             </Modal.Body>

@@ -7,7 +7,7 @@ import { userModal } from "../../store/Modal";
 const UserModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(userModal);
-    const resetModal = useResetRecoilState(userModal)
+    const resetModal = useResetRecoilState(userModal);
 
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
@@ -17,10 +17,10 @@ const UserModal = (props) => {
     const request = { name, username, changePassword, password };
 
     const modalClose = () => {
-        setChangePassword(true)
         setModalData({ ...modalData, show: false })
         setTimeout(() => {
             resetModal();
+            setChangePassword(true)
         }, 300);
     }
 

@@ -74,8 +74,9 @@ function AddTransactions() {
 
                             <IconButton
                                 size="xs"
-                                appearance="ghost"
-                                icon={<Icon icon="check" />}
+                                color="red"
+                                appearance="primary"
+                                icon={<Icon icon="refresh" />}
                                 onClick={clearCart}
                             >
                                 Clear All

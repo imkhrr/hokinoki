@@ -18,10 +18,10 @@ const ConfirmationModal = (props) => {
             <Modal.Footer>
                 <Button onClick={props.yes} appearance="primary" block>
                     Ya
-        </Button>
+                </Button>
                 <Button onClick={props.no} appearance="default" block>
                     Tidak
-        </Button>
+                </Button>
             </Modal.Footer>
         </Modal>
     );

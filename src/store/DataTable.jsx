@@ -2,35 +2,25 @@ import { atom } from "recoil";
 
 const itemsTable = atom({
     key: "itemsTable",
-    default: {
-        data: [],
-    },
+    default: [],
 });
 const usersTable = atom({
     key: "usersTable",
-    default: {
-        data: [],
-    },
+    default: [],
 });
 const customersTable = atom({
     key: "customersTable",
-    default: {
-        data: [],
-    },
+    default: [],
 });
 
 const transTable = atom({
     key: "transTable",
-    default: {
-        data: [],
-    },
+    default: [],
 });
 
 const sellReportTable = atom({
     key: "sellReportTable",
-    default: {
-        data: [],
-    },
+    default: [],
 });
 
 export { itemsTable, usersTable, customersTable, transTable, sellReportTable };

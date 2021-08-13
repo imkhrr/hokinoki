@@ -5,6 +5,7 @@ import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { customersTable } from "../../store/DataTable";
 import { customerModal } from "../../store/Modal";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -12,10 +13,16 @@ const TableCustomers = (props) => {
 
     const [tableData, setTableData] = useRecoilState(customersTable);
     // const [tableData, setTableData] = useRecoilState([]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState({});
+
     const [modal, setModal] = useRecoilState(customerModal);
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const request = { length };
+
 
     const handleChangePage = (e) => {
         setPage(e);
@@ -27,10 +34,36 @@ const TableCustomers = (props) => {
         setPage(1);
     };
 
+    const handleDelete = useCallback(async (data) => {
+        setShowModal(true);
+        setModalData(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalData, showModal])
+
+    const deleteData = async (e) => {
+        try {
+            let { data } = await axios.delete(`/customers/${modalData.id}`);
+            Notification.success({
+                title: 'Berhasil',
+                description: data.message
+            })
+            getData()
+            setShowModal(false);
+            setModalData([]);
+        } catch (e) {
+            Notification.error({
+                title: 'Gagal',
+                description: 'Data tidak dapat dihapus'
+            })
+            setShowModal(false);
+            setModalData([]);
+        }
+    }
+
     const getData = useCallback(async (e) => {
         setLoading(true);
         try {
-            let { data } = await axios.post(`table/customers?page=${page}`, length);
+            let { data } = await axios.post(`table/customers?page=${page}`, request);
             setTableData(data);
             setLoading(false);
         } catch (e) {
@@ -43,9 +76,30 @@ const TableCustomers = (props) => {
         getData()
     }, [getData])
 
-
     return (
         <div>
+            <ConfirmationModal
+                show={showModal}
+                header="Hapus Data Pelanggan"
+                onClose={(e) => setShowModal(e)}
+                save={deleteData}
+            >
+                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
+                    <Column width={40}>
+                        <HeaderCell>ID </HeaderCell>
+                        <Cell dataKey="id" />
+                    </Column>
+                    <Column width={200}>
+                        <HeaderCell>Nama </HeaderCell>
+                        <Cell dataKey="name" />
+                    </Column>
+                    <Column width={500}>
+                        <HeaderCell>Alamat </HeaderCell>
+                        <Cell dataKey="address" />
+                    </Column>
+                </Table>
+            </ConfirmationModal>
+
             <Table
                 loading={loading}
                 data={tableData.data}
@@ -76,21 +130,6 @@ const TableCustomers = (props) => {
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            async function handleDelete() {
-                                try {
-                                    let { data } = await axios.delete(`/customers/${rowData.id}`);
-                                    Notification.success({
-                                        title: 'Berhasil',
-                                        description: data.message
-                                    })
-                                } catch (e) {
-                                    Notification.error({
-                                        title: 'Gagal',
-                                        description: 'Data tidak dapat dihapus'
-                                    })
-                                }
-                                getData()
-                            }
 
                             function handleUpdate() {
                                 setModal({
@@ -119,7 +158,7 @@ const TableCustomers = (props) => {
                                             // appearance="ghost"
                                             color="red"
                                             size="xs"
-                                            onClick={handleDelete}
+                                            onClick={() => handleDelete(rowData)}
                                         >
                                             <span className="is-desktop">Hapus</span>
                                         </IconButton>
@@ -135,6 +174,7 @@ const TableCustomers = (props) => {
                     { value: 10, label: 10 },
                     { value: 50, label: 50 },
                     { value: 100, label: 100 },
+                    { value: tableData.total, label: "all" },
                 ]}
                 total={tableData.total}
                 activePage={tableData.current_page}

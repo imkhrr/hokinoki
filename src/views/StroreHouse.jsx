@@ -18,7 +18,8 @@ function StoreHouse() {
     const [panel, setPanel] = useState(false);
     const [togglePage, setTogglePage] = useState(false);
     const [data, setData] = useState(1);
-    const [info, setInfo] = useState([])
+    const [info, setInfo] = useState([]);
+    const [reloadTable, setReloadTable] = useState(true);
 
     const date = new Date();
 
@@ -156,14 +157,7 @@ function StoreHouse() {
                         color="green"
                         size="sm"
                         block
-                        onClick={() => {
-                            setAnimateIn(false);
-                            setTimeout(() => {
-                                setAnimateIn(true);
-                                setPanel(false);
-                                storehouseReset();
-                            }, 600)
-                        }}
+                        onClick={() => opnameConfirmation()}
                     >
                         Confirm
                     </IconButton>
@@ -178,9 +172,37 @@ function StoreHouse() {
         }
     }
 
-    const getTableData = useCallback( (data) => {
+    const getTableData = useCallback((data) => {
         setInfo(data);
     }, [])
+
+    const opnameConfirmation = async () => {
+        const request = {
+            user: auth.user.id,
+            note: "Stock Opname"
+        }
+        try {
+            await axios.post('transactions/opname-confirmation', request);
+
+            Notification.success({
+                title: "Success",
+                description: "Berhasil melakukan Stock Opname"
+            })
+            setReloadTable(!reloadTable);
+            setAnimateIn(false);
+            setTimeout(() => {
+                setAnimateIn(true);
+                setPanel(false);
+                setTogglePage(false);
+                storehouseReset();
+            }, 600)
+        } catch (e) {
+            Notification.error({
+                title: "Error",
+                description: "Oops!! Something Wrong"
+            })
+        }
+    }
 
     useEffect(() => {
         if (togglePage) {
@@ -241,7 +263,7 @@ function StoreHouse() {
                                     </div>
                                     <div style={{ paddingTop: 4 }}>
                                         {/* {togglePage ? <TableStockOpname /> : <TableStoreHouse />} */}
-                                        <TableStoreHouse info={getTableData}/>
+                                        <TableStoreHouse info={getTableData} reload={reloadTable} />
                                     </div>
 
                                 </Col>

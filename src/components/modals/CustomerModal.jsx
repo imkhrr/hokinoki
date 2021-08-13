@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { Modal, Button, FormGroup, ControlLabel, FormControl, Form, Notification } from "rsuite";
 import { customerModal } from "../../store/Modal";
 
 const CustomerModal = (props) => {
 
     const [modalData, setModalData] = useRecoilState(customerModal);
+    const resetModal = useResetRecoilState(customerModal)
+
     const [name, setName] = useState('');
     const [address, setAdrress] = useState('');
     const [contact1, setContact1] = useState('');
@@ -15,12 +17,10 @@ const CustomerModal = (props) => {
     const request = { name, address, contact1, contact2 };
 
     const modalClose = () => {
-        setModalData({
-            ...modalData,
-            show: false,
-            formData: [],
-            eventSuccess: false
-        });
+        setModalData({ ...modalData, show: false });
+        setTimeout(() => {
+            resetModal();
+        }, 300);
     }
 
     const insertData = async () => {

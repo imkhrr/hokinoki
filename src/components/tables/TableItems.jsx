@@ -6,6 +6,7 @@ import TablePagination from "rsuite/lib/Table/TablePagination";
 import { itemsTable } from "../../store/DataTable";
 import { itemModal } from "../../store/Modal";
 import Currency from "../../helper/Currency";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -13,6 +14,9 @@ const TableItems = (props) => {
 
     const [tableData, setTableData] = useRecoilState(itemsTable);
     const [modal, setModal] = useRecoilState(itemModal);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState({});
 
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
@@ -26,10 +30,35 @@ const TableItems = (props) => {
     };
 
     const handleChangeLength = (e) => {
-        console.log(e);
         setLength(e);
         setPage(1);
     };
+
+    const handleDelete = useCallback(async (data) => {
+        setShowModal(true);
+        setModalData(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalData, showModal])
+
+    const deleteData = async (e) => {
+        try {
+            let { data } = await axios.delete(`/commodities/${modalData.id}`);
+            Notification.success({
+                title: 'Berhasil',
+                description: data.message
+            })
+            getData()
+            setShowModal(false);
+            setModalData([]);
+        } catch (e) {
+            Notification.error({
+                title: 'Gagal',
+                description: 'Data tidak dapat dihapus'
+            })
+            setShowModal(false);
+            setModalData([]);
+        }
+    }
 
     const getData = useCallback(async (e) => {
         setSearch(props.search);
@@ -51,12 +80,35 @@ const TableItems = (props) => {
 
     return (
         <div>
+            <ConfirmationModal
+                show={showModal}
+                header="Hapus Data Barang"
+                onClose={(e) => setShowModal(e)}
+                save={deleteData}
+            >
+                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
+                    <Column width={40}>
+                        <HeaderCell>ID </HeaderCell>
+                        <Cell dataKey="id" />
+                    </Column>
+                    <Column width={150}>
+                        <HeaderCell>Kode Barang </HeaderCell>
+                        <Cell dataKey="code" />
+                    </Column>
+                    <Column width={500}>
+                        <HeaderCell>Nama Barang </HeaderCell>
+                        <Cell dataKey="name" />
+                    </Column>
+                </Table>
+            </ConfirmationModal>
+
             <Table loading={loading} data={tableData.data} height={400}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
                         {(rowData, rowIndex) => {
-                            return rowIndex + 1;
+                            let num = length * (tableData.current_page - 1);
+                            return num + rowIndex + 1;
                         }}
                     </Cell>
                 </Column>
@@ -111,21 +163,6 @@ const TableItems = (props) => {
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            async function handleDelete() {
-                                try {
-                                    let { data } = await axios.delete(`/commodities/${rowData.id}`);
-                                    Notification.success({
-                                        title: 'Berhasil',
-                                        description: data.message
-                                    })
-                                } catch (e) {
-                                    Notification.error({
-                                        title: 'Gagal',
-                                        description: 'Data tidak dapat dihapus'
-                                    })
-                                }
-                                getData()
-                            }
 
                             function handleUpdate() {
                                 setModal({
@@ -142,7 +179,7 @@ const TableItems = (props) => {
                                     <ButtonToolbar>
                                         <IconButton
                                             icon={<Icon icon="edit" />}
-                                            // appearance="ghost"
+                                            appearance="primary"
                                             color="blue"
                                             size="xs"
                                             onClick={handleUpdate}
@@ -151,10 +188,10 @@ const TableItems = (props) => {
                                         </IconButton>
                                         <IconButton
                                             icon={<Icon icon="trash" />}
-                                            // appearance="ghost"
+                                            appearance="primary"
                                             color="red"
                                             size="xs"
-                                            onClick={handleDelete}
+                                            onClick={() => handleDelete(rowData)}
                                         >
                                             <span className="is-desktop">Hapus</span>
                                         </IconButton>

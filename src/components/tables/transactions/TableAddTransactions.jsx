@@ -161,14 +161,14 @@ const TableAddTransactions = (props) => {
                             return (
                                 <ButtonToolbar>
                                     <IconButton
-                                        icon={<Icon icon="plus" />}
-                                        // appearance="ghost"
+                                        icon={<Icon icon={disable ? 'warning' : 'plus'} />}
+                                        appearance={disable ? 'ghost' : 'primary'}
                                         color="blue"
                                         size="xs"
                                         onClick={handleAction}
                                         disabled={disable}
                                     >
-                                        <span className="is-desktop">Tambah</span>
+                                        <span className="is-desktop">{disable ? 'Habis' : 'Tambah'}</span>
                                     </IconButton>
                                 </ButtonToolbar>
                             );

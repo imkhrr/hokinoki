@@ -5,6 +5,7 @@ import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
 import { usersTable } from "../../store/DataTable";
 import { userModal } from "../../store/Modal";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -13,6 +14,9 @@ const TableUsers = (props) => {
 
     const [tableData, setTableData] = useRecoilState(usersTable);
     const [modal, setModal] = useRecoilState(userModal);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState({});
 
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
@@ -26,6 +30,32 @@ const TableUsers = (props) => {
         setLength(e);
         setPage(1);
     };
+
+    const handleDelete = useCallback(async (data) => {
+        setShowModal(true);
+        setModalData(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalData, showModal])
+
+    const deleteData = async (e) => {
+        try {
+            let { data } = await axios.delete(`/users/${modalData.id}`);
+            Notification.success({
+                title: 'Berhasil',
+                description: data.message
+            })
+            getData()
+            setShowModal(false);
+            setModalData([]);
+        } catch (e) {
+            Notification.error({
+                title: 'Gagal',
+                description: 'Data tidak dapat dihapus'
+            })
+            setShowModal(false);
+            setModalData([]);
+        }
+    }
 
     const getData = useCallback(async (e) => {
         setLoading(true);
@@ -45,6 +75,28 @@ const TableUsers = (props) => {
 
     return (
         <div>
+            <ConfirmationModal
+                show={showModal}
+                header="Hapus Data Pengguna"
+                onClose={(e) => setShowModal(e)}
+                save={deleteData}
+            >
+                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
+                    <Column width={40}>
+                        <HeaderCell>ID </HeaderCell>
+                        <Cell dataKey="id" />
+                    </Column>
+                    <Column width={100}>
+                        <HeaderCell>Username </HeaderCell>
+                        <Cell dataKey="username" />
+                    </Column>
+                    <Column width={300}>
+                        <HeaderCell>Nama </HeaderCell>
+                        <Cell dataKey="name" />
+                    </Column>
+                </Table>
+            </ConfirmationModal>
+
             <Table loading={loading} data={tableData.data} height={400}>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
@@ -66,22 +118,6 @@ const TableUsers = (props) => {
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-                            async function handleDelete() {
-                                try {
-                                    let { data } = await axios.delete(`/users/${rowData.id}`);
-                                    Notification.success({
-                                        title: 'Success',
-                                        description: data.message
-                                    })
-                                } catch (e) {
-                                    Notification.error({
-                                        title: 'Error',
-                                        description: 'Oopss, Something wrong!!'
-                                    })
-                                }
-                                getData()
-                            }
-
                             function handleUpdate() {
                                 setModal({
                                     ...modal,
@@ -109,7 +145,7 @@ const TableUsers = (props) => {
                                             // appearance="ghost"
                                             color="red"
                                             size="xs"
-                                            onClick={handleDelete}
+                                            onClick={() => handleDelete(rowData)}
                                         >
                                             <span className="is-desktop">Hapus</span>
                                         </IconButton>

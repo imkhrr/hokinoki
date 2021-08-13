@@ -4,7 +4,6 @@ import NumberFormat from "react-number-format";
 import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, Button, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { itemsTable } from "../../store/DataTable";
 import { Storehouse } from "../../store/Trans";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -15,6 +14,7 @@ const TableStorehouse = (props) => {
     const [tableData, setTableData] = useState([]);
     const [storehouse, setStorehouse] = useRecoilState(Storehouse);
 
+    // const [showModal, setShowModal] = useState(false);
     const [data, setData] = useState([]);
     const [opname, setOpname] = useState([])
     const [length, setLength] = useState(10);
@@ -33,8 +33,8 @@ const TableStorehouse = (props) => {
                         autoFocus
                         className="rs-input"
                         style={{ textAlign: 'right' }}
-                        // defaultValue={rowData[dataKey]}
-                        value={rowData.newStock}
+                        defaultValue={rowData[dataKey]}
+                        value={rowData[dataKey]}
                         onChange={event => {
                             onChange && onChange(rowData.id, dataKey, event.target.value);
                         }}
@@ -50,10 +50,15 @@ const TableStorehouse = (props) => {
 
         const itemOpname = async (itemData) => {
 
+            const newStock = parseInt(itemData.newStock);
+
             const request = {
                 id: itemData.id,
                 code: itemData.code,
-                newStock: itemData.newStock,
+                stock: itemData.stock,
+                in: newStock > itemData.stock ? newStock - itemData.stock : 0,
+                out: newStock < itemData.stock ? (newStock - itemData.stock) * 1 : 0,
+                newStock: newStock,
                 updated: true
             }
 
@@ -126,67 +131,47 @@ const TableStorehouse = (props) => {
                             updated: dataOpname(item).updated || false
                         })
                     }))
+                    setOpname(response.data)
                     setTableData(tableItem.data);
                     props.info({ tableData: tableItem.data, opnameData: response.data });
+
+                    setLoading(false);
                 })
                 .catch((response) => {
                     console.log(response);
                 })
-            setLoading(false);
         } catch (e) {
             setLoading(false);
             Notification.error({
                 title: "Error",
-                description: "nyapo kok gak kenek"
+                description: "Oops!! Something Wrong"
             })
             console.log(e);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, length, search, props.search, storehouse.updated])
+    }, [page, length, search, props.search, storehouse.updated, props.reload])
 
     useEffect(() => {
         getData();
     }, [getData]);
 
     useEffect(() => {
-        //     if (storehouse.type === "opname" && opname.length > 0) {
-        //         const nextData = Object.assign([], data);
-        //         opname.map((val, index) => {
-        //             nextData.find(item => item.id === val.id)["newStock"] = val.newStock;
-        //             nextData.find(item => item.id === val.id)["updated"] = val.updated;
-        //             return 0
-        //         })
-        //         setData(nextData);
-        //     }
         props.info({ tableData: tableData, opnameData: opname })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [opname, storehouse.type])
 
-    // const handleChange = (id, key, value) => {
-    //     const nextData = Object.assign([], data);
-    //     const opnameData = Object.assign([], opname);
-    //     const activeItem = opnameData.find(item => item.id === id);
-    //     nextData.find(item => item.id === id)[key] = value;
-    //     if (activeItem) {
-    //         opnameData.find(item => item.id === id)[key] = value;
-    //     } else {
-    //         nextData.find(item => item.id === id)["updated"] = true;
-    //     }
-    //     setOpname(opnameData);
-    //     setData(nextData);
-    // };
 
     const handleChange = (id, key, value) => {
         const nextData = Object.assign([], data);
-        // const opnameData = Object.assign([], opname);
-        // const activeItem = opnameData.find(item => item.id === id);
+        const opnameData = Object.assign([], opname);
+        const activeItem = opnameData.find(item => item.id === id);
         nextData.find(item => item.id === id)[key] = value;
-        // if (activeItem) {
-        //     opnameData.find(item => item.id === id)[key] = value;
-        // } else {
-        //     nextData.find(item => item.id === id)["updated"] = true;
-        // }
-        // setOpname(opnameData);
+        if (activeItem) {
+            opnameData.find(item => item.id === id)[key] = value;
+        } else {
+            nextData.find(item => item.id === id)["updated"] = true;
+        }
+        setOpname(opnameData);
         setData(nextData);
     };
 
@@ -249,7 +234,7 @@ const TableStorehouse = (props) => {
                                                     size="xs"
                                                     onClick={handleRestock}
                                                 >
-                                                    <Icon icon="cubes" />
+                                                    <Icon icon="cube" />
                                                     <span className="is-tablet" style={{ marginLeft: "5px" }}>Restock</span>
                                                 </Button>
                                             </ButtonToolbar>

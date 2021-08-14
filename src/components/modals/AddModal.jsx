@@ -29,9 +29,14 @@ const AddModal = (props) => {
             </Modal.Header>
             <Modal.Body>{props.content}</Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.yes} appearance="primary" block> Simpan </Button>
-                <Button onClick={props.no} appearance="default" block> Batal
-                </Button>
+                <div className="flex jc-sb">
+                    <div>
+                    </div>
+                    <div>
+                        <Button onClick={props.yes} appearance="primary" block> Simpan </Button>
+                        <Button onClick={props.no} appearance="default" block> Batal </Button>
+                    </div>
+                </div>
             </Modal.Footer>
         </Modal>
     );

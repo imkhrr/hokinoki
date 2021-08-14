@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { authenticated } from "../store/User";
 
 import SideBar from "./SideBar";
+import Only from "../middleware/forbiden/Only";
 // import SideBar2 from "./SideBar2";
 
 function NavigasiBar(props) {
@@ -40,6 +41,7 @@ function NavigasiBar(props) {
                     </Nav>
                 </div>
                 <Nav className="is-mobile" pullRight>
+                    <Nav.Item icon={<Icon icon="shopping-cart" size="lg" />} onSelect={toggleNavbar} />
                     <Nav.Item icon={<Icon icon={nav ? "bars" : "close"} size="lg" />} onSelect={toggleNavbar} />
                 </Nav>
                 <Nav className="is-desktop">
@@ -49,13 +51,18 @@ function NavigasiBar(props) {
                             <span className="pl-1">{auth.user.name}</span>
                         </div>
                     </Nav.Item>
-                    <Nav.Item className="pr-1">
+                    {/* <Nav.Item className="pr-1">
                         <Icon icon="bell-o" size="lg" />
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Dropdown icon={<Icon icon="gear" size="lg" />} placement="bottomEnd" noCaret >
                         {/* <NavLink to="/settings">
                             <Dropdown.Item componentClass="div" icon={<Icon icon="setting" />} style={{ width: 147 }} > <span className="pl-1">Pengaturan</span> </Dropdown.Item>
                         </NavLink> */}
+                        <Only forRole="admin">
+                            <NavLink to="" onClick={Logout}>
+                                <Dropdown.Item componentClass="div" icon={<Icon icon="cog" />} > <span className="pl-1">Password</span> </Dropdown.Item>
+                            </NavLink>
+                        </Only>
                         <NavLink to="" onClick={Logout}>
                             <Dropdown.Item componentClass="div" icon={<Icon icon="sign-out" />} > <span className="pl-1">Keluar</span> </Dropdown.Item>
                         </NavLink>

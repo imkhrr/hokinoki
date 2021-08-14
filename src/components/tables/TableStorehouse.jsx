@@ -184,7 +184,7 @@ const TableStorehouse = (props) => {
 
     return (
         <div>
-            <Table loading={loading} data={data} height={400}>
+            <Table loading={loading} data={data} height={400} affixHorizontalScrollbar>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -193,27 +193,27 @@ const TableStorehouse = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.75}>
+                <Column width={100} >
                     <HeaderCell>Kode Barang</HeaderCell>
                     <Cell dataKey="code" />
                 </Column>
-                <Column flexGrow={1.5}>
+                <Column flexGrow={3} minWidth={200}>
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.5} align="right">
+                <Column width={75} align="right">
                     <HeaderCell>Stok Lama</HeaderCell>
                     <Cell dataKey="stock" />
-                </Column>
+                </Column >
                 {
                     storehouse.type === "opname" && (
-                        <Column flexGrow={0.5} align="right">
+                        <Column width={75} align="right">
                             <HeaderCell>Stok Baru</HeaderCell>
                             <EditCell dataKey="newStock" onChange={handleChange} />
                         </Column>
                     )
                 }
-                <Column flexGrow={1} align="center">
+                <Column width={125} align="center" fixed="right">
                     <HeaderCell>Action</HeaderCell>
 
                     {

@@ -63,7 +63,7 @@ function AddTransactions() {
                     </div>
 
                 </Col>
-                <Col xs={24} sm={24} md={7} className="px-0px">
+                <Col xs={24} sm={24} md={7} className="px-0px ">
                     <div className="pl-2">
                         <div className="pb-2 flex jc-sb">
                             <div>
@@ -112,7 +112,7 @@ function AddTransactions() {
                                                                 let _shopCart = [...shopCart];
                                                                 _shopCart[index] = {
                                                                     ..._shopCart[index],
-                                                                    count: parseInt(val)
+                                                                    count: Number.isNaN(parseInt(val)) ? 0 : parseInt(val)
                                                                 };
                                                                 setShopCart(_shopCart);
                                                             }}

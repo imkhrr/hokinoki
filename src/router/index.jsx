@@ -11,8 +11,6 @@ import Customers from "../views/Customers";
 // import Settings from "../views/Settings";
 import StoreHouse from "../views/StroreHouse";
 
-
-import RestrictedPage from "../middleware/forbiden/RestrictedPage";
 import SellReport from "../views/SellReport";
 
 function Router(props) {
@@ -34,49 +32,37 @@ function Router(props) {
 
                     <Route path="/items">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <Items />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 
                     <Route path="/users">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <Users />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 
                     <Route path="/customers">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <Customers />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 
                     <Route path="/storehouse" >
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <StoreHouse />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 
                     <Route path="/selling-report">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <SellReport />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 
                     <Route path="/statistics">
                         <Middleware.Authenticated>
-                            <RestrictedPage forRole="cashier">
                                 <StoreHouse />
-                            </RestrictedPage>
                         </Middleware.Authenticated>
                     </Route>
 {/* 

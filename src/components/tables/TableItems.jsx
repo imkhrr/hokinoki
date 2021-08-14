@@ -1,10 +1,7 @@
 import axios from "axios";
 import React, { useState, useCallback, useEffect } from "react";
-import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { itemsTable } from "../../store/DataTable";
-import { itemModal } from "../../store/Modal";
 import Currency from "../../helper/Currency";
 import ConfirmationModal from "../modals/ConfirmationModal";
 
@@ -12,8 +9,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 const TableItems = (props) => {
 
-    const [tableData, setTableData] = useRecoilState(itemsTable);
-    const [modal, setModal] = useRecoilState(itemModal);
+    const [tableData, setTableData] = useState({});
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
@@ -22,7 +18,7 @@ const TableItems = (props) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
-    const request = {length, search};
+    const request = { length, search };
 
     const handleChangePage = (e) => {
         console.log(e);
@@ -34,11 +30,16 @@ const TableItems = (props) => {
         setPage(1);
     };
 
-    const handleDelete = useCallback(async (data) => {
+    const handleDelete = useCallback( (data) => {
         setShowModal(true);
         setModalData(data);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalData, showModal])
+
+    const handleUpdate = useCallback( (data) => {
+        props.onEdit(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const deleteData = async (e) => {
         try {
@@ -49,15 +50,14 @@ const TableItems = (props) => {
             })
             getData()
             setShowModal(false);
-            setModalData([]);
         } catch (e) {
             Notification.error({
                 title: 'Gagal',
                 description: 'Data tidak dapat dihapus'
             })
             setShowModal(false);
-            setModalData([]);
         }
+        setTimeout(() => setModalData([]), 300);
     }
 
     const getData = useCallback(async (e) => {
@@ -72,37 +72,22 @@ const TableItems = (props) => {
             console.log(e.response);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modal.eventSuccess, page, length, search, props.search])
+    }, [page, length, search, props.search])
 
     useEffect(() => {
-       getData() 
+        getData()
     }, [getData])
+
+    useEffect(() => {
+        if (props.reload) {
+            getData()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.reload])
 
     return (
         <div>
-            <ConfirmationModal
-                show={showModal}
-                header="Hapus Data Barang"
-                onClose={(e) => setShowModal(e)}
-                save={deleteData}
-            >
-                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
-                    <Column width={40}>
-                        <HeaderCell>ID </HeaderCell>
-                        <Cell dataKey="id" />
-                    </Column>
-                    <Column width={150}>
-                        <HeaderCell>Kode Barang </HeaderCell>
-                        <Cell dataKey="code" />
-                    </Column>
-                    <Column width={500}>
-                        <HeaderCell>Nama Barang </HeaderCell>
-                        <Cell dataKey="name" />
-                    </Column>
-                </Table>
-            </ConfirmationModal>
-
-            <Table loading={loading} data={tableData.data} height={400}>
+            <Table loading={loading} data={tableData.data} height={400} affixHorizontalScrollbar>
                 <Column width={50} align="center" fixed>
                     <HeaderCell>No.</HeaderCell>
                     <Cell>
@@ -112,15 +97,15 @@ const TableItems = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.5}>
+                <Column width={100}>
                     <HeaderCell>Kode Barang</HeaderCell>
                     <Cell dataKey="code" />
                 </Column>
-                <Column flexGrow={1.5}>
+                <Column flexGrow={1.5} minWidth={200}>
                     <HeaderCell>Nama Barang</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
-                <Column flexGrow={0.8} align="left">
+                <Column width={125} align="left">
                     <HeaderCell>Kategori</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -130,7 +115,7 @@ const TableItems = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.5} align="left">
+                <Column width={75} align="left">
                     <HeaderCell>Unit</HeaderCell>
                     <Cell>
                         {(rowData) => {
@@ -140,40 +125,25 @@ const TableItems = (props) => {
                         }}
                     </Cell>
                 </Column>
-                <Column flexGrow={0.5} align="right">
+                <Column flexGrow={0.5} minWidth={125} align="center">
                     <HeaderCell>Harga</HeaderCell>
                     <Cell>
                         {
                             (rowData) => {
                                 return (
                                     <div className="flex jc-sb bold">
-                                        <span>
-                                            Rp. 
-                                        </span>
-                                        <span>
-                                            {Currency(rowData.sell_price, [3])}
-                                        </span>
+                                        <span > Rp. </span>
+                                        <span> {Currency(rowData.sell_price, [3])} </span>
                                     </div>
                                 )
                             }
                         }
                     </Cell>
                 </Column>
-                <Column flexGrow={1} align="center">
+                <Column flexGrow={0.75} minWidth={100} align="center" fixed="right">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-
-                            function handleUpdate() {
-                                setModal({
-                                    ...modal,
-                                    title: 'Edit data Barang',
-                                    size: 'xs',
-                                    show: true,
-                                    formData: rowData,
-                                    update: true
-                                })
-                            }
                             return (
                                 <div>
                                     <ButtonToolbar>
@@ -182,7 +152,7 @@ const TableItems = (props) => {
                                             appearance="primary"
                                             color="blue"
                                             size="xs"
-                                            onClick={handleUpdate}
+                                            onClick={() => handleUpdate(rowData)}
                                         >
                                             <span className="is-desktop">Edit</span>
                                         </IconButton>
@@ -216,6 +186,28 @@ const TableItems = (props) => {
                 onChangeLength={handleChangeLength}
 
             />
+
+            <ConfirmationModal
+                show={showModal}
+                header="Hapus Data Barang"
+                onClose={(e) => setShowModal(e)}
+                save={deleteData}
+            >
+                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
+                    <Column width={40}>
+                        <HeaderCell>ID </HeaderCell>
+                        <Cell dataKey="id" />
+                    </Column>
+                    <Column width={100}>
+                        <HeaderCell>Kode Barang </HeaderCell>
+                        <Cell dataKey="code" />
+                    </Column>
+                    <Column flexGrow={1.5} minWidth={250}>
+                        <HeaderCell>Nama Barang </HeaderCell>
+                        <Cell dataKey="name" />
+                    </Column>
+                </Table>
+            </ConfirmationModal>
         </div>
     );
 };

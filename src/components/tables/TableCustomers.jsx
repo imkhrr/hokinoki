@@ -1,35 +1,30 @@
 import axios from "axios";
 import React, { useState, useCallback, useEffect } from "react";
-import { useRecoilState } from "recoil";
 import { ButtonToolbar, Table, Icon, IconButton, Notification } from "rsuite";
 import TablePagination from "rsuite/lib/Table/TablePagination";
-import { customersTable } from "../../store/DataTable";
-import { customerModal } from "../../store/Modal";
 import ConfirmationModal from "../modals/ConfirmationModal";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const TableCustomers = (props) => {
 
-    const [tableData, setTableData] = useRecoilState(customersTable);
-    // const [tableData, setTableData] = useRecoilState([]);
-
+    // MODAL STATE
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
-    const [modal, setModal] = useRecoilState(customerModal);
+    // TABLE STATE
+    const [tableData, setTableData] = useState({});
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
-    const request = { length };
-
+    const request = { length, search };
 
     const handleChangePage = (e) => {
         setPage(e);
     };
 
     const handleChangeLength = (e) => {
-        console.clear();
         setLength(e);
         setPage(1);
     };
@@ -40,24 +35,27 @@ const TableCustomers = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalData, showModal])
 
+    const handleUpdate = useCallback((data) => {
+        props.onEdit(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const deleteData = async (e) => {
         try {
-            let { data } = await axios.delete(`/customers/${modalData.id}`);
+            await axios.delete(`/customers/${modalData.id}`);
             Notification.success({
                 title: 'Berhasil',
-                description: data.message
+                description: "Data Pelanggan Berhasil Dihapus"
             })
-            getData()
-            setShowModal(false);
-            setModalData([]);
-        } catch (e) {
+            getData();
+        } catch (error) {
             Notification.error({
                 title: 'Gagal',
                 description: 'Data tidak dapat dihapus'
             })
-            setShowModal(false);
-            setModalData([]);
         }
+        setShowModal(false);
+        setTimeout(() => setModalData([]), 300);
     }
 
     const getData = useCallback(async (e) => {
@@ -66,40 +64,32 @@ const TableCustomers = (props) => {
             let { data } = await axios.post(`table/customers?page=${page}`, request);
             setTableData(data);
             setLoading(false);
-        } catch (e) {
-            console.log(e.response);
+        } catch (error) {
+            setLoading(false);
+            console.log("Gagal Memuat Data Barang");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modal.eventSuccess, length, page])
+    }, [page, length, search])
 
     useEffect(() => {
         getData()
     }, [getData])
 
+    useEffect(() => {
+        if (props.reload) {
+            getData()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.reload])
+
+    useEffect(() => {
+        setSearch(props.search);
+        setPage(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.search])
+
     return (
         <div>
-            <ConfirmationModal
-                show={showModal}
-                header="Hapus Data Pelanggan"
-                onClose={(e) => setShowModal(e)}
-                save={deleteData}
-            >
-                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
-                    <Column width={40}>
-                        <HeaderCell>ID </HeaderCell>
-                        <Cell dataKey="id" />
-                    </Column>
-                    <Column width={200}>
-                        <HeaderCell>Nama </HeaderCell>
-                        <Cell dataKey="name" />
-                    </Column>
-                    <Column width={500}>
-                        <HeaderCell>Alamat </HeaderCell>
-                        <Cell dataKey="address" />
-                    </Column>
-                </Table>
-            </ConfirmationModal>
-
             <Table
                 loading={loading}
                 data={tableData.data}
@@ -126,21 +116,10 @@ const TableCustomers = (props) => {
                     <HeaderCell>No. HP</HeaderCell>
                     <Cell dataKey="contact_1" />
                 </Column>
-                <Column flexGrow={1} align="center">
+                <Column flexGrow={0.75} minWidth={100} align="center" fixed="right">
                     <HeaderCell>Action</HeaderCell>
                     <Cell>
                         {(rowData) => {
-
-                            function handleUpdate() {
-                                setModal({
-                                    ...modal,
-                                    title: 'Edit data Pelanggan',
-                                    size: 'xs',
-                                    show: true,
-                                    formData: rowData,
-                                    update: true
-                                })
-                            }
                             return (
                                 <div>
                                     <ButtonToolbar>
@@ -149,7 +128,7 @@ const TableCustomers = (props) => {
                                             // appearance="ghost"
                                             color="blue"
                                             size="xs"
-                                            onClick={handleUpdate}
+                                            onClick={() => handleUpdate(rowData)}
                                         >
                                             <span className="is-desktop">Edit</span>
                                         </IconButton>
@@ -181,8 +160,28 @@ const TableCustomers = (props) => {
                 displayLength={tableData.per_page}
                 onChangePage={handleChangePage}
                 onChangeLength={handleChangeLength}
-
             />
+            <ConfirmationModal
+                show={showModal}
+                header="Hapus Data Pelanggan"
+                onClose={(e) => setShowModal(e)}
+                save={deleteData}
+            >
+                <Table height={100} data={[modalData]} affixHorizontalScrollbar>
+                    <Column width={40}>
+                        <HeaderCell>ID </HeaderCell>
+                        <Cell dataKey="id" />
+                    </Column>
+                    <Column width={200}>
+                        <HeaderCell>Nama </HeaderCell>
+                        <Cell dataKey="name" />
+                    </Column>
+                    <Column width={500}>
+                        <HeaderCell>Alamat </HeaderCell>
+                        <Cell dataKey="address" />
+                    </Column>
+                </Table>
+            </ConfirmationModal>
         </div>
     );
 };

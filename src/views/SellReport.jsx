@@ -9,7 +9,6 @@ import {
     InputGroup,
     Input
 } from "rsuite";
-import ItemModal from "../components/modals/ItemModal";
 import TableSellReport from "../components/tables/TableSellReport";
 
 function SellReport() {
@@ -33,7 +32,6 @@ function SellReport() {
                     </Col>
                     <Col xs={24} sm={24} md={20} className="px-0px">
                         <NavigasiBar title="Penjualan" />
-                        <ItemModal />
                         <div className="p-3 animate__animated animate__fadeIn">
                             <div style={{ minHeight: "77vh" }}>
                                 <div className="pb-2 flex jc-sb">

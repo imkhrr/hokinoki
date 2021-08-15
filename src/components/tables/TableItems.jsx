@@ -9,19 +9,20 @@ const { Column, HeaderCell, Cell } = Table;
 
 const TableItems = (props) => {
 
-    const [tableData, setTableData] = useState({});
-
+    // MODAL STATE
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
-
+        
+    // TABLE STATE
+    const [tableData, setTableData] = useState({});
     const [length, setLength] = useState(10);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState(props.search);
     const [loading, setLoading] = useState(true);
     const request = { length, search };
 
+    // TABLE PROCESSING
     const handleChangePage = (e) => {
-        console.log(e);
         setPage(e);
     };
 
@@ -41,38 +42,37 @@ const TableItems = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // DATA PROCESSING
     const deleteData = async (e) => {
         try {
-            let { data } = await axios.delete(`/commodities/${modalData.id}`);
+            await axios.delete(`/commodities/${modalData.id}`);
             Notification.success({
                 title: 'Berhasil',
-                description: data.message
+                description: "Data Barang Berhasil Dihapus"
             })
-            getData()
-            setShowModal(false);
-        } catch (e) {
+            getData();
+        } catch (error) {
             Notification.error({
                 title: 'Gagal',
                 description: 'Data tidak dapat dihapus'
             })
-            setShowModal(false);
         }
+        setShowModal(false);
         setTimeout(() => setModalData([]), 300);
     }
 
     const getData = useCallback(async (e) => {
-        setSearch(props.search);
         setLoading(true);
         try {
             let { data } = await axios.post(`table/commodities?page=${page}`, request);
             setTableData(data);
             setLoading(false);
-        } catch (e) {
+        } catch (error) {
             setLoading(false);
-            console.log(e.response);
+            console.log("Gagal Memuat Data Barang");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, length, search, props.search])
+    }, [page, length, search])
 
     useEffect(() => {
         getData()
@@ -84,6 +84,12 @@ const TableItems = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.reload])
+
+    useEffect(() => {
+        setSearch(props.search);
+        setPage(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ props.search])
 
     return (
         <div>
@@ -194,7 +200,7 @@ const TableItems = (props) => {
                 save={deleteData}
             >
                 <Table height={100} data={[modalData]} affixHorizontalScrollbar>
-                    <Column width={40}>
+                    <Column width={50}>
                         <HeaderCell>ID </HeaderCell>
                         <Cell dataKey="id" />
                     </Column>
@@ -202,7 +208,7 @@ const TableItems = (props) => {
                         <HeaderCell>Kode Barang </HeaderCell>
                         <Cell dataKey="code" />
                     </Column>
-                    <Column flexGrow={1.5} minWidth={250}>
+                    <Column flexGrow={1.5} minWidth={200}>
                         <HeaderCell>Nama Barang </HeaderCell>
                         <Cell dataKey="name" />
                     </Column>

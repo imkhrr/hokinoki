@@ -29,6 +29,7 @@ function Items() {
     const [addModal, setAddModal] = useState(true);
 
     // DATA PROCESSING STATE
+    const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState([]);
@@ -65,7 +66,7 @@ function Items() {
             await axios.post(`commodities`, request);
             Notification.success({
                 title: 'Success',
-                description: "Berhasil Menambahkan Data Barang"
+                description: "Data Barang Berhasil Ditambah"
             });
             setShowModal(false);
             setTableReload(true);
@@ -79,17 +80,17 @@ function Items() {
 
     const updateData = async () => {
         try {
-            await axios.patch(`commodities/${1}`, request);
+            await axios.patch(`commodities/${id}`, request);
             Notification.success({
-                title: 'Sukses',
-                description: "Berhasil Edit Data Barang"
+                title: 'Success',
+                description: "Data Barang Berhasil Diedit"
             });
             setShowModal(false);
             setTableReload(true);
         } catch (error) {
             Notification.error({
                 title: 'Gagal',
-                description: 'Terjadi kesalahan, gagal update data'
+                description: 'Terjadi kesalahan, gagal edit data'
             });
         }
     }
@@ -103,14 +104,15 @@ function Items() {
         setTableReload(false)
     }
 
-    // MODAL SHOW AND HIDE
+    // MODAL DATA ON SHOW
     const editModal = (data) => {
         setAddModal(false);
         setShowModal(true);
+        setId(data.id);
         setName(data.name);
         setPrice(data.sell_price);
         setStock(data.stock);
-        if (!data.addModal) {
+        if (!addModal) {
             setCategory(data.commodity_type.id);
             setUnit(data.commodity_unit.id);
         }
@@ -186,8 +188,8 @@ function Items() {
                                     icon={<Icon icon="plus" />}
                                     appearance="primary"
                                     onClick={() => {
-                                        setShowModal(true)
                                         setAddModal(true)
+                                        setShowModal(true)
                                         setName('')
                                         setPrice('')
                                         setStock('')
@@ -202,7 +204,6 @@ function Items() {
                     </Col>
                 </Row>
             </Grid>
-
             <SaveModal
                 show={showModal}
                 title={`${addModal ? 'Tambah' : 'Edit'} Data Barang`}
